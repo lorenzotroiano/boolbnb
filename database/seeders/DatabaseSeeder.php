@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Apartment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,11 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            UserTableSeeder::class,
+            ApartmentTableSeeder::class,
+            MessageTableSeeder::class,
+            ViewTableSeeder::class,
+            ImageTableSeeder::class,
+            ApartmentSponsorTableSeeder::class,
+            ServiceTableSeeder::class,
+            SponsorTableSeeder::class
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        ]);
     }
 }

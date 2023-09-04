@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
 
             $table->string('name', 128);
-            $table->text('description');
+            $table->text('description', 255);
             $table->integer('room');
             $table->integer('bathroom');
             $table->integer('mq');
             $table->text('address');
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->float('latitude')->hidden();
+            $table->float('longitude')->hidden();
             $table->boolean('visible');
 
             $table->timestamps();

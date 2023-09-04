@@ -21,7 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'birth_date',
+
+        'apartment_id'
     ];
+
+    public function apartments()
+    {
+        return $this->hasMany(Apartment::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
