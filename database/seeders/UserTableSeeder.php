@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use App\Models\Apartment;
+
 class UserTableSeeder extends Seeder
 {
     /**
@@ -14,6 +16,5 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        //
     }
 }
