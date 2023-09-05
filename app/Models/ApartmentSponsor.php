@@ -14,3 +14,5 @@ class ApartmentSponsor extends Model
         'end_date'
     ];
 }
+
+

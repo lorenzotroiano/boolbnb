@@ -17,16 +17,17 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::factory()->count(50)->create();
+        $users = User::factory()->count(10)->make();
 
         foreach ($users as $user) {
 
-            $apartments = Apartment::inRandomOrder()->limit(rand(0, 3))->get();
+            $apartments = Apartment::inRandomOrder()->first();
             
             $user->apartment_id = $apartments->id;
 
             $user->save();
             
         }
+
     }
 }

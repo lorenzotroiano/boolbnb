@@ -17,16 +17,18 @@ class ApartmentSponsorTableSeeder extends Seeder
      */
     public function run()
     {
-        $apartmentSponsors = ApartmentSponsor::factory()->create();
+        $apartmentSponsors = ApartmentSponsor::factory()->count(5)->make();
 
         foreach ($apartmentSponsors as $apartmentSponsor) {
 
-            $apartments = Apartment::inRandomOrder()->limit(rand(0, 3))->get();
-            $sponsors = Sponsor::inRandomOrder()->limit(rand(0, 3))->get();
+            $apartments = Apartment::inRandomOrder()->first();
+            $sponsors = Sponsor::inRandomOrder()->first();
             
 
-            $apartmentSponsor->apartments()->attach($apartments);
-            $apartmentSponsor->sponsors()->attach($sponsors);
+            $apartmentSponsor->apartment_id = $apartments->id;
+            $apartmentSponsor->sponsor_id = $sponsors->id;
+
+            $apartmentSponsor->save();
             
         }
     }
