@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use App\Models\Message;
 class MessageTableSeeder extends Seeder
 {
     /**
@@ -14,6 +14,7 @@ class MessageTableSeeder extends Seeder
      */
     public function run()
     {
-        
+        Message::factory()->count(100)->create();
+
     }
 }

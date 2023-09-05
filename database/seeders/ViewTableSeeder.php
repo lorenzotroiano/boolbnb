@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\View;
 
 class ViewTableSeeder extends Seeder
 {
@@ -14,6 +15,7 @@ class ViewTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        View::factory()->count(100)->create();
+
     }
 }

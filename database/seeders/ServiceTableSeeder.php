@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,7 @@ class ServiceTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Service::factory()->count(20)->create();
+
     }
 }
