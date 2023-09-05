@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
 
             $table->text('image')->nullable();
-            $table->text('cover');
 
             $table->timestamps();
         });

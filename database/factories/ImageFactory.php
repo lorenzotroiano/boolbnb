@@ -18,9 +18,7 @@ class ImageFactory extends Factory
     {
         return [
 
-
             'image' => fake()->paragraph(),
-            'cover' => fake()->paragraph(),
 
         ];
     }
