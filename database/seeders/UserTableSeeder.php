@@ -26,7 +26,6 @@ class UserTableSeeder extends Seeder
             $user->apartment_id = $apartments->id;
 
             $user->save();
-            
         }
 
     }

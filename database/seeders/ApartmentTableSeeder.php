@@ -31,7 +31,6 @@ class ApartmentTableSeeder extends Seeder
             $apartment->view_id = $view->id;
 
             $apartment->save();
+        }
     }
-}
-
 }
