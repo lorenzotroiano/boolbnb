@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('latitude')->hidden();
             $table->float('longitude')->hidden();
             $table->boolean('visible');
+            $table->text('cover');
+
 
             $table->timestamps();
         });

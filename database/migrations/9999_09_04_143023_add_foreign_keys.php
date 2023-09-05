@@ -18,14 +18,6 @@ return new class extends Migration
             $table->foreignId('apartment_id')->constrained();
         });
 
-        Schema::table('apartments', function (Blueprint $table) {
-
-            $table->foreignId('image_id')->constrained();
-            $table->foreignId('view_id')->constrained();
-            $table->foreignId('message_id')->constrained();
-        });
-
-
         Schema::table('apartment_service', function (Blueprint $table) {
 
             $table->foreignId('apartment_id')->constrained();
@@ -38,6 +30,26 @@ return new class extends Migration
             $table->foreignId('apartment_id')->constrained();
             $table->foreignId('sponsor_id')->constrained();
         });
+
+        Schema::table('messages', function (Blueprint $table) {
+
+            $table->foreignId('apartment_id')->constrained();
+
+        });
+
+        Schema::table('views', function (Blueprint $table) {
+
+            $table->foreignId('apartment_id')->constrained();
+
+        });
+
+        Schema::table('images', function (Blueprint $table) {
+
+            $table->foreignId('apartment_id')->constrained();
+
+        });
+
+
     }
 
     /**
@@ -54,21 +66,6 @@ return new class extends Migration
             $table->dropColumn('apartment_id');
         });
 
-        Schema::table('apartments', function (Blueprint $table) {
-
-            $table->dropForeign('apartments_message_id_foreign');
-
-            $table->dropColumn('message_id');
-
-            $table->dropForeign('apartments_view_id_foreign');
-
-            $table->dropColumn('view_id');
-
-            $table->dropForeign('apartments_image_id_foreign');
-
-            $table->dropColumn('image_id');
-        });
-
         
         Schema::table('apartment_service', function (Blueprint $table) {
 
@@ -80,8 +77,6 @@ return new class extends Migration
         });
 
 
-
-
         Schema::table('apartment_sponsors', function (Blueprint $table) {
 
             $table->dropForeign('apartment_sponsors_apartment_id_foreign');
@@ -89,6 +84,30 @@ return new class extends Migration
 
             $table->dropColumn('apartment_id');
             $table->dropColumn('sponsor_id');
+        });
+
+        Schema::table('messages', function (Blueprint $table) {
+
+            $table->dropForeign('messages_apartments_id_foreign');
+
+            $table->dropColumn('apartment_id');
+
+        });
+
+        Schema::table('views', function (Blueprint $table) {
+
+            $table->dropForeign('views_apartments_id_foreign');
+
+            $table->dropColumn('apartment_id');
+
+        });
+
+        Schema::table('images', function (Blueprint $table) {
+
+            $table->dropForeign('images_apartments_id_foreign');
+
+            $table->dropColumn('apartment_id');
+
         });
     }
 };

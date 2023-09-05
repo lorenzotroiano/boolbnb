@@ -19,11 +19,7 @@ class Apartment extends Model
         'latitude',
         'longitude',
         'visible',
-
-        'message_id',
-        'view_id',
-        'image_id'
-
+        'cover'
     ];
 
     public function user()

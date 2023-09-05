@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Apartment;
 use App\Models\Service;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,5 +17,14 @@ class ServiceTableSeeder extends Seeder
     public function run()
     {
         Service::factory()->count(10)->create();
+
+        $services = Service::factory()->count(10)->create();
+
+        foreach ($services as $service) {
+
+            $apartments = Apartment::inRandomOrder()->limit(rand(1, 3))->get();
+
+            $service->apartments()->attach($apartments);
+        }
     }
 }

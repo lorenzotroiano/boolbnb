@@ -27,6 +27,8 @@ class ApartmentFactory extends Factory
             'latitude' => fake()->latitude($min = -90, $max = 90),
             'longitude' => fake()->longitude($min = -180, $max = 180),
             'visible' => fake()->boolean(),
+            'cover' => fake()->paragraph()
+
         ];
     }
 }
