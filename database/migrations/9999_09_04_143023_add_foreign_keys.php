@@ -25,16 +25,6 @@ return new class extends Migration
             $table->foreignId('message_id')->constrained();
         });
 
-        // Schema::table('apartments', function (Blueprint $table) {
-
-        //     $table->foreignId('view_id')->constrained();
-        // });
-
-        // Schema::table('apartments', function (Blueprint $table) {
-
-        //     $table->foreignId('message_id')->constrained();
-        // });
-
 
         Schema::table('apartment_service', function (Blueprint $table) {
 
@@ -79,21 +69,7 @@ return new class extends Migration
             $table->dropColumn('image_id');
         });
 
-        // Schema::table('apartments', function (Blueprint $table) {
-
-        //     $table->dropForeign('apartments_view_id_foreign');
-
-        //     $table->dropColumn('view_id');
-        // });
-
-        // Schema::table('apartments', function (Blueprint $table) {
-
-        //     $table->dropForeign('apartments_image_id_foreign');
-
-        //     $table->dropColumn('image_id');
-        // });
-
-
+        
         Schema::table('apartment_service', function (Blueprint $table) {
 
             $table->dropForeign('apartment_service_apartment_id_foreign');
