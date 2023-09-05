@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->date('date');
-            $table->string('IP_address')->unique()->hidden();
+            $table->string('IP_address')->hidden();
 
             $table->timestamps();
         });

@@ -14,16 +14,32 @@ class MessageTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        $messages = Message::factory()->count(100)->make();
-        foreach ($messages as $message) {
+    // public function run()
+    // {
+    //     $messages = Message::factory()->count(500)->make();
+    //     foreach ($messages as $message) {
 
-            $apartment = Apartment::inRandomOrder()->first();
+    //         $apartment = Apartment::inRandomOrder()->limit(rand(0, 5))->get();
             
 
-            $message->apartment_id = $apartment->id;
+    //         $message->apartment_id = $apartment->id;
 
+    //         $message->save();
+    //     }
+    // }
+
+    public function run() {
+        $messages = Message::factory()->count(500)->make();
+        foreach ($messages as $message) {
+    
+            // Get a random number of apartments (between 1 to 5)
+            $apartments = Apartment::inRandomOrder()->limit(rand(1, 5))->get();
+    
+            // Get the ID of the first apartment in the collection
+            $apartmentId = $apartments->first()->id;
+    
+            $message->apartment_id = $apartmentId;
+    
             $message->save();
         }
     }

@@ -17,13 +17,14 @@ class ViewTableSeeder extends Seeder
      */
     public function run()
     {
-        $views = View::factory()->count(100)->make();
+        $views = View::factory()->count(5000)->make();
         foreach ($views as $view) {
 
-            $apartment = Apartment::inRandomOrder()->first();
+            $apartments = Apartment::inRandomOrder()->limit(rand(1, 50))->get();
             
-
-            $view->apartment_id = $apartment->id;
+            $apartmentId = $apartments->first()->id;
+    
+            $view->apartment_id = $apartmentId;
 
             $view->save();
         }

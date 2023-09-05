@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     {
         return [
 
-            'image' => fake()->paragraph(),
+            'image' => fake()->imageUrl(800, 800, true, 'jpg')
 
         ];
     }

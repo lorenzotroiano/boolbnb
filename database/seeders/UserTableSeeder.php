@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::factory()->count(10)->make();
+        $users = User::factory()->count(30)->make();
 
         foreach ($users as $user) {
 

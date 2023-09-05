@@ -17,13 +17,13 @@ class ImageTableSeeder extends Seeder
     public function run()
     {
         
-        $images = Image::factory()->count(100)->make();
+        $images = Image::factory()->count(500)->make();
         foreach ($images as $image) {
 
-            $apartment = Apartment::inRandomOrder()->first();
+            $apartments = Apartment::inRandomOrder()->limit(rand(1, 5))->get();
             
-
-            $image->apartment_id = $apartment->id;
+            $apartmentId = $apartments->first()->id;
+            $image->apartment_id = $apartmentId;
 
             $image->save();
         }

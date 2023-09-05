@@ -15,6 +15,6 @@ class ApartmentTableSeeder extends Seeder
      */
     public function run()
     {
-        Apartment::factory()->count(50)->create();
+        Apartment::factory()->count(100)->create();
     }
 }
