@@ -22,16 +22,15 @@ class ApartmentTableSeeder extends Seeder
         $apartments = Apartment::factory()->count(20)->make();
         foreach ($apartments as $apartment) {
 
-            $image = Image::inRandomOrder()->limit(rand(1, 2))->get();
-            $message = Message::inRandomOrder()->limit(rand(1, 2))->get();
-            $view = View::inRandomOrder()->limit(rand(1, 2))->get();
+            $image = Image::inRandomOrder()->first();
+            $message = Message::inRandomOrder()->first();
+            $view = View::inRandomOrder()->first();
 
             $apartment->image_id = $image->id;
             $apartment->message_id = $message->id;
             $apartment->view_id = $view->id;
 
             $apartment->save();
+        }
     }
-}
-
 }
