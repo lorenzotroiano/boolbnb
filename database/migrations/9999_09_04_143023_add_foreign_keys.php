@@ -21,17 +21,19 @@ return new class extends Migration
         Schema::table('apartments', function (Blueprint $table) {
 
             $table->foreignId('image_id')->constrained();
-        });
-
-        Schema::table('apartments', function (Blueprint $table) {
-
             $table->foreignId('view_id')->constrained();
-        });
-
-        Schema::table('apartments', function (Blueprint $table) {
-
             $table->foreignId('message_id')->constrained();
         });
+
+        // Schema::table('apartments', function (Blueprint $table) {
+
+        //     $table->foreignId('view_id')->constrained();
+        // });
+
+        // Schema::table('apartments', function (Blueprint $table) {
+
+        //     $table->foreignId('message_id')->constrained();
+        // });
 
 
         Schema::table('apartment_service', function (Blueprint $table) {
@@ -67,21 +69,29 @@ return new class extends Migration
             $table->dropForeign('apartments_message_id_foreign');
 
             $table->dropColumn('message_id');
-        });
-
-        Schema::table('apartments', function (Blueprint $table) {
 
             $table->dropForeign('apartments_view_id_foreign');
 
             $table->dropColumn('view_id');
-        });
-
-        Schema::table('apartments', function (Blueprint $table) {
 
             $table->dropForeign('apartments_image_id_foreign');
 
             $table->dropColumn('image_id');
         });
+
+        // Schema::table('apartments', function (Blueprint $table) {
+
+        //     $table->dropForeign('apartments_view_id_foreign');
+
+        //     $table->dropColumn('view_id');
+        // });
+
+        // Schema::table('apartments', function (Blueprint $table) {
+
+        //     $table->dropForeign('apartments_image_id_foreign');
+
+        //     $table->dropColumn('image_id');
+        // });
 
 
         Schema::table('apartment_service', function (Blueprint $table) {
@@ -98,8 +108,8 @@ return new class extends Migration
 
         Schema::table('apartment_sponsor', function (Blueprint $table) {
 
-            $table->dropForeign('apartment_service_apartment_id_foreign');
-            $table->dropForeign('apartment_service_sponsor_id_foreign');
+            $table->dropForeign('apartment_sponsor_apartment_id_foreign');
+            $table->dropForeign('apartment_sponsor_sponsor_id_foreign');
 
             $table->dropColumn('apartment_id');
             $table->dropColumn('sponsor_id');
