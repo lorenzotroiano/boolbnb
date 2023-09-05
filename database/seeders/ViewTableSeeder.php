@@ -16,6 +16,5 @@ class ViewTableSeeder extends Seeder
     public function run()
     {
         View::factory()->count(100)->create();
-
     }
 }

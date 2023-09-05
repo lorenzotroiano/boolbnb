@@ -19,8 +19,8 @@ class ImageFactory extends Factory
         return [
 
 
-            'image' => fake()->image(null, 640, 480),
-            'cover' => fake()->image(null, 640, 480),
+            'image' => fake()->paragraph(),
+            'cover' => fake()->paragraph(),
 
         ];
     }

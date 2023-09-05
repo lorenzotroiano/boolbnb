@@ -16,6 +16,5 @@ class SponsorTableSeeder extends Seeder
     public function run()
     {
         Sponsor::factory()->count(3)->create();
-
     }
 }

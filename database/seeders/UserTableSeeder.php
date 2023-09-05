@@ -23,11 +23,10 @@ class UserTableSeeder extends Seeder
 
             $apartments = Apartment::inRandomOrder()->limit(rand(0, 3))->get();
             
-
-            $user->apartments()->attach($apartments);
-            
+            $user->apartment_id = $apartments->id;
 
             $user->save();
+            
         }
     }
 }

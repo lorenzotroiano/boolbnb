@@ -19,12 +19,12 @@ class ApartmentTableSeeder extends Seeder
     public function run()
     {
 
-        $apartments = Apartment::factory()->count(100)->make();
+        $apartments = Apartment::factory()->count(20)->make();
         foreach ($apartments as $apartment) {
 
-            $image = Image::inRandomOrder()->limit(rand(1, 20))->get();
-            $message = Message::inRandomOrder()->limit(rand(1, 20))->get();
-            $view = View::inRandomOrder()->limit(rand(1, 500))->get();
+            $image = Image::inRandomOrder()->limit(rand(1, 2))->get();
+            $message = Message::inRandomOrder()->limit(rand(1, 2))->get();
+            $view = View::inRandomOrder()->limit(rand(1, 2))->get();
 
             $apartment->image_id = $image->id;
             $apartment->message_id = $message->id;
