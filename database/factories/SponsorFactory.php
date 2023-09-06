@@ -19,7 +19,7 @@ class SponsorFactory extends Factory
         return [
             'name' => fake()->randomElement(['base', 'medio', 'premium']),
             'price' => fake()->randomFloat(2, 1, 10),
-            'duration' => fake()->time(1, 24)
+            'duration' => fake()->numberBetween(1, 7)
         ];
     }
 }

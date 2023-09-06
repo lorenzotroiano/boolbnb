@@ -18,11 +18,11 @@ class ApartmentFactory extends Factory
     {
         return [
 
-            'name' => fake()->name(),
+            'name' => fake()->company(),
             'description' => fake()->paragraph(),
-            'room' => fake()->randomDigit(3, 15),
-            'bathroom' => fake()->randomDigit(1, 3),
-            'mq' => fake()->randomNumber(3, false),
+            'room' => fake()->numberBetween(4, 15),
+            'bathroom' => fake()->numberBetween(1, 2),
+            'mq' => fake()->numberBetween(40, 200),
             'address' => fake()->address(),
             'latitude' => fake()->latitude($min = -90, $max = 90),
             'longitude' => fake()->longitude($min = -180, $max = 180),

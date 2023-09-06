@@ -17,8 +17,8 @@ class ApartmentSponsorFactory extends Factory
     public function definition()
     {
         return [
-            'start_date' => fake()->dateTimeBetween('-4 year', 'now'),
-            'end_date' => fake()->dateTimeBetween('now', '+10 year'),
+            'start_date' => fake()->dateTimeBetween('now'),
+            'end_date' => fake()->dateTimeBetween('+1 day', '+7 day'),
         ];
     }
 }
