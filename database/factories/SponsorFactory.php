@@ -4,38 +4,36 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sponsor>
- */
 class SponsorFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+
     public function definition()
     {
-        
         $names = ['Economy', 'Standard', 'Premium'];
 
-        $sponsors = [];
+        // Seleziona un nome casuale dall'array $names
+        $name = $this->faker->randomElement($names);
 
-        for ($i=0; $i < count($names) ; $i++) { 
-            
-            $sponsors = [
-                'name' => $names[$i],
-                'price' => fake()->randomFloat(2, 1, 10),
-                'duration' => fake()->numberBetween(1, 7)
-            ];
+        // Configurazione dei dettagli basata sul nome
+        switch ($name) {
+            case 'Economy':
+                $price = $this->faker->randomFloat(2, 1, 3);
+                $duration = $this->faker->numberBetween(1, 3);
+                break;
+            case 'Standard':
+                $price = $this->faker->randomFloat(2, 3, 7);
+                $duration = $this->faker->numberBetween(3, 5);
+                break;
+            case 'Premium':
+                $price = $this->faker->randomFloat(2, 7, 10);
+                $duration = $this->faker->numberBetween(5, 7);
+                break;
         }
-        
-        return $sponsors;
 
-        // return [
-        //     'name' => fake()->randomElement(['base', 'medio', 'premium']),
-        //     'price' => fake()->randomFloat(2, 1, 10),
-        //     'duration' => fake()->numberBetween(1, 7)
-        // ];
+        return [
+            'name' => $name,
+            'price' => $price,
+            'duration' => $duration
+        ];
     }
 }

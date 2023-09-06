@@ -13,8 +13,25 @@ class SponsorTableSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
-        Sponsor::factory()->count(3)->create();
+        Sponsor::create([
+            'name' => 'Economy',
+            'price' => 2.99,
+            'duration' => 1,
+        ]);
+
+        Sponsor::create([
+            'name' => 'Standard',
+            'price' => 4.99,
+            'duration' => 4,
+        ]);
+
+        Sponsor::create([
+            'name' => 'Premium',
+            'price' => 8.99,
+            'duration' => 7,
+        ]);
     }
 }
