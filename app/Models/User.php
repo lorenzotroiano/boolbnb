@@ -21,8 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'birth_date',
-        'apartment_id'
+        'birth_date'
     ];
 
     public function apartments()

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Apartment;
+use App\Models\User;
 
 class ApartmentTableSeeder extends Seeder
 {
@@ -15,6 +16,16 @@ class ApartmentTableSeeder extends Seeder
      */
     public function run()
     {
-        Apartment::factory()->count(100)->create();
+
+        $apartments = Apartment::factory()->count(30)->make();
+
+        foreach ($apartments as $apartment) {
+
+            $users = User::inRandomOrder()->first();
+
+            $apartment->user_id = $users->id;
+
+            $apartment->save();
+        }
     }
 }

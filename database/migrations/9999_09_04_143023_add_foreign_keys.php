@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('apartments', function (Blueprint $table) {
 
-            $table->foreignId('apartment_id')->constrained();
+            $table->foreignId('user_id')->constrained();
         });
 
         Schema::table('apartment_service', function (Blueprint $table) {
@@ -34,22 +34,17 @@ return new class extends Migration
         Schema::table('messages', function (Blueprint $table) {
 
             $table->foreignId('apartment_id')->constrained();
-
         });
 
         Schema::table('views', function (Blueprint $table) {
 
             $table->foreignId('apartment_id')->constrained();
-
         });
 
         Schema::table('images', function (Blueprint $table) {
 
             $table->foreignId('apartment_id')->constrained();
-
         });
-
-
     }
 
     /**
@@ -59,14 +54,14 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('apartments', function (Blueprint $table) {
 
-            $table->dropForeign('users_apartment_id_foreign');
+            $table->dropForeign('apartments_user_id_foreign');
 
-            $table->dropColumn('apartment_id');
+            $table->dropColumn('user_id');
         });
 
-        
+
         Schema::table('apartment_service', function (Blueprint $table) {
 
             $table->dropForeign('apartment_service_apartment_id_foreign');
@@ -88,28 +83,24 @@ return new class extends Migration
 
         Schema::table('messages', function (Blueprint $table) {
 
-            $table->dropForeign('messages_apartments_id_foreign');
+            $table->dropForeign('messages_apartment_id_foreign');
 
             $table->dropColumn('apartment_id');
-
         });
 
         Schema::table('views', function (Blueprint $table) {
 
-            $table->dropForeign('views_apartments_id_foreign');
+            $table->dropForeign('views_apartment_id_foreign');
 
             $table->dropColumn('apartment_id');
-
         });
 
         // Tabella immagini
         Schema::table('images', function (Blueprint $table) {
 
-            $table->dropForeign('images_apartments_id_foreign');
+            $table->dropForeign('images_apartment_id_foreign');
 
             $table->dropColumn('apartment_id');
-
-
         });
     }
 };

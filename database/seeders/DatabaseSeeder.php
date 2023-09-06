@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            UserTableSeeder::class,
             ApartmentTableSeeder::class,
             MessageTableSeeder::class,
             ViewTableSeeder::class,
             ImageTableSeeder::class,
             SponsorTableSeeder::class,
-            ServiceTableSeeder::class,           
-            UserTableSeeder::class,
+            ServiceTableSeeder::class,
             ApartmentSponsorTableSeeder::class
         ]);
     }

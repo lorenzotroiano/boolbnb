@@ -17,16 +17,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::factory()->count(30)->make();
 
-        foreach ($users as $user) {
-
-            $apartments = Apartment::inRandomOrder()->first();
-            
-            $user->apartment_id = $apartments->id;
-
-            $user->save();
-        }
-
+        User::factory()->count(100)->create();
     }
 }

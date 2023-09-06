@@ -19,7 +19,9 @@ class Apartment extends Model
         'latitude',
         'longitude',
         'visible',
-        'cover'
+        'cover',
+
+        'user_id'
     ];
 
     public function user()
