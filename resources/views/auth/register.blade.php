@@ -39,6 +39,21 @@
                             </div>
                         </div>
 
+                        {{-- BIRTH_DATE --}}
+                        <div class="mb-4 row">
+                            <label for="birth_date" class="col-md-4 col-form-label text-md-right"> Inserisci il peggior giorno della vita dei tuoi genitori</label>
+
+                            <div class="col-md-6">
+                                <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" required autocomplete="birth_date">
+
+                                @error('birth_date')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="mb-4 row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 

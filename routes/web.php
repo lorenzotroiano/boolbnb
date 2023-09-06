@@ -1,22 +1,11 @@
 <?php
 
+// Percorso dei controller
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\Apartment\ApartmentController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -28,4 +17,35 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+
+// Rotta guest intro
+Route::get('/', [GuestController::class, 'index'])
+    ->name('home');
+
+// Rotta Guest Show
+Route::get('/show/{id}', [GuestController::class, 'show'])
+    ->name('show');
+
+
+// Rotte auth
+Route::middleware('auth')->group(function () {
+
+    // Home Auth
+    Route::get('/', [ApartmentController::class, 'index'])
+        ->name('home');
+
+    // Rotta Auth Show
+    Route::get('/show/{id}', [ApartmentController::class, 'show'])
+        ->name('show');
+
+
+    // Rotta Auth CREATE
+    Route::get('/create', [ApartmentController::class, 'create'])
+        ->name('create');
+
+    // Rotta per salvare un nuovo progetto nel database
+    Route::post('/store', [ApartmentController::class, 'store'])
+        ->name('store');
+});
