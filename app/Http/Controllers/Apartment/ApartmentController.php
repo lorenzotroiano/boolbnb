@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apartment;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
 use App\Models\Image;
 use App\Models\Service;
@@ -58,6 +59,9 @@ class ApartmentController extends Controller
             // Potresti voler gestire l'errore: chiamata API fallita
             return redirect()->back()->with('error', 'Errore nel recupero delle coordinate.');
         }
+
+        // Imposta il user_id dell'appartamento con l'id dell'utente autenticato
+        $data['user_id'] = Auth::id();
 
         // Creazione dell'appartamento e associazione dei servizi
         $apartment = Apartment::create($data);
