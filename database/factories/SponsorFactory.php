@@ -16,10 +16,26 @@ class SponsorFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => fake()->randomElement(['base', 'medio', 'premium']),
-            'price' => fake()->randomFloat(2, 1, 10),
-            'duration' => fake()->numberBetween(1, 7)
-        ];
+        
+        $names = ['Economy', 'Standard', 'Premium'];
+
+        $sponsors = [];
+
+        for ($i=0; $i < count($names) ; $i++) { 
+            
+            $sponsors = [
+                'name' => $names[$i],
+                'price' => fake()->randomFloat(2, 1, 10),
+                'duration' => fake()->numberBetween(1, 7)
+            ];
+        }
+        
+        return $sponsors;
+
+        // return [
+        //     'name' => fake()->randomElement(['base', 'medio', 'premium']),
+        //     'price' => fake()->randomFloat(2, 1, 10),
+        //     'duration' => fake()->numberBetween(1, 7)
+        // ];
     }
 }
