@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Apartment;
 use App\Models\User;
+use App\Models\ApartmentSponsor;
 
 class ApartmentTableSeeder extends Seeder
 {

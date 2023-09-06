@@ -17,19 +17,20 @@ class ApartmentSponsorTableSeeder extends Seeder
      */
     public function run()
     {
+        // Genero gli id relativi alla tabella ponte
         $apartmentSponsors = ApartmentSponsor::factory()->count(5)->make();
 
         foreach ($apartmentSponsors as $apartmentSponsor) {
+            $randomApartment = Apartment::inRandomOrder()->first();
+            $randomSponsor = Sponsor::inRandomOrder()->first();
 
-            $apartments = Apartment::inRandomOrder()->first();
-            $sponsors = Sponsor::inRandomOrder()->first();
-            
-
-            $apartmentSponsor->apartment_id = $apartments->id;
-            $apartmentSponsor->sponsor_id = $sponsors->id;
-
+            $apartmentSponsor->apartment_id = $randomApartment->id;
+            $apartmentSponsor->sponsor_id = $randomSponsor->id;
             $apartmentSponsor->save();
-            
+
+            // Modifica il valore visible subito dopo aver salvato l'ApartmentSponsor
+            $randomApartment->visible = true;
+            $randomApartment->save();
         }
     }
 }
