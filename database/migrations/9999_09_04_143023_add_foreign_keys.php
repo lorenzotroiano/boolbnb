@@ -102,11 +102,13 @@ return new class extends Migration
 
         });
 
+        // Tabella immagini
         Schema::table('images', function (Blueprint $table) {
 
             $table->dropForeign('images_apartments_id_foreign');
 
             $table->dropColumn('apartment_id');
+
 
         });
     }
