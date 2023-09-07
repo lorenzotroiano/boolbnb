@@ -20,7 +20,4 @@
             Immagine non disponibile
         @endif
     </div>
-
-
-    {{-- <span>cover : <img src="{{asset('storage/' .$apartament->cover)}}" alt="Immagine di Mauro"> </span><br> --}}
 @endsection

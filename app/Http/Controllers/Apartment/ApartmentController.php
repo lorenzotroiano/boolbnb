@@ -37,7 +37,7 @@ class ApartmentController extends Controller
     public function store(Request $request)
     {
         // Recupera i dati dal form inviato
-        $data = $request->all();
+        $data = $request->validate($this -> getValidations(),$this -> getValidationsMessage());
 
         $img_path= Storage::put('uploads', $data['cover']);
         $data['cover'] = $img_path;
@@ -70,13 +70,44 @@ class ApartmentController extends Controller
         $apartment = Apartment::create($data);
         $apartment->services()->attach($data['services']);
 
-
-
-
-
         // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena creato
         return redirect()->route('show', $apartment->id);
+    }
 
-        // Push per Matteo
+    public function getValidations(){
+        return[
+            "name" => "required|string|min:3",
+            "description" => "nullable|string",
+            "room" => "required|int|min:4|max:20",
+            "bathroom" => "required|int|max:4",
+            "mq" => "required|int|min:10",
+            "address" => "required|string",
+            "cover" => "required|image"
+        ];
+    }
+
+    public function getValidationsMessage(){
+        return[
+            "name.required" => "Il campo Nome è obbligatorio.",
+            "name.string" => "Il campo Nome deve essere una stringa.",
+            "name.min" => "Il campo Nome deve contenere almeno 3 caratteri.",
+            "description.string" => "Il campo Descrizione deve essere una stringa.",
+            "room.required" => "Il campo Stanza è obbligatorio.",
+            "room.int" => "Il campo Stanza deve essere un numero intero.",
+            "room.min" => "Il campo Stanza deve essere almeno 4.",
+            "room.max" => "Il campo Stanza non deve essere superiore a 20.",
+            "bathroom.required" => "Il campo Bagno è obbligatorio.",
+            "bathroom.int" => "Il campo Bagno deve essere un numero intero.",
+            "bathroom.max" => "Il campo Bagno non deve essere superiore a 4.",
+            "mq.required" => "Il campo Metri Quadrati (mq) è obbligatorio.",
+            "mq.int" => "Il campo Metri Quadrati (mq) deve essere un numero intero.",
+            "mq.min" => "Il campo Metri Quadrati (mq) deve essere almeno 10.",
+            "address.required" => "Il campo Indirizzo è obbligatorio.",
+            "address.string" => "Il campo Indirizzo deve essere una stringa.",
+            "cover.required" => "Il campo Copertina è obbligatorio.",
+            "cover.image" => "Il campo Copertina deve essere un'immagine."
+        ];
     }
 }
+
+
