@@ -13,6 +13,16 @@
     <span>address : {{ $apartment->address }}</span><br>
     <span>latitude : {{ $apartment->latitude }}</span><br>
     <span>longitude : {{ $apartment->longitude }}</span><br>
+    @foreach ($apartment->services as $service)
+        <div class="form-check mx-auto" style="max-width: 300px">
+            <span class="form-check-label">
+                {{ $service->name }}
+            </span>
+            <span class="form-check-label">
+                {{ $service->icon }}
+            </span>
+        </div>
+    @endforeach
     <div>
         @if ($apartment->cover)
             <img src="{{ asset('storage/' . $apartment->cover) }}" width="200px" alt="Immagine di Mauro">
@@ -20,4 +30,6 @@
             Immagine non disponibile
         @endif
     </div>
+
+    <span><a href="{{ route('edit', $apartment->id) }}">Modifica appartamento</a></span>
 @endsection

@@ -3,14 +3,18 @@
     <div class="container text-center">
         <h1>Create new Apartment</h1>
 
-        <form method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('update', $apartment->id) }}" enctype="multipart/form-data">
 
             @csrf
-            @method('POST')
+            @method('PUT')
 
-            <label for="cover">Main picture</label>
+            @if ($apartment->cover)
+                <img src="{{ asset('storage/' . $apartment->cover) }}" width="200px" alt="Immagine di Mauro">
+            @else
+                Immagine non disponibile
+            @endif
             <br>
-            <input type="file" name="cover" id="cover">
+            <input type="file" name="cover" id="cover" value="{{ $apartment->cover }}">
             <br>
             @error('cover')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -18,7 +22,7 @@
 
             <label for="name">name</label>
             <br>
-            <input type="text" name="name" id="name">
+            <input type="text" name="name" id="name" value="{{ $apartment->name }}">
             <br>
 
             @error('name')
@@ -29,7 +33,7 @@
 
             <label for="description">description</label>
             <br>
-            <input type="text" name="description" id="description">
+            <input type="text" name="description" id="description" value="{{ $apartment->description }}">
             <br>
             @error('description')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -38,7 +42,7 @@
 
             <label for="room">room</label>
             <br>
-            <input type="number" name="room" id="room">
+            <input type="number" name="room" id="room" value="{{ $apartment->room }}">
             <br>
             @error('room')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -47,7 +51,7 @@
 
             <label for="bathroom">bathroom</label>
             <br>
-            <input type="number" name="bathroom" id="bathroom">
+            <input type="number" name="bathroom" id="bathroom" value="{{ $apartment->bathroom }}">
             <br>
             @error('bathroom')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -56,7 +60,7 @@
 
             <label for="mq">mq</label>
             <br>
-            <input type="number" name="mq" id="mq">
+            <input type="number" name="mq" id="mq" value="{{ $apartment->mq }}">
             <br>
             @error('mq')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -65,13 +69,11 @@
 
             <label for="address">address</label>
             <br>
-            <input type="text" name="address" id="address">
+            <input type="text" name="address" id="address" value="{{ $apartment->address }}">
             <br>
             @error('address')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-
-
 
 
             @foreach ($services as $service)

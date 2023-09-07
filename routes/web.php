@@ -48,4 +48,11 @@ Route::middleware('auth')->group(function () {
     // Rotta per salvare un nuovo progetto nel database
     Route::post('/store', [ApartmentController::class, 'store'])
         ->name('store');
+
+    // Rotte per la update
+    Route ::get('/edit/{id}', [ApartmentController :: class, 'edit'])
+        ->name('edit');
+
+    Route ::put('/update/{id}', [ApartmentController :: class, 'update'])
+        ->name('update');
 });
