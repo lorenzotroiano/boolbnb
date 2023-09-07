@@ -117,7 +117,7 @@ class ApartmentController extends Controller
             "bathroom" => "required|int|max:4",
             "mq" => "required|int|min:8",
             "address" => "required|string",
-            "cover" => "required|image",
+            // "cover" => "required|image",
             "services" => "required|array|exists:services,id"
         ];
     }
@@ -141,8 +141,8 @@ class ApartmentController extends Controller
             "mq.min" => "Il campo Metri Quadrati (mq) deve essere almeno 10.",
             "address.required" => "Il campo Indirizzo è obbligatorio.",
             "address.string" => "Il campo Indirizzo deve essere una stringa.",
-            "cover.required" => "Il campo Copertina è obbligatorio.",
-            "cover.image" => "Il campo Copertina deve essere un'immagine.",
+            // "cover.required" => "Il campo Copertina è obbligatorio.",
+            // "cover.image" => "Il campo Copertina deve essere un'immagine.",
             "services.required" => "Il campo Servizi è obbligatorio.",
             "services.array" => "Il campo Servizi deve essere un array.",
             "services.exists" => "Il campo Servizi contiene valori non validi."
