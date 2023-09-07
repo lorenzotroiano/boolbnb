@@ -5,9 +5,10 @@
             <h1>Home BoolBNB Guest</h1>
         @endguest
 
-        @auth
-            <h1>Home BoolBNB {{ Auth::user()->name }}</h1>
-        @endauth
+    {{-- Auth --}}
+    @auth
+    <div>
+        <h1>Home BoolBNB {{ Auth::user()->name }}</h1>
         <ul>
             @foreach ($apartments as $apartment)
                 @if ($apartment->visible)
@@ -17,6 +18,7 @@
                 @endif
             @endforeach
         </ul>
-        <button class="btn btn-warning"><a href="{{route('create')}}">ADD YOUR HOME</a></button>
+
+        <button><a href="{{route('create')}}">+</a></button>
     </div>
 @endsection
