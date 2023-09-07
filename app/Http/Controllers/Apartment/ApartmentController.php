@@ -77,14 +77,16 @@ class ApartmentController extends Controller
         return redirect()->route('show', $apartment->id);
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $apartment = Apartment::findOrFail($id);
-        
+
         $services = Service::all();
-        return view("edit", compact("apartment","services"));
+        return view("edit", compact("apartment", "services"));
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $data = $request->validate(
             $this->getValidations(),
             $this->getValidationsMessage()
@@ -93,19 +95,19 @@ class ApartmentController extends Controller
 
 
         if (!array_key_exists("cover", $data))
-            $data['cover'] = $apartment -> cover;
+            $data['cover'] = $apartment->cover;
         else {
-            if ($apartment -> cover) {
+            if ($apartment->cover) {
 
-                $oldImgPath = $apartment -> cover;
+                $oldImgPath = $apartment->cover;
                 Storage::delete($oldImgPath);
             }
 
             $data['cover'] = Storage::put('uploads', $data['cover']);
         }
 
-        $apartment ->update($data);
-        $apartment -> services() -> sync($data['services']);
+        $apartment->update($data);
+        $apartment->services()->sync($data['services']);
         return redirect()->route('show', $apartment->id);
     }
 
@@ -118,7 +120,7 @@ class ApartmentController extends Controller
             "bathroom" => "required|int|max:4",
             "mq" => "required|int|min:8",
             "address" => "required|string",
-            // "cover" => "required|image",
+            "cover" => "image",
             "services" => "required|array|exists:services,id"
         ];
     }
@@ -143,12 +145,10 @@ class ApartmentController extends Controller
             "address.required" => "Il campo Indirizzo è obbligatorio.",
             "address.string" => "Il campo Indirizzo deve essere una stringa.",
             // "cover.required" => "Il campo Copertina è obbligatorio.",
-            // "cover.image" => "Il campo Copertina deve essere un'immagine.",
+            "cover.image" => "Il campo Copertina deve essere un'immagine.",
             "services.required" => "Il campo Servizi è obbligatorio.",
             "services.array" => "Il campo Servizi deve essere un array.",
             "services.exists" => "Il campo Servizi contiene valori non validi."
         ];
     }
-
-
 }
