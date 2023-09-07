@@ -69,5 +69,7 @@ class ApartmentController extends Controller
 
         // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena creato
         return redirect()->route('show', $apartment->id);
+
+        // Push per Matteo
     }
 }
