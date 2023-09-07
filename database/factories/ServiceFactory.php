@@ -16,9 +16,9 @@ class ServiceFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'name' => fake()->randomElement(['wifi', 'spotify', 'garage', 'youtube', 'condizionatore', 'palestra', 'bar', 'scuola', 'tv', 'idromassaggio', 'colazione', 'animali consentiti']),
-            'icon' => fake()->image(null, 80, 80),
-        ];
+        // return [
+        //     'name' => fake()->randomElement(['wifi', 'spotify', 'garage', 'youtube', 'condizionatore', 'palestra', 'bar', 'scuola', 'tv', 'idromassaggio', 'colazione', 'animali consentiti']),
+        //     'icon' => fake()->image(null, 80, 80),
+        // ];
     }
 }
