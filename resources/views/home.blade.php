@@ -10,7 +10,7 @@
 
         <ul>
             @foreach ($apartments as $apartment)
-                @if ($apartment->visible)
+                @if ($apartment->sponsor)
                     <li><a style="color: red" href="{{ route('show', $apartment->id) }}">{{ $apartment->name }}</a></li>
                 @else
                     <li><a href="{{ route('show', $apartment->id) }}">{{ $apartment->name }}</a></li>
