@@ -19,6 +19,7 @@ class Apartment extends Model
         'latitude',
         'longitude',
         'visible',
+        'sponsor',
         'cover',
 
         'user_id'

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="container text-center">
-        <h1>Create new Apartment</h1>
+        <h1>MODIFY</h1>
 
         <form method="POST" action="{{ route('update', $apartment->id) }}" enctype="multipart/form-data">
 
@@ -76,6 +76,17 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
+            <label for="visible">Visible</label>
+            <br>
+            <input type="radio" name="visible" id="visible-yes" value="1"  @if ($apartment->visible == 1) checked @endif required> Yes
+            <input type="radio" name="visible" id="visible-no" value="0" @if ($apartment->visible == 0) checked @endif required> No
+            <br>
+            @error('visible')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            
+            
+
 
             @foreach ($services as $service)
                 <div class="form-check mx-auto" style="max-width: 300px">
@@ -90,7 +101,7 @@
 
 
             <!-- Bottone di submit per inviare il form -->
-            <input class="my-3" type="submit" value="CREATE">
+            <input class="my-3" type="submit" value="MODIFY">
 
         </form>
     </div>

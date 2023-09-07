@@ -71,6 +71,18 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
+            
+            <label for="visible">Visible</label>
+            <br>
+            <input type="radio" name="visible" id="visible-yes" value="1"> Yes
+            <input type="radio" name="visible" id="visible-no" value="0"> No
+            <br>
+            @error('visible')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            
+            <br>
+
 
 
 

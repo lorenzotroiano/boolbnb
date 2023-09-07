@@ -24,7 +24,8 @@ return new class extends Migration
             $table->text('address');
             $table->float('latitude')->hidden();
             $table->float('longitude')->hidden();
-            $table->boolean('visible')->default(false);
+            $table->boolean('visible')->default(true);
+            $table->boolean('sponsor')->default(false);
             $table->text('cover');
 
 

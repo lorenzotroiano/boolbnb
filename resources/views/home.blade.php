@@ -17,5 +17,6 @@
                 @endif
             @endforeach
         </ul>
+        <button class="btn btn-warning"><a href="{{route('create')}}">ADD YOUR HOME</a></button>
     </div>
 @endsection
