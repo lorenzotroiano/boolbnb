@@ -31,5 +31,8 @@
         @endif
     </div>
 
-    <span><a href="{{ route('edit', $apartment->id) }}">Modifica appartamento</a></span>
+    @if (Auth::id() === $apartment->user_id)
+        <span><a href="{{ route('edit', $apartment->id) }}">Modifica appartamento</a></span>
+    @endif
+    
 @endsection

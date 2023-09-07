@@ -79,6 +79,7 @@ class ApartmentController extends Controller
 
     public function edit($id){
         $apartment = Apartment::findOrFail($id);
+        
         $services = Service::all();
         return view("edit", compact("apartment","services"));
     }
