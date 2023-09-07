@@ -21,7 +21,7 @@ require __DIR__ . '/auth.php';
 
 
 // Rotta guest intro
-Route::get('/', [GuestController::class, 'index'])
+Route::get('/home', [GuestController::class, 'index'])
     ->name('home');
 
 // Rotta Guest Show
@@ -50,9 +50,9 @@ Route::middleware('auth')->group(function () {
         ->name('store');
 
     // Rotte per la update
-    Route ::get('/edit/{id}', [ApartmentController :: class, 'edit'])
+    Route::get('/edit/{id}', [ApartmentController::class, 'edit'])
         ->name('edit');
 
-    Route ::put('/update/{id}', [ApartmentController :: class, 'update'])
+    Route::put('/update/{id}', [ApartmentController::class, 'update'])
         ->name('update');
 });

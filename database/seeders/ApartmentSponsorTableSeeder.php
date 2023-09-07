@@ -29,7 +29,7 @@ class ApartmentSponsorTableSeeder extends Seeder
             $apartmentSponsor->save();
 
             // Modifica il valore visible subito dopo aver salvato l'ApartmentSponsor
-            $randomApartment->visible = true;
+            $randomApartment->sponsor = true;
             $randomApartment->save();
         }
     }

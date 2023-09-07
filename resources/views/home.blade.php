@@ -21,7 +21,7 @@
     {{-- Auth --}}
     @auth
     <div>
-        <h1>Home BoolBNB {{ Auth::user()->name }}</h1>
+        <h1>Home BoolBNB <span style="text-transform: capitalize">{{ Auth::user()->name }}</span> </h1>
         <ul>
             @foreach ($apartments as $apartment)
                 @if ($apartment->visible)
@@ -34,7 +34,7 @@
 
         </ul>
 
-        <button><a href="{{route('create')}}">+</a></button>
+        <button class="btn btn-warning"><a href="{{route('create')}}">ADD YOUR HOME</a></button>
     </div>
     @endauth
     
