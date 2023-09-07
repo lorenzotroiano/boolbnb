@@ -14,69 +14,6 @@ class ServiceTableSeeder extends Seeder
      *
      * @return void
      */
-    // public function run()
-    // {
-    //     Service::create([
-    //         'name' => 'Wifi',
-    //         'icon' => 'nome_del_file_icona_wifi.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Spotify',
-    //         'icon' => 'nome_del_file_icona_spotify.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Tv',
-    //         'icon' => 'Tv.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'FrigoBar',
-    //         'icon' => 'FrigoBar.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Idromassaggio',
-    //         'icon' => 'Idromassaggio.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Garage',
-    //         'icon' => 'Garage.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Animali',
-    //         'icon' => 'Animali.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Bevande',
-    //         'icon' => 'Bevande.png',
-    //     ]);
-
-
-    //     Service::create([
-    //         'name' => 'Palestra',
-    //         'icon' => 'Palestra.png',
-    //     ]);
-
-    //     Service::create([
-    //         'name' => 'Bar',
-    //         'icon' => 'Bar.png',
-    //     ]);
-
-    //     // Aggiungi altri servizi desiderati qui...
-
-    //     $apartments = Apartment::inRandomOrder()->limit(rand(1, 3))->get();
-    //     $services = Service::whereIn('name', ['Wifi', 'Spotify'])->get();
-
-    //     foreach ($services as $service) {
-    //         $service->apartments()->attach($apartments);
-    //     }
-    // }
-
 
     public function run()
     {
@@ -92,7 +29,7 @@ class ServiceTableSeeder extends Seeder
             ['name' => 'Bevande', 'icon' => 'Bevande.png'],
             ['name' => 'Palestra', 'icon' => 'Palestra.png'],
             ['name' => 'Bar', 'icon' => 'Bar.png'],
-            // Puoi aggiungere altri servizi desiderati qui...
+
         ];
 
         // Loop attraverso l'array dei dati dei servizi e crea i servizi nel database

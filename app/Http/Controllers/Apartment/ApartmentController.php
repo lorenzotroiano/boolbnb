@@ -14,19 +14,6 @@ use Illuminate\Support\Facades\Http;
 
 class ApartmentController extends Controller
 {
-    public function index()
-    {
-        $apartments = Apartment::all();
-        return view("home", compact("apartments"));
-    }
-
-    public function show($id)
-    {
-        $apartment = Apartment::findOrFail($id);
-
-        return view("show", compact("apartment"));
-    }
-
 
     public function create()
     {

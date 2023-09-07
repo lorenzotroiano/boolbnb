@@ -32,14 +32,6 @@ Route::get('/show/{id}', [GuestController::class, 'show'])
 // Rotte auth
 Route::middleware('auth')->group(function () {
 
-    // Home Auth
-    Route::get('/', [ApartmentController::class, 'index'])
-        ->name('home');
-
-    // Rotta Auth Show
-    Route::get('/show/{id}', [ApartmentController::class, 'show'])
-        ->name('show');
-
 
     // Rotta Auth CREATE
     Route::get('/create', [ApartmentController::class, 'create'])
@@ -50,9 +42,9 @@ Route::middleware('auth')->group(function () {
         ->name('store');
 
     // Rotte per la update
-    Route ::get('/edit/{id}', [ApartmentController :: class, 'edit'])
+    Route::get('/edit/{id}', [ApartmentController::class, 'edit'])
         ->name('edit');
 
-    Route ::put('/update/{id}', [ApartmentController :: class, 'update'])
+    Route::put('/update/{id}', [ApartmentController::class, 'update'])
         ->name('update');
 });
