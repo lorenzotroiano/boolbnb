@@ -90,6 +90,7 @@ class ApartmentController extends Controller
         );
         $apartment = Apartment::findOrFail($id);
 
+
         if (!array_key_exists("cover", $data))
             $data['cover'] = $apartment -> cover;
         else {
@@ -103,7 +104,7 @@ class ApartmentController extends Controller
         }
 
         $apartment ->update($data);
-
+        $apartment -> services() -> sync($data['services']);
         return redirect()->route('show', $apartment->id);
     }
 
