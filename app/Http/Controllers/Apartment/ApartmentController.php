@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apartment;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
@@ -38,6 +39,8 @@ class ApartmentController extends Controller
         // Recupera i dati dal form inviato
         $data = $request->all();
 
+        $img_path= Storage::put('uploads', $data['cover']);
+        $data['cover'] = $img_path;
         // Chiamata API per ottenere latitudine e longitudine
         $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
@@ -66,6 +69,10 @@ class ApartmentController extends Controller
         // Creazione dell'appartamento e associazione dei servizi
         $apartment = Apartment::create($data);
         $apartment->services()->attach($data['services']);
+
+
+
+
 
         // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena creato
         return redirect()->route('show', $apartment->id);
