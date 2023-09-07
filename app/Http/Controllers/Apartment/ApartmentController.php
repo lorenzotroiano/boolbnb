@@ -37,9 +37,12 @@ class ApartmentController extends Controller
     public function store(Request $request)
     {
         // Recupera i dati dal form inviato
-        $data = $request->validate($this -> getValidations(),$this -> getValidationsMessage());
+        $data = $request->validate(
+            $this->getValidations(),
+            $this->getValidationsMessage()
+        );
 
-        $img_path= Storage::put('uploads', $data['cover']);
+        $img_path = Storage::put('uploads', $data['cover']);
         $data['cover'] = $img_path;
         // Chiamata API per ottenere latitudine e longitudine
         $address = $data['address'];
@@ -74,8 +77,9 @@ class ApartmentController extends Controller
         return redirect()->route('show', $apartment->id);
     }
 
-    public function getValidations(){
-        return[
+    public function getValidations()
+    {
+        return [
             "name" => "required|string|min:3",
             "description" => "nullable|string",
             "room" => "required|int|min:4|max:20",
@@ -86,8 +90,9 @@ class ApartmentController extends Controller
         ];
     }
 
-    public function getValidationsMessage(){
-        return[
+    public function getValidationsMessage()
+    {
+        return [
             "name.required" => "Il campo Nome è obbligatorio.",
             "name.string" => "Il campo Nome deve essere una stringa.",
             "name.min" => "Il campo Nome deve contenere almeno 3 caratteri.",
@@ -109,5 +114,3 @@ class ApartmentController extends Controller
         ];
     }
 }
-
-
