@@ -111,6 +111,11 @@ class ApartmentController extends Controller
     public function delete($id)
     {
         $apartment = Apartment::FindOrFail($id);
+        
+        if (auth()->user()->id !== $apartment->user_id) {
+            abort(403, 'Non hai il permesso di modificare questa casa.');
+        }
+        
         $apartment->services()->detach();
         $apartment->images()->delete();
         $apartment->messages()->delete();
