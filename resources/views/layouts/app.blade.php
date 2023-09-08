@@ -43,9 +43,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        {{-- Home --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/') }}">{{ __('Home') }}</a>
                         </li>
+                        {{-- My house --}}
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url('/') }}">{{ __('Dashboard') }}</a>
+                            </li>  
+                        @endauth  
                     </ul>
 
                     <!-- Right Side Of Navbar -->
