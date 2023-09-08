@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
-use App\Models\Image;
 use App\Models\Service;
 
 use Illuminate\Http\Request;
