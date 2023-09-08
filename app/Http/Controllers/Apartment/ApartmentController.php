@@ -79,6 +79,12 @@ class ApartmentController extends Controller
         );
         $apartment = Apartment::findOrFail($id);
 
+        // Verifica se l'utente autenticato è l'owner dell'appartamento
+        if (Auth::id() !== $apartment->user_id) {
+            // Se l'utente non è l'owner, reindirizza o restituisci un errore
+            return redirect()->back()->with('error', 'Non sei autorizzato a modificare questo appartamento.');
+        }
+
 
         if (!array_key_exists("cover", $data))
             $data['cover'] = $apartment->cover;
