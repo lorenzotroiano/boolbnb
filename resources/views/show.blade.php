@@ -34,4 +34,12 @@
     @if (Auth::id() === $apartment->user_id)
         <span><a href="{{ route('edit', $apartment->id) }}">Modifica appartamento</a></span>
     @endif
+
+    <form class="d-inline" method="POST" action="{{ route('delete', $apartment->id) }}">
+
+        @csrf
+        @method('DELETE')
+
+        <input class="btn btn-primary" type="submit" value="DELETE">
+    </form>
 @endsection

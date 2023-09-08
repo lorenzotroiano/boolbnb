@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
+use App\Models\Message;
 use App\Models\Service;
 
 use Illuminate\Http\Request;
@@ -105,6 +106,30 @@ class ApartmentController extends Controller
         $apartment->update($data);
         $apartment->services()->sync($data['services']);
         return redirect()->route('show', $apartment->id);
+    }
+
+    public function delete($id)
+    {
+        $apartment = Apartment::FindOrFail($id);
+        $apartment->services()->detach();
+        $apartment->images()->delete();
+        $apartment->messages()->delete();
+        $apartment->views()->delete();
+
+        $apartment->delete();
+        return redirect()->route('home');
+    }
+
+    public function deletePicture($id)
+    {
+        $apartment = Apartment::FindOrFail($id);
+        if ($apartment->cover) {
+            $oldImgPath = $apartment->cover;
+            Storage::delete($oldImgPath);
+        }
+        $apartment->cover = null;
+        $apartment->save();
+        return redirect()->route('log.show', $apartment->id);
     }
 
     public function getValidations()

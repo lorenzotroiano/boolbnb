@@ -4,6 +4,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\Apartment\ApartmentController;
+use App\Models\Apartment;
 use Illuminate\Support\Facades\Route;
 
 
@@ -47,4 +48,10 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/update/{id}', [ApartmentController::class, 'update'])
         ->name('update');
+
+
+    //     Route :: delete('/rabbits/{id}/picture', [RabbitController :: class, 'deletePicture'])
+    // -> name('rabbit.picture.delete');
+    Route::delete('/delete/{id}', [ApartmentController::class, 'delete'])
+        ->name('delete');
 });
