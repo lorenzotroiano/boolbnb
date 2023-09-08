@@ -44,7 +44,7 @@
                             <label for="birth_date" class="col-md-4 col-form-label text-md-right"> Inserisci il peggior giorno della vita dei tuoi genitori</label>
 
                             <div class="col-md-6">
-                                <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" required autocomplete="birth_date">
+                                <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" required autocomplete="birth_date" max="2007-12-31">
 
                                 @error('birth_date')
                                 <span class="invalid-feedback" role="alert">
@@ -54,6 +54,7 @@
                             </div>
                         </div>
 
+                        {{-- Password --}}
                         <div class="mb-4 row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 

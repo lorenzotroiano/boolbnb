@@ -18,7 +18,7 @@
 
             <label for="name">name</label>
             <br>
-            <input type="text" name="name" id="name">
+            <input type="text" name="name" id="name" required minlength="3" maxlength="50">
             <br>
 
             @error('name')
@@ -29,7 +29,7 @@
 
             <label for="description">description</label>
             <br>
-            <input type="text" name="description" id="description">
+            <input type="text" name="description" id="description" required maxlength="255">
             <br>
             @error('description')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -38,7 +38,7 @@
 
             <label for="room">room</label>
             <br>
-            <input type="number" name="room" id="room">
+            <input type="number" name="room" id="room" required min="1" max="20">
             <br>
             @error('room')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -47,7 +47,7 @@
 
             <label for="bathroom">bathroom</label>
             <br>
-            <input type="number" name="bathroom" id="bathroom">
+            <input type="number" name="bathroom" id="bathroom" required max="4">
             <br>
             @error('bathroom')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -56,7 +56,7 @@
 
             <label for="mq">mq</label>
             <br>
-            <input type="number" name="mq" id="mq">
+            <input type="number" name="mq" id="mq" required min="8">
             <br>
             @error('mq')
                 <div class="alert alert-danger">{{ $message }}</div>
@@ -65,7 +65,7 @@
 
             <label for="address">address</label>
             <br>
-            <input type="text" name="address" id="address">
+            <input type="text" name="address" id="address" required>
             <br>
             @error('address')
                 <div class="alert alert-danger">{{ $message }}</div>
