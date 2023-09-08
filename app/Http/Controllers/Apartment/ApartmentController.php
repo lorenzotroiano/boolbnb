@@ -66,9 +66,9 @@ class ApartmentController extends Controller
     public function edit($id)
     {
         $apartment = Apartment::findOrFail($id);
-        if (auth()->user()->id !== $house->user_id) {
-            abort(403, 'Non hai il permesso di modificare questa casa.');
 
+        if (auth()->user()->id !== $apartment->user_id) {
+            abort(403, 'Non hai il permesso di modificare questa casa.');
         }
 
         $services = Service::all();
@@ -82,12 +82,10 @@ class ApartmentController extends Controller
             $this->getValidationsMessage()
         );
         $apartment = Apartment::findOrFail($id);
-        if (auth()->user()->id !== $house->user_id) {
-            abort(403, 'Non hai il permesso di modificare questa casa.');
-        }
+
 
         // Verifica se l'utente autenticato è l'owner dell'appartamento
-        if (auth()->user()->id !== $house->user_id) {
+        if (auth()->user()->id !== $apartment->user_id) {
             abort(403, 'Non hai il permesso di modificare questa casa.');
         }
 
