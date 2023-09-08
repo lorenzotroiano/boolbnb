@@ -8,9 +8,7 @@ use App\Models\Apartment;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,6 +31,10 @@ Route::get('/show/{id}', [GuestController::class, 'show'])
 // Rotte auth
 Route::middleware('auth')->group(function () {
 
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
     // Rotta Auth CREATE
     Route::get('/create', [ApartmentController::class, 'create'])

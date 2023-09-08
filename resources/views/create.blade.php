@@ -85,7 +85,7 @@
 
 
             @foreach ($services as $service)
-                <div class="form-check mx-auto" style="max-width: 300px">
+                <div class="form-check mx-auto user-select-none" style="max-width: 300px">
                     <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" value="{{ $service->id }}" name="services[]"
                             id="service-{{ $service->id }}">

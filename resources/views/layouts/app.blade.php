@@ -47,10 +47,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url('/') }}">{{ __('Home') }}</a>
                         </li>
-                        {{-- My house --}}
+                        {{-- Dashboard --}}
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link" href="{{url('/') }}">{{ __('Dashboard') }}</a>
+                                <a class="nav-link" href="{{url('/dashboard') }}">{{ __('Dashboard') }}</a>
                             </li>  
                         @endauth  
                     </ul>
