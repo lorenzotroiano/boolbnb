@@ -21,7 +21,7 @@ require __DIR__ . '/auth.php';
 
 
 // Rotta guest intro
-Route::get('/home', [GuestController::class, 'index'])
+Route::get('/', [GuestController::class, 'index'])
     ->name('home');
 
 // Rotta Guest Show
