@@ -1,123 +1,102 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container text-center">
-        <h1>Create new Apartment</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Create new Apartment</h1>
 
-        <form method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('store') }}" enctype="multipart/form-data" class="bg-light p-4 rounded shadow">
+        @csrf
+        @method('POST')
 
-            @csrf
-            @method('POST')
+        <div class="mb-3">
+            <label for="cover" class="form-label text-center">Main picture</label>
+            <input type="file" class="form-control" name="cover" id="cover">
+            @error('cover')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
 
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" name="name" id="name" required minlength="3" maxlength="50">
+            @error('name')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" name="description" id="description" required maxlength="255">
+            @error('description')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="room" class="form-label">Room</label>
+            <input type="number" class="form-control" name="room" id="room" required min="1" max="20">
+            @error('room')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="bathroom" class="form-label">Bathroom</label>
+            <input type="number" class="form-control" name="bathroom" id="bathroom" required max="4">
+            @error('bathroom')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="mq" class="form-label">mq</label>
+            <input type="number" class="form-control" name="mq" id="mq" required min="8">
+            @error('mq')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" id="address" required>
+            @error('address')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div id="dropdown" class="mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label">Visible</label>
             <div>
-                <label for="cover">Main picture</label>
-                <br>
-                <input type="file" name="cover" id="cover">
-                <br>
-                @error('cover')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="visible" id="visible-yes" value="1">
+                    <label class="form-check-label" for="visible-yes">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="visible" id="visible-no" value="0">
+                    <label class="form-check-label" for="visible-no">No</label>
+                </div>
             </div>
+            @error('visible')
+                <div class="alert alert-danger mt-2">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div>
-                <label for="name">name</label>
-                <br>
-                <input type="text" name="name" id="name" required minlength="3" maxlength="50">
-                <br>
-    
-                @error('name')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Services</label>
+            @foreach ($services as $service)
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
+                    <label class="form-check-label" for="service-{{ $service->id }}">
+                        {{ $service->name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
 
-
-            <div>
-                <label for="description">description</label>
-                <br>
-                <input type="text" name="description" id="description" required maxlength="255">
-                <br>
-                @error('description')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-
-            <div>
-                <label for="room">room</label>
-                <br>
-                <input type="number" name="room" id="room" required min="1" max="20">
-                <br>
-                @error('room')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-
-            <div>
-                <label for="bathroom">bathroom</label>
-                <br>
-                <input type="number" name="bathroom" id="bathroom" required max="4">
-                <br>
-                @error('bathroom')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-
-            <div>
-                <label for="mq">mq</label>
-                <br>
-                <input type="number" name="mq" id="mq" required min="8">
-                <br>
-                @error('mq')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-
-
-            <div>
-                <label for="address">address</label>
-                <br>
-                <input type="text" name="address" id="address" required>
-                <br>
-                @error('address')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            {{-- Dropdown autocomplete --}}
-            <div id="dropdown">
-            </div>
-
-            <div>
-                <label for="visible">Visible</label>
-                <br>
-                <input type="radio" name="visible" id="visible-yes" value="1"> Yes
-                <input type="radio" name="visible" id="visible-no" value="0"> No
-                <br>
-                @error('visible')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div>
-                @foreach ($services as $service)
-                    <div class="form-check mx-auto user-select-none" style="max-width: 300px">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="{{ $service->id }}" name="services[]"
-                                id="service-{{ $service->id }}">
-                            {{ $service->name }}
-                        </label>
-                    </div>
-                @endforeach
-            </div>
-
-
-            <!-- Bottone di submit per inviare il form -->
-            <input class="my-3" type="submit" value="CREATE">
-
-        </form>
-    </div>
+        <button type="submit" class="btn btn-primary">CREATE</button>
+    </form>
+</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {

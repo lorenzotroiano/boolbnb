@@ -1,83 +1,97 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Questa è la show di <b style="text-transform: capitalize">{{ $apartment->name }}</b> </h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-    {{-- Descrizione --}}
-    <p>
-        <b>Description</b> {{ $apartment->description }}
-    </p>
+            {{-- Titolo --}}
+            <h1 class="mb-4 text-center"><b style="text-transform: capitalize">{{ $apartment->name }}</b></h1>
 
-    <span>Room : {{ $apartment->room }}</span><br>
-    <span>Bathroom : {{ $apartment->bathroom }}</span><br>
-    <span>mq : {{ $apartment->mq }}</span><br>
-    <span>address : {{ $apartment->address }}</span><br>
-    <span>latitude : {{ $apartment->latitude }}</span><br>
-    <span>longitude : {{ $apartment->longitude }}</span><br>
-    @foreach ($apartment->services as $service)
-        <div class="form-check mx-auto" style="max-width: 300px">
-            <span class="form-check-label">
-                {{ $service->name }}
-            </span>
-            <span class="form-check-label">
-                {{ $service->icon }}
-            </span>
+            <div class="image-container text-center">
+                @if ($apartment->cover)
+                    <img src="{{ asset('storage/' . $apartment->cover) }}" class="img-fluid rounded mb-4" alt="Apartment Image">
+                @else
+                    <div class="alert alert-warning">Iage not available</div>
+                @endif
+            </div>
+
+
+            {{-- Caratteristiche --}}
+            <h3>Character</h3>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">Description: {{ $apartment->description }}</li>
+                <li class="list-group-item">Room: {{ $apartment->room }}</li>
+                <li class="list-group-item">Bathroom: {{ $apartment->bathroom }}</li>
+                <li class="list-group-item">mq: {{ $apartment->mq }}</li>
+                <li class="list-group-item">Address: {{ $apartment->address }}</li>
+                <li class="list-group-item">Latitude: {{ $apartment->latitude }}</li>
+                <li class="list-group-item">Longitude: {{ $apartment->longitude }}</li>
+            </ul>
+
+            {{-- Servizi --}}
+            <h4 class="mb-3">Services:</h4>
+            <ul class="list-group mb-4">
+                @foreach ($apartment->services as $service)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ $service->name }}
+                        <span class="badge badge-primary badge-pill">{{ $service->icon }}</span>
+                    </li>
+                @endforeach
+            </ul>
+
+            {{-- Message --}}
+            <h4 class="mt-5 mb-3">Send a message</h4>
+            <form action="{{ route('send.message', $apartment->id) }}" method="POST">
+                @csrf
+
+                {{-- Message per guest --}}
+                @if(!Auth::check())
+                    <div class="form-group">
+                        <label for="name">Nome:</label>
+                        <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                @endif
+
+                {{-- Parte comune del message --}}
+                <div class="form-group">
+                    <textarea name="body" placeholder="Ho visto Mauro con le scarpe di gomma.....🎵" id="body" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Invia</button>
+            </form>
+
+
+            {{-- Numero di visualizzazioni --}}
+            @if(Auth::check() && $apartment->user_id === Auth::id())
+                <div class="alert alert-info mt-4">
+                    <b>Number of visualizations:</b> {{ $apartment->views->count() }}
+                </div>
+            @endif
+
+            {{-- Delete e Modify --}}
+            @if (Auth::id() === $apartment->user_id)
+
+                {{-- MODIFY --}}
+                <a href="{{ route('edit', $apartment->id) }}" class="btn btn-warning mb-2">MODIFY APARTMENT</a>
+
+                {{-- DELETE --}}
+                <form class="d-inline" method="POST" action="{{ route('delete', $apartment->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger mb-2">DELETE</button>
+                </form>
+
+                {{-- DELETE PICTURE --}}
+                <form class="d-inline" method="POST" action="{{ route('apartment.picture.delete', $apartment->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger mb-2">DELETE PICTURE</button>
+                </form>
+            @endif
         </div>
-    @endforeach
-    <div>
-        @if ($apartment->cover)
-            <img src="{{ asset('storage/' . $apartment->cover) }}" width="200px" alt="">
-        @else
-            Immagine non disponibile
-        @endif
     </div>
-
-    @if (Auth::id() === $apartment->user_id)
-        <span><a href="{{ route('edit', $apartment->id) }}">Modifica appartamento</a></span>
-        <form class="d-inline" method="POST" action="{{ route('delete', $apartment->id) }}">
-
-            @csrf
-            @method('DELETE')
-
-            <input class="btn btn-primary" type="submit" value="DELETE">
-        </form>
-
-        <form class="d-inline" method="POST" action="{{ route('apartment.picture.delete', $apartment->id) }}">
-            @csrf
-            @method('DELETE')
-            <input class="btn btn-primary " type="submit" value="DELETE PICTURE">
-        </form>
-    @endif
-
-    {{-- MESSAGGIO --}}
-    @if(Auth::check())
-        <h2>Invia un messaggio</h2>
-            <form action="{{ route('send.message', $apartment->id) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="body">Messaggio:</label>
-                    <textarea name="body" id="body" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Invia</button>
-            </form>
-    @else
-        <h2>Invia un messaggio</h2>
-            <form action="{{ route('send.message', $apartment->id) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Nome:</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="body">Messaggio:</label>
-                    <textarea name="body" id="body" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Invia</button>
-            </form>
-    @endif
-
-    
+</div>
 @endsection
