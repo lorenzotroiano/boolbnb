@@ -23,6 +23,34 @@ class ApartmentController extends Controller
     }
 
 
+    // MESSAGE
+    public function sendMessage(Request $request, $id)
+    {
+        // Se l'utente è autenticato
+        if (Auth::check()) {
+            $user = Auth::user();
+            $data = $request->validate([
+                'body' => 'required|string',
+            ]);
+            $data['name'] = $user->name;
+            $data['email'] = $user->email;
+        } else {
+            // Se l'utente non è autenticato
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'body' => 'required|string',
+            ]);
+        }
+
+        $data['apartment_id'] = $id;
+
+        Message::create($data);
+
+        return redirect()->back()->with('success', 'Messaggio inviato con successo!');
+    }
+
+
     // CREATE
     public function create()
     {
