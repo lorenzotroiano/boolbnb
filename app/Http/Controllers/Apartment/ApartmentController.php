@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\Http;
 
 class ApartmentController extends Controller
 {
+
+    // DASHBOARD
     public function dashboard()
     {
         $apartments = Apartment::all();
         return view("dashboard", compact("apartments"));
     }
 
+
+    // CREATE
     public function create()
     {
         // Recupera tutti i record dalla tabella 'Service' nel database
@@ -29,6 +33,8 @@ class ApartmentController extends Controller
         return view('create', compact('services'));
     }
 
+
+    // STORE
     public function store(Request $request)
     {
         // Recupera i dati dal form inviato e applica le regole di validazione definite
@@ -77,6 +83,29 @@ class ApartmentController extends Controller
         return redirect()->route('show', $apartment->id);
     }
 
+
+
+    // AUTOCOMPLETE
+    public function searchAddress(Request $request)
+    {
+        $query = $request->input('query');
+        $apiKey = env('TOMTOM_API_KEY');
+        $endpoint = "https://api.tomtom.com/search/2/search/{$query}.json?key={$apiKey}&language=en-US";
+
+        $response = Http::get($endpoint);
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return response()->json([], 500);
+        }
+    }
+
+
+
+
+
+    // EDIT
     public function edit($id)
     {
         // Trova l'appartamento con l'id fornito
@@ -95,6 +124,8 @@ class ApartmentController extends Controller
         return view("edit", compact("apartment", "services"));
     }
 
+
+    // UPDATE
     public function update(Request $request, $id)
     {
         $data = $request->validate(
@@ -141,6 +172,9 @@ class ApartmentController extends Controller
         return redirect()->route('show', $apartment->id);
     }
 
+
+
+    // DELETE
     public function delete($id)
     {
         $apartment = Apartment::FindOrFail($id);
@@ -164,6 +198,9 @@ class ApartmentController extends Controller
         return redirect()->route('dashboard');
     }
 
+
+
+    // DELETE PICTURE
     public function deletePicture($id)
     {
         $apartment = Apartment::FindOrFail($id);
@@ -186,6 +223,7 @@ class ApartmentController extends Controller
 
 
 
+    // VALIDATION
     public function getValidations()
     {
         return [
@@ -201,6 +239,8 @@ class ApartmentController extends Controller
         ];
     }
 
+
+    // MESSAGE VALIDATION
     public function getValidationsMessage()
     {
         return [

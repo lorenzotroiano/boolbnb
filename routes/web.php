@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/create', [ApartmentController::class, 'create'])
         ->name('create');
 
+    // Rotta AUTOCOMPLETE
+    Route::get('/search-address', [ApartmentController::class, 'searchAddress']);
+
+
+
     // Rotta per salvare un nuovo progetto nel database
     Route::post('/store', [ApartmentController::class, 'store'])
         ->name('store');
