@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // Importo il model
 use App\Models\Apartment;
 use App\Models\View;
+use App\Models\ApartmentSponsor;
 
 class GuestController extends Controller
 {
@@ -19,8 +20,9 @@ class GuestController extends Controller
     public function show($id)
     {
         $apartment = Apartment::findOrFail($id);
+        $apartmentsponsors = ApartmentSponsor::all();
 
-        // Registra una nuova visualizzazione
+        // NUOVA VISUALIZZAZIONE
         $view = new View();
         $view->apartment_id = $id;
         $view->IP_address = request()->ip(); // Ottieni l'indirizzo IP del visitatore
@@ -28,6 +30,7 @@ class GuestController extends Controller
         $view->save();
 
 
-        return view("show", compact("apartment"));
+
+        return view("show", compact("apartment", "apartmentsponsors"));
     }
 }

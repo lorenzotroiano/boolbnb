@@ -7,9 +7,10 @@
     </h2>
     <div class="row justify-content-center">
         <div class="col">
-            <div class="card">
-                <h5 class="card-header"> <b>Pubblico</b> </h5>
 
+            {{-- PUBBLICO --}}
+            <div class="card">
+                <h5 class="card-header"> <b>Pubblic</b> </h5>
                 <div class="card-body">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
@@ -53,9 +54,9 @@
             </div>
 
 
-
+            {{-- PRIVATO --}}
             <div class="card mt-5">
-                <h5 class="card-header"> <b>Privato</b> </h5>
+                <h5 class="card-header"> <b>Private</b> </h5>
                 <div class="card-body">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
@@ -94,7 +95,50 @@
                 </div>
             </div>
 
-            {{-- Create --}}
+
+            {{-- SPONSORIZZATO --}}
+            <div class="card mt-5">
+                <h5 class="card-header"> <b>Sponsorized</b> </h5>
+                <div class="card-body">
+                    @if (session('status'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
+                    @endif
+
+                    <div class="row">
+                        @foreach ($apartments as $apartment)
+                            @if ($apartment->user_id === Auth::id() && $apartment->sponsor == 1 )
+                                <div class="col-sm-4 my-3">
+                                    <div class="card shadow @if ($apartment->sponsor) bg-info  @endif">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $apartment->name }}</h5>
+                                            <p class="card-text">{{ $apartment->address }}</p>
+                                            <p class="card-text">Metri quadrati: {{ $apartment->mq }}</p>
+                                            <a href="{{ route('show', $apartment->id) }}" class="btn btn-primary">Visualizza</a>
+                                            <a href="{{ route('edit', $apartment->id) }}" class="btn btn-secondary">Modifica</a>
+                                            
+
+                                            <form action="{{ route('delete', $apartment->id) }}" method="POST">
+                                                @csrf
+                                                @method("delete")
+
+                                                <button class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo appartamento?');">Elimina</button> 
+                                            </form>
+
+                                            @if ($apartment ->sponsor)
+                                                <span class="btn btn-warning">Sponsorizzato</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{-- CREATE--}}
             <div class="text-center my-3">
                 <a href="{{route('create')}}" class="btn btn-success">ADD NEW APARTMENT</a>
             </div>

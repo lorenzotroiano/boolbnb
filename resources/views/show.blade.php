@@ -71,6 +71,28 @@
                 </div>
             @endif
 
+
+            {{-- Tempo mancante sponsorizzazioni --}}
+            @if(Auth::check() && $apartment->sponsor === 1)
+            <div class="alert alert-info mt-4">
+                @foreach ($apartmentsponsors as $apartmentsponsor)
+                    @if ($apartmentsponsor->apartment_id === $apartment->id)
+                        @php
+                            // Converto in formato data
+                            $startDate = \Carbon\Carbon::parse($apartmentsponsor->start_date);
+                            $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
+                            $hoursDifference = $endDate->diffInHours($startDate);
+                        @endphp
+                        <div class="alert alert-info mt-4">
+                            <b>Time left for sponsorship:</b> {{ $hoursDifference }} hours
+                        </div>                        
+                    @endif
+                @endforeach
+            </div>
+        @endif
+        
+        
+
             {{-- Delete e Modify --}}
             @if (Auth::id() === $apartment->user_id)
 
