@@ -9,21 +9,21 @@
                 $sorted_apartments = $apartments->sortByDesc('sponsor');
             @endphp
             @foreach ($sorted_apartments as $apartment)
-                <div class="col-sm-4 my-3">
-                    <div class="card shadow @if ($apartment->sponsor) bg-info  @endif">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $apartment->name }}</h5>
-                            <p class="card-text">{{ $apartment->address }}</p>
-                            <p class="card-text">Metri quadrati: {{ $apartment->mq }}</p>
-                            <a href="{{ route('show', $apartment->id) }}" class="btn btn-primary">Visualizza</a>
-                            @if ($apartment ->sponsor)
-                                <span class="btn btn-warning">Sponsorizzato</span>
-                            @endif
-                            
-
+                @if ($apartment->visible)
+                    <div class="col-sm-4 my-3">
+                        <div class="card shadow @if ($apartment->sponsor) bg-info  @endif">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $apartment->name }}</h5>
+                                <p class="card-text">{{ $apartment->address }}</p>
+                                <p class="card-text">Metri quadrati: {{ $apartment->mq }}</p>
+                                <a href="{{ route('show', $apartment->id) }}" class="btn btn-primary">Visualizza</a>
+                                @if ($apartment ->sponsor)
+                                    <span class="btn btn-warning">Sponsorizzato</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @endforeach
         </div>
     </div>

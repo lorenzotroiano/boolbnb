@@ -37,7 +37,7 @@
                                                 @csrf
                                                 @method("delete")
 
-                                                <button class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo appartamento?');">Elimina Mauro</button> 
+                                                <button class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo appartamento?');">Elimina</button> 
                                             </form>
 
                                             @if ($apartment ->sponsor)
