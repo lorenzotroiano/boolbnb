@@ -17,27 +17,33 @@ class ApartmentController extends Controller
 
     public function create()
     {
+        // Recupera tutti i record dalla tabella 'Service' nel database
         $services = Service::all();
+
+        // Restituisce la vista 'create' e passa l'elenco dei servizi alla vista
         return view('create', compact('services'));
     }
 
     public function store(Request $request)
     {
-        // Recupera i dati dal form inviato
+        // Recupera i dati dal form inviato e applica le regole di validazione definite
         $data = $request->validate(
             $this->getValidations(),
             $this->getValidationsMessage()
         );
 
+        // Carica l'immagine del copertina e memorizza il percorso
         $img_path = Storage::put('uploads', $data['cover']);
         $data['cover'] = $img_path;
-        // Chiamata API per ottenere latitudine e longitudine
+
+        // Chiamata API per ottenere latitudine e longitudine basata sull'indirizzo
         $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
         $endpoint = "https://api.tomtom.com/search/2/geocode/" . urlencode($address) . ".json?key={$apiKey}";
 
         $response = Http::get($endpoint);
 
+        // Verifica se la chiamata API è stata eseguita con successo
         if ($response->successful()) {
             $apiData = $response->json();
             if (!empty($apiData['results'])) {
@@ -56,8 +62,10 @@ class ApartmentController extends Controller
         // Imposta il user_id dell'appartamento con l'id dell'utente autenticato
         $data['user_id'] = Auth::id();
 
-        // Creazione dell'appartamento e associazione dei servizi
+        // Crea un nuovo appartamento utilizzando i dati validati e associati
         $apartment = Apartment::create($data);
+
+        // Associa i servizi selezionati all'appartamento
         $apartment->services()->attach($data['services']);
 
         // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena creato
@@ -66,13 +74,19 @@ class ApartmentController extends Controller
 
     public function edit($id)
     {
+        // Trova l'appartamento con l'id fornito
         $apartment = Apartment::findOrFail($id);
 
+        // Verifica se l'utente autenticato è il proprietario dell'appartamento
         if (auth()->user()->id !== $apartment->user_id) {
+            // Se l'utente non è il proprietario, restituisce un errore 403 (Permesso negato)
             abort(403, 'Non hai il permesso di modificare questa casa.');
         }
 
+        // Recupera tutti i servizi disponibili
         $services = Service::all();
+
+        // Restituisce la vista "edit" e passa l'appartamento e l'elenco dei servizi alla vista
         return view("edit", compact("apartment", "services"));
     }
 
@@ -82,44 +96,64 @@ class ApartmentController extends Controller
             $this->getValidations(),
             $this->getValidationsMessage()
         );
-        $apartment = Apartment::findOrFail($id);
 
+        $apartment = Apartment::findOrFail($id);
 
         // Verifica se l'utente autenticato è l'owner dell'appartamento
         if (auth()->user()->id !== $apartment->user_id) {
             abort(403, 'Non hai il permesso di modificare questa casa.');
         }
 
+        // Verifica se l'utente autenticato è il proprietario dell'appartamento
+        if (auth()->user()->id !== $apartment->user_id) {
+            // Se l'utente non è il proprietario, restituisce un errore 403 (Permesso negato)
+            abort(403, 'Non hai il permesso di modificare questa casa.');
+        }
 
-        if (!array_key_exists("cover", $data))
+        // Gestisce il caricamento dell'immagine di copertina
+        if (!array_key_exists("cover", $data)) {
+            // Se l'immagine di copertina non è stata modificata, utilizza l'immagine esistente
             $data['cover'] = $apartment->cover;
-        else {
+        } else {
+            // Se l'immagine di copertina è stata modificata
             if ($apartment->cover) {
-
+                // Elimina l'immagine di copertina precedente dallo storage
                 $oldImgPath = $apartment->cover;
                 Storage::delete($oldImgPath);
             }
 
+            // Carica la nuova immagine di copertina e memorizza il percorso
             $data['cover'] = Storage::put('uploads', $data['cover']);
         }
 
+        // Aggiorna l'appartamento con i dati validati
         $apartment->update($data);
+
+        // Sincronizza i servizi associati all'appartamento
         $apartment->services()->sync($data['services']);
+
+        // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena aggiornato
         return redirect()->route('show', $apartment->id);
     }
 
     public function delete($id)
     {
         $apartment = Apartment::FindOrFail($id);
-        
+
         if (auth()->user()->id !== $apartment->user_id) {
             abort(403, 'Non hai il permesso di modificare questa casa.');
         }
-        
+
+        // Rimuove l'associazione tra l'appartamento e i servizi
         $apartment->services()->detach();
+
+        // Elimina le immagini, messaggi e visualizzazioni  associate all'appartamento
         $apartment->images()->delete();
         $apartment->messages()->delete();
         $apartment->views()->delete();
+
+        // Elimina l'appartamento dal database
+        $apartment->delete();
 
         $apartment->delete();
         return redirect()->route('home');
@@ -128,12 +162,18 @@ class ApartmentController extends Controller
     public function deletePicture($id)
     {
         $apartment = Apartment::FindOrFail($id);
+
+        // Verifica se l'appartamento ha una copertina (immagine di copertina)
         if ($apartment->cover) {
+            // Se l'appartamento ha una copertina, elimina l'immagine dallo storage
             $oldImgPath = $apartment->cover;
             Storage::delete($oldImgPath);
         }
+
+        // Imposta il campo di copertina dell'appartamento su null e salva l'appartamento
         $apartment->cover = null;
         $apartment->save();
+
         return redirect()->route('log.show', $apartment->id);
     }
 
