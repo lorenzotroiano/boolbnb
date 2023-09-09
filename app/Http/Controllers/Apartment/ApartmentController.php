@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
 use App\Models\Message;
 use App\Models\Service;
+use App\Models\ApartmentSponsor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
