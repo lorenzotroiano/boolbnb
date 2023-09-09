@@ -161,7 +161,7 @@ class ApartmentController extends Controller
         $apartment->delete();
 
         $apartment->delete();
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
 
     public function deletePicture($id)
