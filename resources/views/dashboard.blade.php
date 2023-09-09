@@ -44,6 +44,12 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Create --}}
+            <div class="text-center my-3">
+                <a href="{{route('create')}}" class="btn btn-success">CREATE</a>
+            </div>
+            
         </div>
     </div>
 </div>

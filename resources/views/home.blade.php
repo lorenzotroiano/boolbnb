@@ -3,10 +3,6 @@
     <div>
 
         <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
-        <div class="text-center my-3">
-            <a href="{{route('create')}}" class="btn btn-success">CREATE</a>
-        </div>
-
         <div class="row">
             @php
                 // Ordina gli appartamenti in base al campo sponsor (true prima di false)
