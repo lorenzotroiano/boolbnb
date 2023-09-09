@@ -96,7 +96,7 @@
 
             {{-- Create --}}
             <div class="text-center my-3">
-                <a href="{{route('create')}}" class="btn btn-success">CREATE</a>
+                <a href="{{route('create')}}" class="btn btn-success">ADD NEW APARTMENT</a>
             </div>
 
         </div>
