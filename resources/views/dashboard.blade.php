@@ -74,7 +74,14 @@
                                             <p class="card-text">Metri quadrati: {{ $apartment->mq }}</p>
                                             <a href="{{ route('show', $apartment->id) }}" class="btn btn-primary">Visualizza</a>
                                             <a href="{{ route('edit', $apartment->id) }}" class="btn btn-secondary">Modifica</a>
-                                            <a href="{{ route('delete', $apartment->id) }}" class="btn btn-danger">Elimina Mauro</a>
+
+                                            <form action="{{ route('delete', $apartment->id) }}" method="POST">
+                                                @csrf
+                                                @method("delete")
+
+                                                <button class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo appartamento?');">Elimina</button> 
+                                            </form>
+
                                             @if ($apartment ->sponsor)
                                                 <span class="btn btn-warning">Sponsorizzato</span>
                                             @endif
