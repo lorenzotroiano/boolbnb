@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Questa è la show di <b>{{ $apartment->name }}</b> </h1>
+    <h1>Questa è la show di <b style="text-transform: capitalize">{{ $apartment->name }}</b> </h1>
 
     {{-- Descrizione --}}
     <p>

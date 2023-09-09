@@ -1,13 +1,8 @@
 @extends('layouts.app')
 @section('content')
     <div>
-        @guest
-            <h1 class="display-4 text-center text-primary">Home BoolBNB Guest</h1>
-        @endguest
-        @auth
-            <h1 class="display-4 text-center text-primary">Home BoolBNB {{ Auth::user()->name }}</h1>
-        @endauth
 
+        <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
         <div class="text-center my-3">
             <a href="{{route('create')}}" class="btn btn-success">CREATE</a>
         </div>
