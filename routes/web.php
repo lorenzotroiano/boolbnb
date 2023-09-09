@@ -27,6 +27,11 @@ Route::get('/', [GuestController::class, 'index'])
 Route::get('/show/{id}', [GuestController::class, 'show'])
     ->name('show');
 
+// Rotta per inviare un messaggio
+Route::post('/send-message/{id}', [ApartmentController::class, 'sendMessage'])
+    ->name('send.message');
+
+
 
 // Rotte auth
 Route::middleware('auth')->group(function () {
