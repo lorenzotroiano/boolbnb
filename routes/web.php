@@ -51,9 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/update/{id}', [ApartmentController::class, 'update'])
         ->name('update');
 
+    // Rotte per la delete
+    Route :: delete('/apartment/{id}/picture', [ApartmentController :: class, 'deletePicture'])
+        -> name('apartment.picture.delete');
 
-    //     Route :: delete('/rabbits/{id}/picture', [RabbitController :: class, 'deletePicture'])
-    // -> name('rabbit.picture.delete');
     Route::delete('/delete/{id}', [ApartmentController::class, 'delete'])
         ->name('delete');
 });

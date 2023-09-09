@@ -174,7 +174,7 @@ class ApartmentController extends Controller
         $apartment->cover = null;
         $apartment->save();
 
-        return redirect()->route('log.show', $apartment->id);
+        return redirect()->route('show', $apartment->id);
     }
 
     public function getValidations()
