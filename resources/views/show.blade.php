@@ -25,7 +25,7 @@
     @endforeach
     <div>
         @if ($apartment->cover)
-            <img src="{{ asset('storage/' . $apartment->cover) }}" width="200px" alt="Immagine di Mauro">
+            <img src="{{ asset('storage/' . $apartment->cover) }}" width="200px" alt="">
         @else
             Immagine non disponibile
         @endif
@@ -47,4 +47,6 @@
             <input class="btn btn-primary " type="submit" value="DELETE PICTURE">
         </form>
     @endif
+
+    
 @endsection

@@ -162,20 +162,24 @@ class ApartmentController extends Controller
     public function deletePicture($id)
     {
         $apartment = Apartment::FindOrFail($id);
+        $defaultPath = "defaultImage/logoboolbnb.jpeg";
+
 
         // Verifica se l'appartamento ha una copertina (immagine di copertina)
-        if ($apartment->cover) {
+        if (!$apartment->cover == $defaultPath) {
             // Se l'appartamento ha una copertina, elimina l'immagine dallo storage
             $oldImgPath = $apartment->cover;
             Storage::delete($oldImgPath);
         }
 
         // Imposta il campo di copertina dell'appartamento su null e salva l'appartamento
-        $apartment->cover = null;
+        $apartment->cover = $defaultPath;
         $apartment->save();
 
         return redirect()->route('show', $apartment->id);
     }
+
+
 
     public function getValidations()
     {
