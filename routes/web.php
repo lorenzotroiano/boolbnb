@@ -32,7 +32,7 @@ Route::get('/show/{id}', [GuestController::class, 'show'])
 Route::middleware('auth')->group(function () {
 
 
-    Route::get('/dashboard', function () {
+    Route::get('/dashboard', [ApartmentController::class, 'dashboard'], function () {
         return view('dashboard');
     })->name('dashboard');
 
@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function () {
         ->name('update');
 
     // Rotte per la delete
-    Route :: delete('/apartment/{id}/picture', [ApartmentController :: class, 'deletePicture'])
-        -> name('apartment.picture.delete');
+    Route::delete('/apartment/{id}/picture', [ApartmentController::class, 'deletePicture'])
+        ->name('apartment.picture.delete');
 
     Route::delete('/delete/{id}', [ApartmentController::class, 'delete'])
         ->name('delete');

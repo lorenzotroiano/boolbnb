@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Http;
 
 class ApartmentController extends Controller
 {
+    public function dashboard()
+    {
+        $apartments = Apartment::all();
+        return view("dashboard", compact("apartments"));
+    }
 
     public function create()
     {
