@@ -26,7 +26,7 @@ class ApartmentFactory extends Factory
             'address' => fake()->address(),
             'latitude' => fake()->latitude($min = -90, $max = 90),
             'longitude' => fake()->longitude($min = -180, $max = 180),
-            'visible' => fake()->boolean(false),
+            'visible' => fake()->boolean(true),
             'cover' => fake()->imageUrl(800, 800, true, 'jpg')
 
         ];
