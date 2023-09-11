@@ -25,7 +25,8 @@ export default {
 </script>
 
 <template>
-    
+    <h1>{{ apartment.name }}</h1>
+    <h2>{{ apartment.description }}</h2>
 </template>
 
 <style scoped>
