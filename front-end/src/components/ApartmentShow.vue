@@ -14,7 +14,7 @@ export default {
             .then(response => {
                 this.apartment = response.data.apartment;
             })
-            .catch(error =>{
+            .catch(error => {
                 console.log(error);
             })
     },
@@ -25,9 +25,7 @@ export default {
 </script>
 
 <template>
-        <h1>{{ apartment.name }}</h1>
-        <h2>{{ apartment.description }}</h2>
-        <h2>{{ apartment.room }}</h2>
+    
 </template>
 
 <style scoped>
