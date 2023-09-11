@@ -33,25 +33,50 @@ export default {
 </script>
 
 <template>
-    <h1>
-        Lista appartamenti:
-    </h1>
+    <div class="container-fluid">
 
-    <!-- Creo la barra di ricerca e imposto v-model sulla variabile search -->
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-            aria-describedby="button-addon2" v-model="search">
+        <!-- FILTRI -->
+        <div class="filter">
+
+            <!-- SEARCH -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
+                    aria-describedby="button-addon2" v-model="search">
+            </div>
+        </div>
+
+        <!-- Lista degli appartamenti -->
+        <ul>
+            <li v-for="apartment in filteredApartments" :key="apartment.id">
+                <!-- Link alla show -->
+                <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }" class="link">
+                    <h2>{{ apartment.name }}</h2>
+                </router-link>
+            </li>
+        </ul>
     </div>
-
-    <!-- Lista degli appartamenti -->
-    <ul>
-        <li v-for="apartment in filteredApartments" :key="apartment.id">
-            <!-- Link alla show -->
-            <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }" class="link">
-                <h2>{{ apartment.name }}</h2>
-            </router-link>
-        </li>
-    </ul>
 </template>
 
-<style scoped></style>
+<style lang="scss">
+.container-fluid {
+    ul {
+        list-style-type: none;
+
+        li {
+            a {
+                text-decoration: none;
+                transition: all 0.8s ease;
+                color: black;
+
+                &:hover {
+                    color: yellow; // Imposta il colore dei link
+                    text-decoration: underline;
+
+                }
+            }
+        }
+    }
+
+}
+</style>
+
