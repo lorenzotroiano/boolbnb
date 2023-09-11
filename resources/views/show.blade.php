@@ -58,7 +58,7 @@
 
                 {{-- Parte comune del message --}}
                 <div class="form-group">
-                    <textarea name="body" placeholder="Ho visto Mauro con le scarpe di gomma.....🎵" id="body" class="form-control" rows="4" required></textarea>
+                    <textarea name="body" placeholder="Inserisci un messaggio" id="body" class="form-control" rows="4" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Invia</button>
             </form>
