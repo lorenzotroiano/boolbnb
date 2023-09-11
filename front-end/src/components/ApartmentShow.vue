@@ -9,12 +9,12 @@ export default {
         }
     },
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data.apartments;
                 this.apartments = data.data;
             })
-            .catch(error =>{
+            .catch(error => {
                 console.log(error);
             })
     },
@@ -24,9 +24,6 @@ export default {
 
 </script>
 
-<template>
-    
-</template>
+<template></template>
 
-<style scoped>
-</style>
+<style scoped></style>
