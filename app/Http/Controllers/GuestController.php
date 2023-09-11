@@ -32,6 +32,9 @@ class GuestController extends Controller
 
 
 
-        return view("show", compact("apartment", "apartmentsponsors"));
+        return response() -> json([
+            'apartment' => $apartment,
+            'apartmentsponsors' => $apartmentsponsors
+    ]);
     }
 }

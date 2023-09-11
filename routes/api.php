@@ -21,5 +21,7 @@ use App\Http\Controllers\GuestController;
 
 Route::prefix('v1')->group(function () {
 
-    Route::get('/apartments', [GuestController::class, 'index']);
+    Route::get('/', [GuestController::class, 'index']);
+    Route::get('/show/{id}', [GuestController::class, 'show']);
+
 });
