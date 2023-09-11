@@ -32,9 +32,8 @@ Route::get('/show/{id}', [GuestController::class, 'show'])
 Route::middleware('auth')->group(function () {
 
 
-    Route::get('/dashboard', [ApartmentController::class, 'dashboard'], function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ApartmentController::class, 'dashboard'])->name('dashboard');
+
 
     // Rotta Auth CREATE
     Route::get('/create', [ApartmentController::class, 'create'])
