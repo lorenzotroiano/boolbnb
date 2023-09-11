@@ -14,7 +14,8 @@ const router = createRouter({
         {
             path: '/show/:id',
             name: 'apartment-show',
-            component: () => import('./components/ApartmentShow.vue')
+            component: () => import('./components/ApartmentShow.vue'),
+            props: true
         }
 
     ]

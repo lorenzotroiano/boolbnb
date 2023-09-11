@@ -4,15 +4,15 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            apartments: [],
+            apartment: [],
 
         }
     },
+    props: ['id'],
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
-                const data = response.data.apartments;
-                this.apartments = data.data;
+                this.apartment = response.data.apartment;
             })
             .catch(error =>{
                 console.log(error);
@@ -25,7 +25,9 @@ export default {
 </script>
 
 <template>
-    
+        <h1>{{ apartment.name }}</h1>
+        <h2>{{ apartment.description }}</h2>
+        <h2>{{ apartment.room }}</h2>
 </template>
 
 <style scoped>
