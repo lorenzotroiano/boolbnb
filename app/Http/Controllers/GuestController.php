@@ -14,7 +14,8 @@ class GuestController extends Controller
     public function index()
     {
         $apartments = Apartment::all();
-        return view("home", compact("apartments"));
+    
+        return response() -> json($apartments);
     }
 
     public function show($id)
