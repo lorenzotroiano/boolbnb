@@ -11,9 +11,8 @@ export default {
             referencePoint: null,
             isSearchClicked: false,
             suggestions: [],
-
-            // Array per filtri servizi
-            selectedServices: []
+            userLocation: null,
+            userCountry: null,
         }
     },
     methods: {
@@ -59,23 +58,70 @@ export default {
                     console.log(error);
                 });
         },
+        
+        getUserLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
 
-        // Lista suggerimenti
+                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
+                        .then(response => {
+                            const country = response.data.addresses[0].address.country;
+                            this.userCountry = country;
+                        })
+                        .catch(error => {
+                            console.error("Error obtaining country:", error);
+                        });
+
+                }, error => {
+                    console.error("Error obtaining geolocation:", error);
+                });
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        },
+
         getSuggestions() {
-            if (this.search.trim() === '') {
+            if (this.search.trim().length < 2) {
                 this.suggestions = [];
                 return;
             }
 
-            axios.get(`https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=5`)
+            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=3&entityType=municipality`;
+
+            if (this.userCountry) {
+                apiUrl += `&countrySet=${this.userCountry}`;
+            }
+
+            axios.get(apiUrl)
                 .then(response => {
-                    this.suggestions = response.data.results.map(result => result.address.freeformAddress);
+                    const results = response.data.results;
+
+                    if (this.userLocation) {
+                        results.sort((a, b) => {
+                            const distanceA = this.haversineDistance(this.userLocation, {
+                                lat: a.position.lat,
+                                lng: a.position.lon
+                            });
+                            const distanceB = this.haversineDistance(this.userLocation, {
+                                lat: b.position.lat,
+                                lng: b.position.lon
+                            });
+                            return distanceA - distanceB;
+                        });
+                    }
+
+                    this.suggestions = results.map(result => result.address.municipality);
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
 
+
+
+        
         selectSuggestion(suggestion) {
             this.search = suggestion;
             this.suggestions = [];
@@ -105,6 +151,9 @@ export default {
     },
 
     mounted() {
+
+        this.getUserLocation();
+
         axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
