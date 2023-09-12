@@ -7,7 +7,8 @@ export default {
         return {
             apartments: [],
             search: '',
-            referencePoint: null
+            referencePoint: null,
+            isSearchClicked: false, // Aggiunto isSearchClicked
         }
     },
     methods: {
@@ -28,6 +29,7 @@ export default {
             return d;
         },
         searchApartments() {
+            this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
 
             axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
                 .then(response => {
@@ -44,9 +46,10 @@ export default {
     },
     computed: {
         filteredApartments() {
-            if (this.search === '') {
-                return this.apartments; // Mostra tutti gli appartamenti se il campo di ricerca è vuoto
+            if (!this.isSearchClicked) {
+                return this.apartments; // Mostra tutti gli appartamenti se non è stato fatto clic su "Search"
             }
+
             return this.apartments.filter(apartment => {
                 const distance = this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
