@@ -7,18 +7,64 @@ export default {
         return {
             apartments: [],
             search: '',
+            referencePoint: null
+        }
+    },
+    methods: {
+        haversineDistance(coords1, coords2) {
+            function toRad(value) {
+                return value * Math.PI / 180;
+            }
+
+            const R = 6371; // raggio della Terra in km
+            const dLat = toRad(coords2.lat - coords1.lat);
+            const dLon = toRad(coords2.lng - coords1.lng);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(coords1.lat)) * Math.cos(toRad(coords2.lat)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const d = R * c;
+
+            return d;
+        },
+        searchApartments() {
+
+            axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
+                .then(response => {
+                    const position = response.data.results[0].position;
+                    this.referencePoint = {
+                        lat: position.lat,
+                        lng: position.lon
+                    };
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     computed: {
         filteredApartments() {
-            // Creo un nuovo array filtrato
-            return this.apartments.filter(apartment => {
-                // Restituisce TRUE se l'indirizzo dell'appartamento contiene la stringa di ricerca
-                return apartment.address.toLowerCase().includes(this.search.toLowerCase());
+
+
+            if (!this.referencePoint && !this.search) {
+                return this.apartments;
+            }
+            
+
+            if (this.referencePoint) {
+                return this.apartments.filter(apartment => {
+                const distance = this.haversineDistance(this.referencePoint, {
+                    lat: apartment.latitude,
+                    lng: apartment.longitude
+                });
+                return distance <= 100;
             });
+            }
+
+            
         }
     },
-
+    
     mounted() {
         axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
@@ -35,14 +81,19 @@ export default {
 <template>
     <div class="container-fluid">
 
-        <!-- FILTRI -->
-        <div class="filter">
+        
+        <!-- <div class="filter">
 
-            <!-- SEARCH -->
+            
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
                     aria-describedby="button-addon2" v-model="search">
             </div>
+        </div> -->
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
+            aria-describedby="button-addon2" v-model="search" @input="searchApartments">
         </div>
 
         <!-- Lista degli appartamenti -->
