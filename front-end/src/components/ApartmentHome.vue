@@ -44,10 +44,9 @@ export default {
     },
     computed: {
         filteredApartments() {
-
-
-            if (!this.referencePoint && !this.search) return this.apartments;
-            
+            if (this.search === '') {
+                return this.apartments; // Mostra tutti gli appartamenti se il campo di ricerca è vuoto
+            }
             return this.apartments.filter(apartment => {
                 const distance = this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
@@ -55,12 +54,11 @@ export default {
                 });
                 return distance <= 100;
             });
-            
         }
     },
-    
+
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -75,7 +73,7 @@ export default {
 <template>
     <div class="container-fluid">
 
-        
+
         <!-- <div class="filter">
 
             
@@ -87,7 +85,7 @@ export default {
 
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-            aria-describedby="button-addon2" v-model="search">
+                aria-describedby="button-addon2" v-model="search">
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
