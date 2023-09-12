@@ -11,6 +11,7 @@ export default {
             referencePoint: null,
             isSearchClicked: false,
             suggestions: [],
+            selectedServices: [],
             userLocation: null,
             userCountry: null,
         }
