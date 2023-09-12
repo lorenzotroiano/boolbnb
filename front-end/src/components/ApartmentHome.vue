@@ -83,7 +83,10 @@ export default {
                     lng: apartment.longitude
                 });
                 return distance <= 100;
+
+
             });
+
         }
     },
 
@@ -125,13 +128,24 @@ export default {
         </div>
 
         <!-- Lista degli servizi -->
-        <ul>
+        <!-- <ul>
             <li v-for="service in services" :key="service.id">
                 <label>
                     <input type="checkbox" v-model="selectedServices" :value="service.id"> {{ service.name }}
                 </label>
             </li>
-        </ul>
+        </ul> -->
+
+
+
+
+        <div v-for="service in services" class="form-check">
+            <input class="form-check-input" type="checkbox" value="" :id="'flexCheckIndeterminate' + service.id">
+            <label class="form-check-label" :for="'flexCheckIndeterminate' + service.id">
+                {{ service.name }}
+            </label>
+        </div>
+
         <!-- Lista degli appartamenti -->
         <ul>
             <li v-for="apartment in filteredApartments" :key="apartment.id">
@@ -146,6 +160,11 @@ export default {
 
 <style lang="scss">
 .container-fluid {
+
+    background-color: orange;
+    text-align: center;
+    padding: 70px;
+
     ul {
         list-style-type: none;
 

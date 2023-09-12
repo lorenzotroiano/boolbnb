@@ -1,21 +1,25 @@
 <script>
 import { RouterLink } from 'vue-router';
-// import ApartmentHome from './components/ApartmentHome.vue';
+import HeaderApp from './components/HeaderApp.vue'
 
-// import axios from 'axios';
+import FooterApp from './components/FooterApp.vue'
 
-// export default {
-//     name: 'App',
-//     components: {ApartmentHome}
-// };
+export default {
+    components: {
 
+        HeaderApp,
+        FooterApp,
+
+    }
+}
 
 
 </script>
 
 <template>
+    <HeaderApp />
     <router-view></router-view>
+    <FooterApp />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

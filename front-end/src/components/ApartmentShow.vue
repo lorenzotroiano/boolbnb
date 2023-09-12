@@ -10,7 +10,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
             })
@@ -40,19 +40,15 @@ export default {
         <img :src="apartment.cover" alt="Copertina dell'appartamento">
 
         <!-- Servizi -->
-        <!-- <h4 class="mb-3">Servizi:</h4>
-        <ul class="list-group mb-4">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-                v-for="service in apartment.services" :key="service.id">
-                {{ service.name }}
-                <span class="badge badge-primary badge-pill">{{ service.icon }}</span>
-            </li>
-        </ul> -->
+        <h2>Servizi:</h2>
+        <ul>
+            <li v-for="service in apartment.services" :key="service.id">{{ service.name }}</li>
+        </ul>
 
     </div>
 </template>
 
-  
-  
+
+
 
 <style scoped></style>

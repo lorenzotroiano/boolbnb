@@ -14,7 +14,7 @@ class GuestController extends Controller
 {
     public function index()
     {
-        $apartments = Apartment::all();
+        $apartments = Apartment::with('services')->get();
 
 
 
@@ -31,17 +31,15 @@ class GuestController extends Controller
 
     public function show($id)
     {
-        $apartment = Apartment::findOrFail($id);
+        $apartment = Apartment::with('services')->findOrFail($id);
         $apartmentsponsors = ApartmentSponsor::all();
 
         // NUOVA VISUALIZZAZIONE
         $view = new View();
         $view->apartment_id = $id;
-        $view->IP_address = request()->ip(); // Ottieni l'indirizzo IP del visitatore
-        $view->date = now(); // Imposta la data corrente
+        $view->IP_address = request()->ip();
+        $view->date = now();
         $view->save();
-
-
 
         return response()->json([
             'apartment' => $apartment,
