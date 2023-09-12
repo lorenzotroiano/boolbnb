@@ -116,7 +116,7 @@ export default {
 
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-                aria-describedby="button-addon2" v-model="search" @input="getSuggestions">
+                aria-describedby="button-addon2" v-model="search" @input="getSuggestions" @keyup.enter="searchApartments">
             <div v-if="suggestions.length" class="suggestions-list">
                 <ul>
                     <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
@@ -126,6 +126,7 @@ export default {
             </div>
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
+
 
         <!-- Lista degli servizi -->
         <!-- <ul>
