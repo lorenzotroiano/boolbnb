@@ -10,10 +10,15 @@ export default {
             search: '',
             referencePoint: null,
             isSearchClicked: false,
-            suggestions: []
+            suggestions: [],
+
+            // Array per filtri servizi
+            filterService: []
         }
     },
     methods: {
+
+        // Calcoli Raggio
         haversineDistance(coords1, coords2) {
             function toRad(value) {
                 return value * Math.PI / 180;
@@ -30,6 +35,8 @@ export default {
 
             return d;
         },
+
+        // Coordinate date dalla search
         searchApartments() {
             if (this.search === '') {
                 this.isSearchClicked = false; // Imposta isSearchClicked su true al clic del pulsante
@@ -39,6 +46,7 @@ export default {
                 this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
             }
 
+            // Prende coordinate del primo suggerimento
             axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
                 .then(response => {
                     const position = response.data.results[0].position;
@@ -51,6 +59,8 @@ export default {
                     console.log(error);
                 });
         },
+
+        // Lista suggerimenti
         getSuggestions() {
             if (this.search.trim() === '') {
                 this.suggestions = [];
@@ -69,25 +79,34 @@ export default {
         selectSuggestion(suggestion) {
             this.search = suggestion;
             this.suggestions = [];
+        },
+
+        toggleService(serviceName) {
+            const index = this.filterService.indexOf(serviceName);
+            if (index === -1) {
+                this.filterService.push(serviceName);
+            } else {
+                this.filterService.splice(index, 1);
+            }
         }
     },
     computed: {
+        // Lista di appartamenti filtrata
         filteredApartments() {
-            if (!this.isSearchClicked) {
-                return this.apartments; // Mostra tutti gli appartamenti se non è stato fatto clic su "Search"
+            if (!this.isSearchClicked && this.filterService.length === 0) {
+                return this.apartments;
             }
 
             return this.apartments.filter(apartment => {
-                const distance = this.haversineDistance(this.referencePoint, {
+                const distanceCondition = !this.isSearchClicked || (this.referencePoint && this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
                     lng: apartment.longitude
-                });
-                return distance <= 100;
-
-
+                }) <= 100);
+                const serviceCondition = this.filterService.every(service => apartment.services.includes(service));
+                return distanceCondition && serviceCondition;
             });
+        },
 
-        }
     },
 
     mounted() {
@@ -127,21 +146,11 @@ export default {
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
-
-        <!-- Lista degli servizi -->
-        <!-- <ul>
-            <li v-for="service in services" :key="service.id">
-                <label>
-                    <input type="checkbox" v-model="selectedServices" :value="service.id"> {{ service.name }}
-                </label>
-            </li>
-        </ul> -->
-
-
-
-
+        <!-- Stampiamo i servizi -->
         <div v-for="service in services" class="form-check">
-            <input class="form-check-input" type="checkbox" value="" :id="'flexCheckIndeterminate' + service.id">
+            <input class="form-check-input" type="checkbox" :value="service.name" @change="toggleService(service.name)"
+                :id="'flexCheckIndeterminate' + service.id">
+
             <label class="form-check-label" :for="'flexCheckIndeterminate' + service.id">
                 {{ service.name }}
             </label>
@@ -155,6 +164,9 @@ export default {
                     <h2>{{ apartment.name }}</h2>
                 </router-link>
             </li>
+        </ul>
+        <ul>
+            <li v-for="service in apartment.services" :key="service.id">{{ service.name }}</li>
         </ul>
     </div>
 </template>
