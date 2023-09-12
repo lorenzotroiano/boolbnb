@@ -13,7 +13,7 @@ export default {
             suggestions: [],
 
             // Array per filtri servizi
-            filterService: []
+            selectedServices: []
         }
     },
     methods: {
@@ -81,36 +81,31 @@ export default {
             this.suggestions = [];
         },
 
-        toggleService(serviceName) {
-            const index = this.filterService.indexOf(serviceName);
-            if (index === -1) {
-                this.filterService.push(serviceName);
-            } else {
-                this.filterService.splice(index, 1);
-            }
+        filterByServices(apartment) {
+            return this.selectedServices.every(serviceId => 
+                apartment.services.some(service => service.id === serviceId)
+            );
         }
+
     },
     computed: {
         // Lista di appartamenti filtrata
         filteredApartments() {
-            if (!this.isSearchClicked && this.filterService.length === 0) {
-                return this.apartments;
-            }
-
             return this.apartments.filter(apartment => {
                 const distanceCondition = !this.isSearchClicked || (this.referencePoint && this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
                     lng: apartment.longitude
-                }) <= 100);
-                const serviceCondition = this.filterService.every(service => apartment.services.includes(service));
-                return distanceCondition && serviceCondition;
+                }) <= 30);
+            
+                return distanceCondition && this.filterByServices(apartment);
             });
-        },
+        }
+
 
     },
 
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -118,7 +113,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8000/api/v1/service')
+            axios.get('http://127.0.0.1:8001/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -146,11 +141,9 @@ export default {
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
-        <!-- Stampiamo i servizi -->
+        <!-- Lista dei servizi -->
         <div v-for="service in services" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="service.name" @change="toggleService(service.name)"
-                :id="'flexCheckIndeterminate' + service.id">
-
+            <input class="form-check-input" type="checkbox" :value="service.id" v-model="selectedServices" :id="'flexCheckIndeterminate' + service.id">
             <label class="form-check-label" :for="'flexCheckIndeterminate' + service.id">
                 {{ service.name }}
             </label>
@@ -164,9 +157,6 @@ export default {
                     <h2>{{ apartment.name }}</h2>
                 </router-link>
             </li>
-        </ul>
-        <ul>
-            <li v-for="service in apartment.services" :key="service.id">{{ service.name }}</li>
         </ul>
     </div>
 </template>
