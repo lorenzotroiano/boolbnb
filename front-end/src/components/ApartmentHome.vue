@@ -6,6 +6,7 @@ export default {
     data() {
         return {
             apartments: [],
+            services: [],
             search: '',
             referencePoint: null,
             isSearchClicked: false,
@@ -51,23 +52,23 @@ export default {
                 });
         },
         getSuggestions() {
-        if (this.search.trim() === '') {
-            this.suggestions = [];
-            return;
-        }
+            if (this.search.trim() === '') {
+                this.suggestions = [];
+                return;
+            }
 
-        axios.get(`https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=5`)
-            .then(response => {
-                this.suggestions = response.data.results.map(result => result.address.freeformAddress);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            axios.get(`https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=5`)
+                .then(response => {
+                    this.suggestions = response.data.results.map(result => result.address.freeformAddress);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         },
-        
+
         selectSuggestion(suggestion) {
-        this.search = suggestion;
-        this.suggestions = [];
+            this.search = suggestion;
+            this.suggestions = [];
         }
     },
     computed: {
@@ -87,14 +88,22 @@ export default {
     },
 
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
             })
             .catch(error => {
                 console.log(error);
-            })
+            }),
+            axios.get('http://127.0.0.1:8000/api/v1/service')
+                .then(response => {
+                    const data = response.data;
+                    this.services = data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
     },
 };
 </script>
@@ -103,7 +112,7 @@ export default {
     <div class="container-fluid">
 
         <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
+            <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
                 aria-describedby="button-addon2" v-model="search" @input="getSuggestions">
             <div v-if="suggestions.length" class="suggestions-list">
                 <ul>
@@ -115,7 +124,14 @@ export default {
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
-
+        <!-- Lista degli servizi -->
+        <ul>
+            <li v-for="service in services" :key="service.id">
+                <label>
+                    <input type="checkbox" v-model="selectedServices" :value="service.id"> {{ service.name }}
+                </label>
+            </li>
+        </ul>
         <!-- Lista degli appartamenti -->
         <ul>
             <li v-for="apartment in filteredApartments" :key="apartment.id">
@@ -149,6 +165,7 @@ export default {
     }
 
 }
+
 .suggestions-list {
     position: absolute;
     top: 100%;
@@ -174,6 +191,5 @@ export default {
         }
     }
 }
-
 </style>
 
