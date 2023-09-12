@@ -29,7 +29,13 @@ export default {
             return d;
         },
         searchApartments() {
-            this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
+            if (this.search === '') {
+                this.isSearchClicked = false; // Imposta isSearchClicked su true al clic del pulsante
+            }
+
+            else {
+                this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
+            }
 
             axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
                 .then(response => {
@@ -42,6 +48,8 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+
+
         }
     },
     computed: {
