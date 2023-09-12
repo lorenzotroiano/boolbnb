@@ -46,27 +46,21 @@ export default {
         filteredApartments() {
 
 
-            if (!this.referencePoint && !this.search) {
-                return this.apartments;
-            }
+            if (!this.referencePoint && !this.search) return this.apartments;
             
-
-            if (this.referencePoint) {
-                return this.apartments.filter(apartment => {
+            return this.apartments.filter(apartment => {
                 const distance = this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
                     lng: apartment.longitude
                 });
                 return distance <= 100;
             });
-            }
-
             
         }
     },
     
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -93,7 +87,8 @@ export default {
 
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-            aria-describedby="button-addon2" v-model="search" @input="searchApartments">
+            aria-describedby="button-addon2" v-model="search">
+            <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
         <!-- Lista degli appartamenti -->
