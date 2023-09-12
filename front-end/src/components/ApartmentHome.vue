@@ -8,7 +8,8 @@ export default {
             apartments: [],
             search: '',
             referencePoint: null,
-            isSearchClicked: false, // Aggiunto isSearchClicked
+            isSearchClicked: false,
+            suggestions: []
         }
     },
     methods: {
@@ -48,8 +49,25 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        getSuggestions() {
+        if (this.search.trim() === '') {
+            this.suggestions = [];
+            return;
+        }
 
-
+        axios.get(`https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=5`)
+            .then(response => {
+                this.suggestions = response.data.results.map(result => result.address.freeformAddress);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        
+        selectSuggestion(suggestion) {
+        this.search = suggestion;
+        this.suggestions = [];
         }
     },
     computed: {
@@ -69,7 +87,7 @@ export default {
     },
 
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -84,21 +102,19 @@ export default {
 <template>
     <div class="container-fluid">
 
-
-        <!-- <div class="filter">
-
-            
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-                    aria-describedby="button-addon2" v-model="search">
-            </div>
-        </div> -->
-
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-                aria-describedby="button-addon2" v-model="search">
+                <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
+                aria-describedby="button-addon2" v-model="search" @input="getSuggestions">
+            <div v-if="suggestions.length" class="suggestions-list">
+                <ul>
+                    <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                        {{ suggestion }}
+                    </li>
+                </ul>
+            </div>
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
+
 
         <!-- Lista degli appartamenti -->
         <ul>
@@ -133,5 +149,31 @@ export default {
     }
 
 }
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    z-index: 1000;
+
+    ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+
+        li {
+            padding: 10px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f5f5f5;
+            }
+        }
+    }
+}
+
 </style>
 
