@@ -13,8 +13,8 @@ export default {
         filteredApartments() {
             // Creo un nuovo array filtrato
             return this.apartments.filter(apartment => {
-                // Restituisce TRUE se i valori sono verificati e FALSE se non lo sono
-                return apartment.name.toLowerCase().includes(this.search.toLowerCase());
+                // Restituisce TRUE se l'indirizzo dell'appartamento contiene la stringa di ricerca
+                return apartment.address.toLowerCase().includes(this.search.toLowerCase());
             });
         }
     },
