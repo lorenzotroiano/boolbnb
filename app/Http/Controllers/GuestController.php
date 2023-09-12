@@ -15,12 +15,16 @@ class GuestController extends Controller
     public function index()
     {
         $apartments = Apartment::with('services')->get();
-        $services = Service::all();
+        
 
-        return response()->json([
-            'apartments' => $apartments,
-            'services' => $services
-        ]);
+        return response()->json($apartments);
+    }
+
+    public function indexService() {
+
+        $services = Service::all();
+        return response()->json($services);
+
     }
 
     public function show($id)

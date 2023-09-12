@@ -136,14 +136,19 @@ export default {
 
     },
     computed: {
+        
         // Lista di appartamenti filtrata
         filteredApartments() {
+            if (!this.isSearchClicked && this.selectedServices.length === 0) {
+                return this.apartments;
+            }
+
             return this.apartments.filter(apartment => {
                 const distanceCondition = !this.isSearchClicked || (this.referencePoint && this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
                     lng: apartment.longitude
                 }) <= 30);
-            
+                
                 return distanceCondition && this.filterByServices(apartment);
             });
         }
