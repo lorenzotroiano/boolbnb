@@ -245,11 +245,19 @@ export default {
     <div class="container-fluid">
 
         <!-- Search -->
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
-                aria-describedby="button-addon2" v-model="search" @input="getSuggestions" @keyup.enter="searchApartments">
-            <button class="btn btn-primary" @click="searchApartments">Search</button>
+        <div class="row justify-content-center">
+            <div class="col-8 mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Cerca appartamento..." aria-label="Cerca..."
+                        aria-describedby="button-addon2" v-model="search" @input="getSuggestions"
+                        @keyup.enter="searchApartments">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" @click="searchApartments">Search</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
 
         <!-- Suggerimenti -->
         <div v-if="suggestions.length" class="suggestions-list">
@@ -259,22 +267,6 @@ export default {
                 </li>
             </ul>
         </div>
-
-        <!-- ICONE FILTRI -->
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <div class="row justify-content-center">
-                    <div v-for="service in services" :key="service.id" class="col-1">
-                        <button type="button" class="btn btn-outline-primary">
-                            <i :class="service.icon"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
 
         <!-- FILTRI -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>

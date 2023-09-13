@@ -22,6 +22,8 @@ export default {
     },
 };
 </script>
+
+
 <template>
     <div class="filter-sidebar">
 
@@ -29,27 +31,44 @@ export default {
         <h3 id="services">Servizi</h3>
 
         <!-- Elenco dei servizi -->
-        <ul class="row justify-between flex">
-            <li v-for="service in services" :key="service.id" class="form-check col-6">
-                <input class="form-check-input" type="checkbox" :value="service.id"
-                    :checked="selectedServicesCopy.includes(service.id)" @change="updateSelectedServices(service.id)"
-                    :id="'filter-service-' + service.id" />
-                <label :for="'filter-service-' + service.id">{{ service.name }}</label>
-            </li>
-        </ul>
-
+        <div class="row justify-between flex">
+            <div v-for="service in services" :key="service.id" class="col-6 mb-2">
+                <button
+                    :class="{ 'btn-selected': selectedServicesCopy.includes(service.id), 'btn': true, 'btn-icon': true }"
+                    @click="updateSelectedServices(service.id)">
+                    <i :class="service.icon"></i>
+                </button>
+            </div>
+        </div>
 
         <!-- Pulsante "Applica filtri" -->
-        <button class="btn btn-primary" @click="applyFilters">Applica filtri</button>
+        <button class="btn btn-primary mt-3" @click="applyFilters">Applica filtri</button>
     </div>
 </template>
 
 
+
 <style lang="scss">
 .filter-sidebar {
+
     #services {
         text-align: left;
         margin-bottom: 50px;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+        border-radius: 4px;
+
+        &.btn-selected {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        &.btn-icon i {
+            font-size: 1.5em; // Aumenta la dimensione dell'icona se necessario
+        }
     }
 }
 </style>
