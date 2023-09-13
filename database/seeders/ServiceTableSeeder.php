@@ -19,16 +19,16 @@ class ServiceTableSeeder extends Seeder
     {
         // Definisci un array di dati dei servizi desiderati
         $serviceData = [
-            ['name' => 'Wifi', 'icon' => 'nome_del_file_icona_wifi.png'],
-            ['name' => 'Spotify', 'icon' => 'nome_del_file_icona_spotify.png'],
-            ['name' => 'Tv', 'icon' => 'Tv.png'],
-            ['name' => 'FrigoBar', 'icon' => 'FrigoBar.png'],
-            ['name' => 'Idromassaggio', 'icon' => 'Idromassaggio.png'],
-            ['name' => 'Garage', 'icon' => 'Garage.png'],
-            ['name' => 'Animali', 'icon' => 'Animali.png'],
-            ['name' => 'Bevande', 'icon' => 'Bevande.png'],
-            ['name' => 'Palestra', 'icon' => 'Palestra.png'],
-            ['name' => 'Bar', 'icon' => 'Bar.png'],
+            ['name' => 'Wifi', 'icon' => 'fas fa-wifi'],
+            ['name' => 'Spotify', 'icon' => 'fas fa-music'],
+            ['name' => 'Tv', 'icon' => 'fas fa-tv'],
+            ['name' => 'FrigoBar', 'icon' => 'fas fa-cocktail'],
+            ['name' => 'Idromassaggio', 'icon' => 'fas fa-bath'],
+            ['name' => 'Garage', 'icon' => 'fas fa-parking'],
+            ['name' => 'Animali', 'icon' => 'fas fa-dog'],
+            ['name' => 'Bevande', 'icon' => 'fas fa-coffee'],
+            ['name' => 'Palestra', 'icon' => 'fas fa-dumbbell'],
+            ['name' => 'Bar', 'icon' => 'fas fa-beer'],
 
         ];
 

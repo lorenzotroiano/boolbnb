@@ -260,6 +260,22 @@ export default {
             </ul>
         </div>
 
+        <!-- ICONE FILTRI -->
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <div class="row justify-content-center">
+                    <div v-for="service in services" :key="service.id" class="col-1">
+                        <button type="button" class="btn btn-outline-primary">
+                            <i :class="service.icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
         <!-- FILTRI -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
 
@@ -360,7 +376,7 @@ export default {
 
 <style lang="scss">
 .container-fluid {
-    background-color: orange;
+    background-color: white;
     text-align: center;
     padding: 70px;
 
