@@ -39,6 +39,9 @@ export default {
         <p>Sponsorizzato: {{ apartment.sponsor }}</p>
         <img :src="apartment.cover" alt="Copertina dell'appartamento">
 
+
+
+
         <!-- Servizi -->
         <h2>Servizi:</h2>
         <ul>

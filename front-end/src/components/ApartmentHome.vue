@@ -225,21 +225,30 @@ export default {
 
         <!-- Lista degli appartamenti -->
         <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
-        <div class="row">
-            <div class="col-sm-4 my-3" v-for="apartment in filteredApartments" :key="apartment.id">
-                <div class="card shadow bg-info ">
-                    <div class="card-body">
-                        <ul>
-                            <li>
-                                <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }" class="link">
-                                    <h2 class="card-title">{{ apartment.name }}</h2>
-                                </router-link>
-                            </li>
-                        </ul>
+        <div class="d-flex flex-wrap">
+            <div v-for="apartment in filteredApartments" :key="apartment.id" class="col-lg-4 col-md-6 col-sm-12 mb-4"
+                :style="{ 'order': apartment.sponsor ? -1 : 0 }">
+                <div class="card h-100 " :class="{ 'sponsored-card': apartment.sponsor }">
+                    <img :src="apartment.cover" class="card-img-top" alt="Cover dell'appartamento"
+                        style="max-height: 200px;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ apartment.name }}</h5>
+                        <p class="card-text flex-grow-1">{{ apartment.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }"
+                                class="btn btn-primary">Dettagli</router-link>
+                            <!-- Aggiungi un pulsante "Consigliato" se l'appartamento ha sponsor -->
+                            <button v-if="apartment.sponsor" class="btn btn-success ml-2">Consigliato</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
+
 
 
     </div>
@@ -268,6 +277,32 @@ export default {
                 }
             }
         }
+    }
+
+    .sponsored-card {
+        background-color: #ffe7e7;
+        /* Colore di sfondo leggermente rosato per le cards sponsorizzate */
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        /* Colore di sfondo blu per il pulsante Dettagli */
+        color: #fff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        /* Colore di sfondo verde per il pulsante Consigliato */
+        color: #fff;
     }
 }
 </style>
