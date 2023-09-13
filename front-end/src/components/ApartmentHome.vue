@@ -60,7 +60,7 @@ export default {
         // Coordinate date dalla search
         searchApartments() {
             if (this.search === '') {
-                this.isSearchClicked = false; // Imposta isSearchClicked su true al clic del pulsante
+                this.isSearchClicked = false; // Imposta isSearchClicked su false al clic del pulsante
             }
 
             else {
@@ -200,14 +200,14 @@ export default {
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
                 aria-describedby="button-addon2" v-model="search" @input="getSuggestions" @keyup.enter="searchApartments">
-            <div v-if="suggestions.length" class="suggestions-list">
-                <ul>
-                    <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-                        {{ suggestion }}
-                    </li>
-                </ul>
-            </div>
             <button class="btn btn-primary" @click="searchApartments">Search</button>
+        </div>
+        <div v-if="suggestions.length" class="suggestions-list">
+            <ul>
+                <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                    {{ suggestion }}
+                </li>
+            </ul>
         </div>
 
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
