@@ -5,8 +5,25 @@ export default {
     data() {
         return {
             apartment: [],
+            map: null,
+            center: [4, 44.4],
+            apiKey: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
+        };
+    },
 
-        }
+    methods: {
+        initializeMap() {
+            this.map = new tt.map({
+                key: this.apiKey,
+                container: this.$refs.map,
+                center: this.center,
+                zoom: 10,
+            });
+
+            this.map.on("load", () => {
+                new tt.Marker().setLngLat(this.center).addTo(this.map);
+            });
+        },
     },
     props: ['id'],
     mounted() {
@@ -17,14 +34,14 @@ export default {
             .catch(error => {
                 console.log(error);
             })
+        this.initializeMap();
     },
 };
-
-
-
 </script>
 
 <template>
+    <div ref="map" style="width: 80%; height: 50%;"></div>
+
     <div>
         <h1>Nome: {{ apartment.name }}</h1>
         <p>ID: {{ apartment.id }}</p>

@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tomtom-international/web-sdk-maps": "^6.23.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.1",
     "geolib": "^3.3.4",
+    "mapbox-gl": "^1.13.2",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
