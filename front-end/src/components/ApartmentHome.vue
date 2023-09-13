@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import FilterSidebar from './FilterSidebar.vue';
+import tt from '@tomtom-international/web-sdk-maps';
 
 export default {
     name: 'ApartmentHome',
@@ -36,28 +37,14 @@ export default {
             selectedBathrooms: null,
             selectedSize: null,
 
+            // Range filtri
+            tempRooms: null,
+            tempBathrooms: null,
+            tempSize: null,
 
         }
     },
     methods: {
-
-        // Calcoli Raggio
-        haversineDistance(coords1, coords2) {
-            function toRad(value) {
-                return value * Math.PI / 180;
-            }
-
-            const R = 6371; // raggio della Terra in km
-            const dLat = toRad(coords2.lat - coords1.lat);
-            const dLon = toRad(coords2.lng - coords1.lng);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(toRad(coords1.lat)) * Math.cos(toRad(coords2.lat)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            const d = R * c;
-
-            return d;
-        },
 
         toggleFilters() {
             // Mostra o nascondi l'offcanvas dei filtri quando il pulsante "Filtri" viene cliccato
@@ -78,14 +65,12 @@ export default {
         },
 
 
-
+        // Coordinate date dalla search
         // Coordinate date dalla search
         searchApartments() {
             if (this.search === '') {
                 this.isSearchClicked = false; // Imposta isSearchClicked su false al clic del pulsante
-            }
-
-            else {
+            } else {
                 this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
             }
 
@@ -93,10 +78,7 @@ export default {
             axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
                 .then(response => {
                     const position = response.data.results[0].position;
-                    this.referencePoint = {
-                        lat: position.lat,
-                        lng: position.lon
-                    };
+                    this.referencePoint = new tt.LngLat(position.lon, position.lat); // Utilizza tt.LngLat per creare un oggetto LngLat
                 })
                 .catch(error => {
                     console.log(error);
@@ -183,7 +165,6 @@ export default {
             return roomCondition && bathroomCondition && sizeCondition;
         },
 
-
         // Filtraggio servizi
         filterByServices(apartment) {
             return this.selectedServices.every(serviceId =>
@@ -202,23 +183,18 @@ export default {
                 // Controlla la distanza solo se è stato fatto un clic di ricerca
                 const distanceCondition = !this.isSearchClicked || (
                     this.referencePoint &&
-                    this.haversineDistance(this.referencePoint, {
-                        lat: apartment.latitude,
-                        lng: apartment.longitude
-                    }) <= 20
+                    this.haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude)) <= 20
                 );
 
                 return distanceCondition &&
                     this.filterByRoomsBathroomsSize(apartment) &&
                     this.filterByServices(apartment);
             });
-        }
-
+        },
     },
 
 
     mounted() {
-
         this.getUserLocation();
 
         axios.get('http://127.0.0.1:8000/api/v1/')
