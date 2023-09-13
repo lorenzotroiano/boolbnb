@@ -30,9 +30,11 @@ export default {
         <!-- Elenco dei servizi -->
         <div v-for="service in services" :key="service.id" class="form-check">
             <input class="form-check-input" type="checkbox" :value="service.id"
-                :checked="selectedServicesCopy.includes(service.id)" @change="updateSelectedServices(service.id)" />
+                :checked="selectedServicesCopy.includes(service.id)" @change="updateSelectedServices(service.id)"
+                :id="'filter-service-' + service.id" />
             <label :for="'filter-service-' + service.id">{{ service.name }}</label>
         </div>
+
 
         <!-- Pulsante "Applica filtri" -->
         <button class="btn btn-primary" @click="applyFilters">Applica filtri</button>
