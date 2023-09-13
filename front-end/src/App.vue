@@ -22,4 +22,15 @@ export default {
     <FooterApp />
 </template>
 
-<style scoped></style>
+<style>
+li {
+    list-style: none;
+
+
+}
+
+i {
+    padding: 15px;
+
+}
+</style>

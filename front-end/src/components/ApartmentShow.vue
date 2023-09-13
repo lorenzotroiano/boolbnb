@@ -62,7 +62,8 @@ export default {
         <!-- Servizi -->
         <h2>Servizi:</h2>
         <ul>
-            <li v-for="service in apartment.services" :key="service.id">{{ service.name }}</li>
+            <li v-for="service in  apartment.services " :key="service.id"> <i :class=service.icon></i>{{ service.name
+            }}</li>
         </ul>
 
     </div>
