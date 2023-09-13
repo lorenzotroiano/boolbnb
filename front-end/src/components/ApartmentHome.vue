@@ -110,7 +110,7 @@ export default {
                 return;
             }
 
-            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK&limit=5&entityType=municipality`;
+            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK&limit=5&entityType=Municipality&countrySet=IT&language=it-IT&radius=20000`;
 
             if (this.userCountry) {
                 apiUrl += `&countrySet=${this.userCountry}`;
@@ -239,7 +239,6 @@ export default {
                     </div>
                 </div>
             </div>
-
         </div>
 
 
