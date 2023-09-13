@@ -22,4 +22,6 @@ export default {
     <FooterApp />
 </template>
 
-<style scoped></style>
+<style lang="scss">
+@import "@tomtom-international/web-sdk-maps"
+</style>
