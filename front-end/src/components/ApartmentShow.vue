@@ -61,10 +61,20 @@ export default {
 
         <!-- Servizi -->
         <h2>Servizi:</h2>
-        <ul>
-            <li v-for="service in  apartment.services " :key="service.id"> <i :class=service.icon></i>{{ service.name
-            }}</li>
-        </ul>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" v-for="service in apartment.services" :key="service.id">
+                    <div class="card mb-3">
+                        <div class="card-body text-center">
+                            <i :class="service.icon" class="service-icon"></i>
+                            <p class="card-text">{{ service.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </div>
 </template>
@@ -72,4 +82,17 @@ export default {
 
 
 
-<style scoped></style>
+<style scoped>
+.service-icon {
+    font-size: 24px;
+
+}
+
+
+.card:hover {
+    background-color: #007bff;
+
+    color: #fff;
+
+}
+</style>
