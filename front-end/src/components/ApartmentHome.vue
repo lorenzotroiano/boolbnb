@@ -1,8 +1,12 @@
 <script>
 import axios from 'axios';
+import FilterSidebar from './FilterSidebar.vue';
 
 export default {
     name: 'ApartmentHome',
+    components: {
+        FilterSidebar,
+    },
     data() {
         return {
             apartments: [],
@@ -14,6 +18,7 @@ export default {
             selectedServices: [],
             userLocation: null,
             userCountry: null,
+            showFilters: false
         }
     },
     methods: {
@@ -36,6 +41,22 @@ export default {
             return d;
         },
 
+        toggleFilters() {
+            // Mostra o nascondi l'offcanvas dei filtri quando il pulsante "Filtri" viene cliccato
+            this.showFilters = !this.showFilters;
+        },
+        applyFilters(selectedServices) {
+            try {
+                // Applica i filtri quando l'utente fa clic su "Applica filtri" nell'offcanvas
+                this.selectedServices = selectedServices;
+                // Chiudi l'offcanvas
+                this.showFilters = false;
+            } catch (error) {
+                console.error("Errore durante l'esecuzione del codice:", error);
+            }
+            console.log(selectedServices);
+        },
+
         // Coordinate date dalla search
         searchApartments() {
             if (this.search === '') {
@@ -47,7 +68,7 @@ export default {
             }
 
             // Prende coordinate del primo suggerimento
-            axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
+            axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
                 .then(response => {
                     const position = response.data.results[0].position;
                     this.referencePoint = {
@@ -59,14 +80,14 @@ export default {
                     console.log(error);
                 });
         },
-        
+
         getUserLocation() {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(position => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
 
-                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`)
+                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
                         .then(response => {
                             const country = response.data.addresses[0].address.country;
                             this.userCountry = country;
@@ -89,7 +110,7 @@ export default {
                 return;
             }
 
-            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD&limit=3&entityType=municipality`;
+            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK&limit=5&entityType=municipality`;
 
             if (this.userCountry) {
                 apiUrl += `&countrySet=${this.userCountry}`;
@@ -98,7 +119,6 @@ export default {
             axios.get(apiUrl)
                 .then(response => {
                     const results = response.data.results;
-
                     if (this.userLocation) {
                         results.sort((a, b) => {
                             const distanceA = this.haversineDistance(this.userLocation, {
@@ -112,31 +132,27 @@ export default {
                             return distanceA - distanceB;
                         });
                     }
-
-                    this.suggestions = results.map(result => result.address.municipality);
+                    this.suggestions = results.map(result => result.address.freeformAddress);
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
 
-
-
-        
         selectSuggestion(suggestion) {
             this.search = suggestion;
             this.suggestions = [];
         },
 
         filterByServices(apartment) {
-            return this.selectedServices.every(serviceId => 
+            return this.selectedServices.every(serviceId =>
                 apartment.services.some(service => service.id === serviceId)
             );
         }
 
     },
     computed: {
-        
+
         // Lista di appartamenti filtrata
         filteredApartments() {
             if (!this.isSearchClicked && this.selectedServices.length === 0) {
@@ -147,20 +163,18 @@ export default {
                 const distanceCondition = !this.isSearchClicked || (this.referencePoint && this.haversineDistance(this.referencePoint, {
                     lat: apartment.latitude,
                     lng: apartment.longitude
-                }) <= 30);
-                
+                }) <= 20);
+
                 return distanceCondition && this.filterByServices(apartment);
             });
         }
-
-
     },
 
     mounted() {
 
         this.getUserLocation();
 
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -168,7 +182,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -196,23 +210,39 @@ export default {
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
 
-        <!-- Lista dei servizi -->
-        <div v-for="service in services" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="service.id" v-model="selectedServices" :id="'flexCheckIndeterminate' + service.id">
-            <label class="form-check-label" :for="'flexCheckIndeterminate' + service.id">
-                {{ service.name }}
-            </label>
+        <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" :class="{ show: showFilters }">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Filtri</h5>
+                <button type="button" class="btn-close" @click="toggleFilters" aria-label="Chiudi"></button>
+            </div>
+            <div class="offcanvas-body">
+                <filter-sidebar :services="services" :selectedServices="selectedServices"
+                    @apply-filters="applyFilters"></filter-sidebar>
+            </div>
         </div>
 
         <!-- Lista degli appartamenti -->
-        <ul>
-            <li v-for="apartment in filteredApartments" :key="apartment.id">
-                <!-- Link alla show -->
-                <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }" class="link">
-                    <h2>{{ apartment.name }}</h2>
-                </router-link>
-            </li>
-        </ul>
+        <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
+        <div class="row">
+            <div class="col-sm-4 my-3" v-for="apartment in filteredApartments" :key="apartment.id">
+                <div class="card shadow bg-info ">
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }" class="link">
+                                    <h2 class="card-title">{{ apartment.name }}</h2>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
     </div>
 </template>
 
@@ -237,33 +267,6 @@ export default {
                     text-decoration: underline;
 
                 }
-            }
-        }
-    }
-
-}
-
-.suggestions-list {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    z-index: 1000;
-
-    ul {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-
-        li {
-            padding: 10px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: #f5f5f5;
             }
         }
     }
