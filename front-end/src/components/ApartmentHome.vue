@@ -18,7 +18,18 @@ export default {
             selectedServices: [],
             userLocation: null,
             userCountry: null,
-            showFilters: false
+            showFilters: false,
+
+            // Fitri ulteriori
+            selectedRooms: null,
+            selectedBathrooms: null,
+            selectedSize: null,
+
+            // Range filtri
+            tempRooms: null,
+            tempBathrooms: null,
+            tempSize: null
+
         }
     },
     methods: {
@@ -47,15 +58,17 @@ export default {
         },
         applyFilters(selectedServices) {
             try {
-                // Applica i filtri quando l'utente fa clic su "Applica filtri" nell'offcanvas
                 this.selectedServices = selectedServices;
+                this.selectedRooms = this.tempRooms;
+                this.selectedBathrooms = this.tempBathrooms;
+                this.selectedSize = this.tempSize;
                 // Chiudi l'offcanvas
                 this.showFilters = false;
             } catch (error) {
                 console.error("Errore durante l'esecuzione del codice:", error);
             }
-            console.log(selectedServices);
         },
+
 
         // Coordinate date dalla search
         searchApartments() {
@@ -144,31 +157,56 @@ export default {
             this.suggestions = [];
         },
 
+        // Filtraggio stanze,bagni e dimensioni
+        filterByRoomsBathroomsSize(apartment) {
+            const roomCondition = !this.selectedRooms || apartment.room === this.selectedRooms;
+            const bathroomCondition = !this.selectedBathrooms || apartment.bathroom === this.selectedBathrooms;
+
+            let upperSizeLimit;
+            if (this.selectedSize === 50) {
+                upperSizeLimit = this.selectedSize + 50;
+            } else {
+                upperSizeLimit = this.selectedSize + 100;
+            }
+
+            const sizeCondition = !this.selectedSize || (apartment.mq >= this.selectedSize && apartment.mq < upperSizeLimit);
+
+            return roomCondition && bathroomCondition && sizeCondition;
+        },
+
+
+        // Filtraggio servizi
         filterByServices(apartment) {
             return this.selectedServices.every(serviceId =>
                 apartment.services.some(service => service.id === serviceId)
             );
-        }
+        },
+
+
 
     },
+
+    // Applicazione filtri su appartamenti
     computed: {
-
-        // Lista di appartamenti filtrata
         filteredApartments() {
-            if (!this.isSearchClicked && this.selectedServices.length === 0) {
-                return this.apartments;
-            }
-
             return this.apartments.filter(apartment => {
-                const distanceCondition = !this.isSearchClicked || (this.referencePoint && this.haversineDistance(this.referencePoint, {
-                    lat: apartment.latitude,
-                    lng: apartment.longitude
-                }) <= 20);
+                // Controlla la distanza solo se è stato fatto un clic di ricerca
+                const distanceCondition = !this.isSearchClicked || (
+                    this.referencePoint &&
+                    this.haversineDistance(this.referencePoint, {
+                        lat: apartment.latitude,
+                        lng: apartment.longitude
+                    }) <= 20
+                );
 
-                return distanceCondition && this.filterByServices(apartment);
+                return distanceCondition &&
+                    this.filterByRoomsBathroomsSize(apartment) &&
+                    this.filterByServices(apartment);
             });
         }
+
     },
+
 
     mounted() {
 
@@ -197,11 +235,14 @@ export default {
 <template>
     <div class="container-fluid">
 
+        <!-- Search -->
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Cerca..." aria-label="Cerca..."
                 aria-describedby="button-addon2" v-model="search" @input="getSuggestions" @keyup.enter="searchApartments">
             <button class="btn btn-primary" @click="searchApartments">Search</button>
         </div>
+
+        <!-- Suggerimenti -->
         <div v-if="suggestions.length" class="suggestions-list">
             <ul>
                 <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
@@ -210,6 +251,7 @@ export default {
             </ul>
         </div>
 
+        <!-- Filtri -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
 
         <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" :class="{ show: showFilters }">
@@ -218,10 +260,53 @@ export default {
                 <button type="button" class="btn-close" @click="toggleFilters" aria-label="Chiudi"></button>
             </div>
             <div class="offcanvas-body">
+                <!-- Filtro per camere da letto -->
+                <div class="mb-3">
+                    <label class="form-label">Camere da letto:</label>
+                    <div class="btn-group" role="group" aria-label="Numero di camere">
+                        <button type="button" class="btn btn-outline-secondary"
+                            v-bind:class="{ 'active': selectedRooms === null }"
+                            @click="selectedRooms = null">Qualsiasi</button>
+                        <button type="button" class="btn btn-outline-secondary" v-for="n in 8"
+                            v-bind:class="{ 'active': selectedRooms === n }" @click="selectedRooms = n">{{ n }}</button>
+                    </div>
+                </div>
+
+                <!-- Filtro per bagni -->
+                <div class="mb-3">
+                    <label class="form-label">Bagni:</label>
+                    <div class="btn-group" role="group" aria-label="Numero di bagni">
+                        <button type="button" class="btn btn-outline-secondary"
+                            v-bind:class="{ 'active': selectedBathrooms === null }"
+                            @click="selectedBathrooms = null">Qualsiasi</button>
+                        <button type="button" class="btn btn-outline-secondary" v-for="n in 5"
+                            v-bind:class="{ 'active': selectedBathrooms === n }" @click="selectedBathrooms = n">{{ n
+                            }}</button>
+                    </div>
+                </div>
+
+                <!-- Filtro per dimensione -->
+                <div class="mb-3">
+                    <label class="form-label">Dimensione (mq):</label>
+                    <div class="btn-group" role="group" aria-label="Dimensione">
+                        <button type="button" class="btn btn-outline-secondary"
+                            v-bind:class="{ 'active': selectedSize === null }"
+                            @click="selectedSize = null">Qualsiasi</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            v-for="(size, index) in [50, 100, 200, 300, 400, 500]" :key="index"
+                            v-bind:class="{ 'active': selectedSize === size }" @click="selectedSize = size">
+                            {{ size }} - {{ index < [50, 100, 200, 300, 400, 500].length - 1 ? [50, 100, 200, 300, 400,
+                                500][index + 1] : '' }} </button>
+
+                    </div>
+                </div>
+
+
                 <filter-sidebar :services="services" :selectedServices="selectedServices"
                     @apply-filters="applyFilters"></filter-sidebar>
             </div>
         </div>
+
 
         <!-- Lista degli appartamenti -->
         <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
@@ -269,6 +354,10 @@ export default {
                 }
             }
         }
+    }
+
+    .offcanvas {
+        width: 500px;
     }
 }
 </style>
