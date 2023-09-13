@@ -244,7 +244,7 @@ export default {
 <template>
     <div class="container-fluid">
 
-        <!-- Search -->
+        <!-- SEARCH -->
         <div class="row justify-content-center">
             <div class="col-8 mb-3">
                 <div class="input-group">
@@ -259,7 +259,7 @@ export default {
         </div>
 
 
-        <!-- Suggerimenti -->
+        <!-- SUGGERIMENTI -->
         <div v-if="suggestions.length" class="suggestions-list">
             <ul>
                 <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
@@ -271,7 +271,7 @@ export default {
         <!-- FILTRI -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
 
-        <!-- PAGE FILTRI -->
+        <!-- Page Filtri -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" :class="{ show: showFilters }">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">Filtri</h5>
@@ -281,7 +281,7 @@ export default {
 
             <div class="offcanvas-body">
 
-                <h3 id="roomBed">Stanze e Letti</h3>
+                <h3>Stanze e Letti</h3>
 
                 <!-- Filtro per camere da letto -->
                 <div class="mb-3 row">
@@ -299,7 +299,7 @@ export default {
                 </div>
 
                 <!-- Filtro per bagni -->
-                <div class="mb-3">
+                <div class="mb-3 row">
 
                     <!-- Titolo -->
                     <label class="form-label col-4">Bagni:</label>
@@ -316,7 +316,7 @@ export default {
                 </div>
 
                 <!-- Filtro per dimensione -->
-                <div class="mb-3">
+                <div class="mb-3 row">
 
                     <!-- Titolo -->
                     <label class="form-label col-4">Dimensione (mq):</label>
@@ -328,8 +328,7 @@ export default {
                         <button type="button" class="btn btn-outline-secondary"
                             v-for="(size, index) in [50, 100, 200, 300, 400, 500]" :key="index"
                             v-bind:class="{ 'active': tempSize === size }" @click="tempSize = size">
-                            {{ size }} - {{ index < [50, 100, 200, 300, 400, 500].length - 1 ? [50, 100, 200, 300, 400,
-                                500][index + 1] : '' }} </button>
+                            {{ size }} </button>
                     </div>
                 </div>
 
@@ -374,12 +373,50 @@ export default {
 
     // Offcanvas
     .offcanvas {
-        width: 700px;
+        width: 900px;
 
-        #roomBed {
+        h3 {
             text-align: left;
             margin-bottom: 50px;
         }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            /* padding uniforme per centrare il testo */
+            font-weight: 600;
+            border-width: 1px;
+
+            &:not(.active):hover {
+                transform: scale(1.05);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            &.active {
+                background-color: #007BFF;
+                color: white;
+                border-color: #0056b3;
+            }
+
+            &:not(.active) {
+                background-color: white;
+                color: #333;
+
+                &:hover {
+                    background-color: #f8f9fa;
+                    border-color: #dae0e5;
+                }
+            }
+        }
+
+
+
+
     }
 
     ul {

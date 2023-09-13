@@ -38,11 +38,12 @@ export default {
                     @click="updateSelectedServices(service.id)">
                     <i :class="service.icon"></i>
                 </button>
+                <span>{{ service.name }}</span>
             </div>
         </div>
 
         <!-- Pulsante "Applica filtri" -->
-        <button class="btn btn-primary mt-3" @click="applyFilters">Applica filtri</button>
+        <button id="applyFilter" class="btn btn-primary mt-3" @click="applyFilters">Applica filtri</button>
     </div>
 </template>
 
@@ -54,6 +55,12 @@ export default {
     #services {
         text-align: left;
         margin-bottom: 50px;
+    }
+
+    #applyFilter {
+        width: 20%;
+        text-align: center;
+        border-radius: 4px;
     }
 
     .btn {
