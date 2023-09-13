@@ -11,24 +11,31 @@ export default {
         return {
             apartments: [],
             services: [],
+
+            // Barra di ricerca
             search: '',
-            referencePoint: null,
             isSearchClicked: false,
+
+            // Suggerimenti
             suggestions: [],
+            referencePoint: null,
             selectedServices: [],
             userLocation: null,
             userCountry: null,
+
+            // Toggle per l'offcanvas per i filtri
             showFilters: false,
 
-            // Fitri ulteriori
+            // Filtri Temporanei
+            tempRooms: null,
+            tempBathrooms: null,
+            tempSize: null,
+
+            // Fitri Finali
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
 
-            // Range filtri
-            tempRooms: null,
-            tempBathrooms: null,
-            tempSize: null
 
         }
     },
@@ -56,18 +63,20 @@ export default {
             // Mostra o nascondi l'offcanvas dei filtri quando il pulsante "Filtri" viene cliccato
             this.showFilters = !this.showFilters;
         },
+
+        // Applica i filtri per poi passarli al filtraggio in filterByRoomsBathroomsSize
         applyFilters(selectedServices) {
             try {
                 this.selectedServices = selectedServices;
                 this.selectedRooms = this.tempRooms;
                 this.selectedBathrooms = this.tempBathrooms;
                 this.selectedSize = this.tempSize;
-                // Chiudi l'offcanvas
-                this.showFilters = false;
+                this.showFilters = false;  // Chiudi l'offcanvas
             } catch (error) {
                 console.error("Errore durante l'esecuzione del codice:", error);
             }
         },
+
 
 
         // Coordinate date dalla search
@@ -251,59 +260,76 @@ export default {
             </ul>
         </div>
 
-        <!-- Filtri -->
+        <!-- FILTRI -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
 
+        <!-- PAGE FILTRI -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" :class="{ show: showFilters }">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title">Filtri</h5>
                 <button type="button" class="btn-close" @click="toggleFilters" aria-label="Chiudi"></button>
             </div>
+
+
             <div class="offcanvas-body">
+
+                <h3 id="roomBed">Stanze e Letti</h3>
+
                 <!-- Filtro per camere da letto -->
-                <div class="mb-3">
-                    <label class="form-label">Camere da letto:</label>
-                    <div class="btn-group" role="group" aria-label="Numero di camere">
+                <div class="mb-3 row">
+
+                    <!-- Titolo -->
+                    <label class="form-label col-4">Camere da letto:</label>
+
+                    <!-- Bottoni -->
+                    <div class="btn-group col-8" role="group" aria-label="Numero di camere">
                         <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': selectedRooms === null }"
-                            @click="selectedRooms = null">Qualsiasi</button>
+                            v-bind:class="{ 'active': tempRooms === null }" @click="tempRooms = null">Qualsiasi</button>
                         <button type="button" class="btn btn-outline-secondary" v-for="n in 8"
-                            v-bind:class="{ 'active': selectedRooms === n }" @click="selectedRooms = n">{{ n }}</button>
+                            v-bind:class="{ 'active': tempRooms === n }" @click="tempRooms = n">{{ n }}</button>
                     </div>
                 </div>
 
                 <!-- Filtro per bagni -->
                 <div class="mb-3">
-                    <label class="form-label">Bagni:</label>
-                    <div class="btn-group" role="group" aria-label="Numero di bagni">
+
+                    <!-- Titolo -->
+                    <label class="form-label col-4">Bagni:</label>
+
+                    <!-- Bottoni -->
+                    <div class="btn-group col-8" role="group" aria-label="Numero di bagni">
                         <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': selectedBathrooms === null }"
-                            @click="selectedBathrooms = null">Qualsiasi</button>
+                            v-bind:class="{ 'active': tempBathrooms === null }"
+                            @click="tempBathrooms = null">Qualsiasi</button>
                         <button type="button" class="btn btn-outline-secondary" v-for="n in 5"
-                            v-bind:class="{ 'active': selectedBathrooms === n }" @click="selectedBathrooms = n">{{ n
+                            v-bind:class="{ 'active': tempBathrooms === n }" @click="tempBathrooms = n">{{ n
                             }}</button>
                     </div>
                 </div>
 
                 <!-- Filtro per dimensione -->
                 <div class="mb-3">
-                    <label class="form-label">Dimensione (mq):</label>
-                    <div class="btn-group" role="group" aria-label="Dimensione">
+
+                    <!-- Titolo -->
+                    <label class="form-label col-4">Dimensione (mq):</label>
+
+                    <!-- Bottoni -->
+                    <div class="btn-group col-8" role="group" aria-label="Dimensione">
                         <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': selectedSize === null }"
-                            @click="selectedSize = null">Qualsiasi</button>
+                            v-bind:class="{ 'active': tempSize === null }" @click="tempSize = null">Qualsiasi</button>
                         <button type="button" class="btn btn-outline-secondary"
                             v-for="(size, index) in [50, 100, 200, 300, 400, 500]" :key="index"
-                            v-bind:class="{ 'active': selectedSize === size }" @click="selectedSize = size">
+                            v-bind:class="{ 'active': tempSize === size }" @click="tempSize = size">
                             {{ size }} - {{ index < [50, 100, 200, 300, 400, 500].length - 1 ? [50, 100, 200, 300, 400,
                                 500][index + 1] : '' }} </button>
-
                     </div>
                 </div>
 
-
-                <filter-sidebar :services="services" :selectedServices="selectedServices"
-                    @apply-filters="applyFilters"></filter-sidebar>
+                <!-- COMPONENTE SIDEBAR -->
+                <div class="mt-5">
+                    <filter-sidebar :services="services" :selectedServices="selectedServices"
+                        @apply-filters="applyFilters"></filter-sidebar>
+                </div>
             </div>
         </div>
 
@@ -329,22 +355,24 @@ export default {
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
     </div>
 </template>
 
 <style lang="scss">
 .container-fluid {
-
     background-color: orange;
     text-align: center;
     padding: 70px;
+
+    // Offcanvas
+    .offcanvas {
+        width: 700px;
+
+        #roomBed {
+            text-align: left;
+            margin-bottom: 50px;
+        }
+    }
 
     ul {
         list-style-type: none;
@@ -390,9 +418,7 @@ export default {
         color: #fff;
     }
 
-    .offcanvas {
-        width: 500px;
-    }
+
 }
 </style>
 

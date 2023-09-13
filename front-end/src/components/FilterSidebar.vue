@@ -25,15 +25,18 @@ export default {
 <template>
     <div class="filter-sidebar">
 
-        <h3>Filtri</h3>
+        <!-- Title -->
+        <h3 id="services">Servizi</h3>
 
         <!-- Elenco dei servizi -->
-        <div v-for="service in services" :key="service.id" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="service.id"
-                :checked="selectedServicesCopy.includes(service.id)" @change="updateSelectedServices(service.id)"
-                :id="'filter-service-' + service.id" />
-            <label :for="'filter-service-' + service.id">{{ service.name }}</label>
-        </div>
+        <ul class="row justify-between flex">
+            <li v-for="service in services" :key="service.id" class="form-check col-6">
+                <input class="form-check-input" type="checkbox" :value="service.id"
+                    :checked="selectedServicesCopy.includes(service.id)" @change="updateSelectedServices(service.id)"
+                    :id="'filter-service-' + service.id" />
+                <label :for="'filter-service-' + service.id">{{ service.name }}</label>
+            </li>
+        </ul>
 
 
         <!-- Pulsante "Applica filtri" -->
@@ -42,4 +45,11 @@ export default {
 </template>
 
 
-<style></style>
+<style lang="scss">
+.filter-sidebar {
+    #services {
+        text-align: left;
+        margin-bottom: 50px;
+    }
+}
+</style>
