@@ -140,21 +140,19 @@ export default {
                 console.error("Errore durante l'esecuzione del codice:", error);
             }
         },
-
-
     },
 
     // FILTRAGGIO ARRAY SECONDO FILTRI
     computed: {
-        // filteredApartments() {
-        //     return this.apartments.filter(apartment => {
-        //         const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
+        filteredApartments() {
+            return this.apartments.filter(apartment => {
+                const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
 
-        //         return distanceCondition &&
-        //             this.filterByRoomsBathroomsSize(apartment) &&
-        //             this.filterByServices(apartment);
-        //     });
-        // },
+                return distanceCondition &&
+                    this.filterByRoomsBathroomsSize(apartment) &&
+                    this.filterByServices(apartment);
+            });
+        },
 
     },
 
@@ -182,16 +180,6 @@ export default {
 
         // Inserisci la casella di ricerca nell'elemento HTML desiderato
         this.$refs.searchBoxContainer.appendChild(searchBoxHTML);
-        // Aggiungi un gestore di evento per monitorare i cambiamenti nella casella di ricerca
-        ttSearchBox.on('tomtom.searchbox.inputrestored', () => {
-            // Ottieni il valore dalla casella di ricerca
-            const inputValue = ttSearchBox.getInputValue();
-            // Aggiorna la variabile searchValue con il valore
-            this.searchValue = inputValue;
-        });
-
-
-
         // this.getUserLocation();
 
         axios.get('http://127.0.0.1:8000/api/v1/')
