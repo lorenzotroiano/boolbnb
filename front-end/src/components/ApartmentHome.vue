@@ -38,57 +38,11 @@ export default {
             selectedBathrooms: null,
             selectedSize: null,
 
-            // Range filtri
-            tempRooms: null,
-            tempBathrooms: null,
-            tempSize: null,
-
         }
     },
     methods: {
 
-        haversineDistance(coord1, coord2) {
-            const toRadians = (angle) => angle * (Math.PI / 180);
-            const radius = 6371; // Raggio della Terra in chilometri
-
-            const lat1 = coord1.lat;
-            const lon1 = coord1.lng;
-            const lat2 = coord2.lat;
-            const lon2 = coord2.lng;
-
-            const dLat = toRadians(lat2 - lat1);
-            const dLon = toRadians(lon2 - lon1);
-
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            const distance = radius * c;
-
-            return distance;
-        },
-
-        toggleFilters() {
-            // Mostra o nascondi l'offcanvas dei filtri quando il pulsante "Filtri" viene cliccato
-            this.showFilters = !this.showFilters;
-        },
-
-        // Applica i filtri per poi passarli al filtraggio in filterByRoomsBathroomsSize
-        applyFilters(selectedServices) {
-            try {
-                this.selectedServices = selectedServices;
-                this.selectedRooms = this.tempRooms;
-                this.selectedBathrooms = this.tempBathrooms;
-                this.selectedSize = this.tempSize;
-                this.showFilters = false;  // Chiudi l'offcanvas
-            } catch (error) {
-                console.error("Errore durante l'esecuzione del codice:", error);
-            }
-        },
-
-
-        // Coordinate date dalla search
+        // COORDINATE SEARCH
         searchApartments() {
             if (this.search === '') {
                 this.isSearchClicked = false; // Imposta isSearchClicked su false al clic del pulsante
@@ -107,29 +61,7 @@ export default {
                 });
         },
 
-        getUserLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-
-                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
-                        .then(response => {
-                            const country = response.data.addresses[0].address.country;
-                            this.userCountry = country;
-                        })
-                        .catch(error => {
-                            console.error("Error obtaining country:", error);
-                        });
-
-                }, error => {
-                    console.error("Error obtaining geolocation:", error);
-                });
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        },
-
+        // SUGGERIMENTI CITTÀ
         getSuggestions() {
             if (this.search.trim().length < 2) {
                 this.suggestions = [];
@@ -170,7 +102,39 @@ export default {
             this.suggestions = [];
         },
 
-        // Filtraggio stanze,bagni e dimensioni
+
+        // DISTANZA date COORDINATE
+        haversineDistance(coord1, coord2) {
+            const toRadians = (angle) => angle * (Math.PI / 180);
+            const radius = 6371; // Raggio della Terra in chilometri
+
+            const lat1 = coord1.lat;
+            const lon1 = coord1.lng;
+            const lat2 = coord2.lat;
+            const lon2 = coord2.lng;
+
+            const dLat = toRadians(lat2 - lat1);
+            const dLon = toRadians(lon2 - lon1);
+
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distance = radius * c;
+
+            return distance;
+        },
+
+
+        // FILTRAGGIO
+
+        // SHOW OFFCANVAS
+        toggleFilters() {
+            this.showFilters = !this.showFilters;
+        },
+
+        // FILTRI BAGNI, STANZE, SIZE
         filterByRoomsBathroomsSize(apartment) {
             const roomCondition = !this.selectedRooms || apartment.room === this.selectedRooms;
             const bathroomCondition = !this.selectedBathrooms || apartment.bathroom === this.selectedBathrooms;
@@ -187,14 +151,14 @@ export default {
             return roomCondition && bathroomCondition && sizeCondition;
         },
 
-        // Filtraggio servizi
+        // FILTRI SERVIZI
         filterByServices(apartment) {
             return this.selectedServices.every(serviceId =>
                 apartment.services.some(service => service.id === serviceId)
             );
         },
 
-        // Filtraggio per distanza
+        // FILTRI DISTANZA
         filterByDistanceRange(apartment) {
             if (!this.referencePoint) return false;
 
@@ -203,9 +167,23 @@ export default {
             return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
         },
 
+        // APPLICA I FILTRI
+        applyFilters(selectedServices) {
+            try {
+                this.selectedServices = selectedServices;
+                this.selectedRooms = this.tempRooms;
+                this.selectedBathrooms = this.tempBathrooms;
+                this.selectedSize = this.tempSize;
+                this.showFilters = false;  // Chiudi l'offcanvas
+            } catch (error) {
+                console.error("Errore durante l'esecuzione del codice:", error);
+            }
+        },
+
+
     },
 
-    // Applicazione filtri su appartamenti
+    // FILTRAGGIO ARRAY SECONDO FILTRI
     computed: {
         filteredApartments() {
             return this.apartments.filter(apartment => {
@@ -219,7 +197,7 @@ export default {
     },
 
 
-
+    // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
         this.getUserLocation();
 
@@ -243,6 +221,8 @@ export default {
 };
 </script>
 
+
+<!-- TEMPLATE -->
 <template>
     <div class="container-fluid">
 
