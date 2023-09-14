@@ -2,6 +2,8 @@
 import axios from 'axios';
 import FilterSidebar from './FilterSidebar.vue';
 import tt from '@tomtom-international/web-sdk-maps';
+import { services } from '@tomtom-international/web-sdk-services';
+import SearchBox from '@tomtom-international/web-sdk-plugin-searchbox';
 
 export default {
     name: 'ApartmentHome',
@@ -16,6 +18,7 @@ export default {
             // Barra di ricerca
             search: '',
             isSearchClicked: false,
+            searchValue: '',
 
             // Suggerimenti
             suggestions: [],
@@ -60,73 +63,6 @@ export default {
                     console.log(error);
                 });
         },
-
-        // SUGGERIMENTI CITTÀ
-        getSuggestions() {
-            if (this.search.trim().length < 2) {
-                this.suggestions = [];
-                return;
-            }
-
-            let apiUrl = `https://api.tomtom.com/search/2/search/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK&limit=5&entityType=Municipality&language=it-IT&radius=20000`;
-
-            if (this.userCountry) {
-                apiUrl += `&countrySet=${this.userCountry}`;
-            }
-
-            axios.get(apiUrl)
-                .then(response => {
-                    const results = response.data.results;
-                    if (this.userLocation) {
-                        results.sort((a, b) => {
-                            const distanceA = this.haversineDistance(this.userLocation, {
-                                lat: a.position.lat,
-                                lng: a.position.lon
-                            });
-                            const distanceB = this.haversineDistance(this.userLocation, {
-                                lat: b.position.lat,
-                                lng: b.position.lon
-                            });
-                            return distanceA - distanceB;
-                        });
-                    }
-                    this.suggestions = results.map(result => result.address.freeformAddress);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
-
-        selectSuggestion(suggestion) {
-            this.search = suggestion;
-            this.suggestions = [];
-        },
-
-
-
-        getUserLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-
-                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
-                        .then(response => {
-                            const country = response.data.addresses[0].address.country;
-                            this.userCountry = country;
-                        })
-                        .catch(error => {
-                            console.error("Error obtaining country:", error);
-                        });
-
-                }, error => {
-                    console.error("Error obtaining geolocation:", error);
-                });
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        },
-
 
         // DISTANZA date COORDINATE
         haversineDistance(coord1, coord2) {
@@ -210,21 +146,53 @@ export default {
 
     // FILTRAGGIO ARRAY SECONDO FILTRI
     computed: {
-        filteredApartments() {
-            return this.apartments.filter(apartment => {
-                const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
+        // filteredApartments() {
+        //     return this.apartments.filter(apartment => {
+        //         const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
 
-                return distanceCondition &&
-                    this.filterByRoomsBathroomsSize(apartment) &&
-                    this.filterByServices(apartment);
-            });
-        },
+        //         return distanceCondition &&
+        //             this.filterByRoomsBathroomsSize(apartment) &&
+        //             this.filterByServices(apartment);
+        //     });
+        // },
+
     },
 
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        this.getUserLocation();
+        const options = {
+            searchOptions: {
+                key: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
+                language: "it-It",
+                limit: 5,
+            },
+            autocompleteOptions: {
+                key: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
+                language: "it-It",
+
+            },
+        };
+
+        // Crea un'istanza di SearchBox
+        const ttSearchBox = new SearchBox(services, options);
+
+        // Ottieni l'HTML della casella di ricerca
+        const searchBoxHTML = ttSearchBox.getSearchBoxHTML();
+
+        // Inserisci la casella di ricerca nell'elemento HTML desiderato
+        this.$refs.searchBoxContainer.appendChild(searchBoxHTML);
+        // Aggiungi un gestore di evento per monitorare i cambiamenti nella casella di ricerca
+        ttSearchBox.on('tomtom.searchbox.inputrestored', () => {
+            // Ottieni il valore dalla casella di ricerca
+            const inputValue = ttSearchBox.getInputValue();
+            // Aggiorna la variabile searchValue con il valore
+            this.searchValue = inputValue;
+        });
+
+
+
+        // this.getUserLocation();
 
         axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
@@ -250,7 +218,8 @@ export default {
 <!-- TEMPLATE -->
 <template>
     <div class="container-fluid">
-
+        <div ref="searchBoxContainer"></div>
+        <p>Risultato ricerca: {{ searchValue }}</p>
         <!-- SEARCH -->
         <div class="row justify-content-center flex-column align-content-center">
 
@@ -521,4 +490,3 @@ export default {
 
 }
 </style>
-
