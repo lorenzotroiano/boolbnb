@@ -26,7 +26,6 @@ export default {
 
             // Toggle per l'offcanvas per i filtri
             showFilters: false,
-            distanceRange: 20,
 
             // Filtri Temporanei
             tempRooms: null,
@@ -37,6 +36,10 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
+
+            // Distanza
+            distanceRange: 20,
+            tempDistanceRange: null
 
         }
     },
@@ -199,6 +202,7 @@ export default {
                 this.selectedRooms = this.tempRooms;
                 this.selectedBathrooms = this.tempBathrooms;
                 this.selectedSize = this.tempSize;
+                this.distanceRange = this.tempDistanceRange;
                 this.showFilters = false;  // Chiudi l'offcanvas
             } catch (error) {
                 console.error("Errore durante l'esecuzione del codice:", error);
@@ -279,13 +283,6 @@ export default {
 
         </div>
 
-        <!-- Filtri distanza -->
-        <div class="mb-3">
-            <label for="distanceRange" class="form-label">Distanza (km)</label>
-            <input type="range" class="form-range" id="distanceRange" min="0" max="100" step="1" v-model="distanceRange">
-            <div>{{ distanceRange }} km</div>
-        </div>
-
         <!-- FILTRI -->
         <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
 
@@ -347,6 +344,16 @@ export default {
                             v-for="(size, index) in [50, 100, 200, 300, 400, 500]" :key="index"
                             v-bind:class="{ 'active': tempSize === size }" @click="tempSize = size">
                             {{ size }} </button>
+                    </div>
+                </div>
+
+                <h3 class="mt-5">Distanza </h3>
+                <!-- Filtri distanza -->
+                <div class="row justify-content-center">
+                    <div class="col-8 mb-3">
+                        <input type="range" class="form-range" id="distanceRange" min="0" max="100" step="1"
+                            v-model="tempDistanceRange">
+                        <div>{{ tempDistanceRange ? tempDistanceRange : 50 }} km</div>
                     </div>
                 </div>
 
