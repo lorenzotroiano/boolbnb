@@ -68,6 +68,10 @@ export default {
         text-align: center;
         border-radius: 4px;
 
+        &:hover {
+            cursor: pointer;
+        }
+
         &.btn-selected {
             background-color: dodgerblue;
             color: white;

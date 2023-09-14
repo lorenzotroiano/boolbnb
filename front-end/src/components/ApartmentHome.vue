@@ -196,15 +196,12 @@ export default {
 
         // Filtraggio per distanza
         filterByDistanceRange(apartment) {
-            if (!this.referencePoint) return false;  // Se non abbiamo un punto di riferimento, ritorna false
+            if (!this.referencePoint) return false;
 
             const distance = this.haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
 
-            return distance >= this.minDistance && distance <= this.maxDistance;
-        }
-
-
-
+            return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
+        },
 
     },
 
@@ -250,7 +247,9 @@ export default {
     <div class="container-fluid">
 
         <!-- SEARCH -->
-        <div class="row justify-content-center">
+        <div class="row justify-content-center flex-column align-content-center">
+
+            <!-- Ricerca -->
             <div class="col-8 mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Cerca appartamento..." aria-label="Cerca..."
@@ -261,18 +260,21 @@ export default {
                     </div>
                 </div>
             </div>
+
+            <!-- SUGGERIMENTI -->
+            <div class="col-2" id="suggest">
+                <div v-if="suggestions.length" class="suggestions-list d-flex justify-content-center">
+                    <ul>
+                        <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                            {{ suggestion }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
-
-        <!-- SUGGERIMENTI -->
-        <div v-if="suggestions.length" class="suggestions-list">
-            <ul>
-                <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-                    {{ suggestion }}
-                </li>
-            </ul>
-        </div>
-
+        <!-- Filtri distanza -->
         <div class="mb-3">
             <label for="distanceRange" class="form-label">Distanza (km)</label>
             <input type="range" class="form-range" id="distanceRange" min="0" max="100" step="1" v-model="distanceRange">
@@ -382,6 +384,47 @@ export default {
     text-align: center;
     padding: 70px;
 
+    #suggest {
+        margin: 0 auto; // Centra il div orizzontalmente
+
+
+        // Suggerimenti
+        .suggestions-list {
+            border: 1px solid #e0e0e0;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+
+            ul {
+                width: 100%;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            li {
+                padding: 10px 15px;
+                border-bottom: 1px solid #f1f1f1;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                    background-color: #f5f5f5;
+                }
+
+                &:active {
+                    background-color: #e0e0e0;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+
+
     // Offcanvas
     .offcanvas {
         width: 900px;
@@ -424,10 +467,6 @@ export default {
                 }
             }
         }
-
-
-
-
     }
 
     ul {
