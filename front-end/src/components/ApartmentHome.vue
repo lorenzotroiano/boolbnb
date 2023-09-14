@@ -168,7 +168,6 @@ export default {
             autocompleteOptions: {
                 key: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
                 language: "it-It",
-
             },
         };
 
