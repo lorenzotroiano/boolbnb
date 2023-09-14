@@ -26,6 +26,7 @@ export default {
 
             // Toggle per l'offcanvas per i filtri
             showFilters: false,
+            distanceRange: 20,
 
             // Filtri Temporanei
             tempRooms: null,
@@ -193,6 +194,16 @@ export default {
             );
         },
 
+        // Filtraggio per distanza
+        filterByDistanceRange(apartment) {
+            if (!this.referencePoint) return false;  // Se non abbiamo un punto di riferimento, ritorna false
+
+            const distance = this.haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+
+            return distance >= this.minDistance && distance <= this.maxDistance;
+        }
+
+
 
 
     },
@@ -201,11 +212,7 @@ export default {
     computed: {
         filteredApartments() {
             return this.apartments.filter(apartment => {
-                // Controlla la distanza solo se è stato fatto un clic di ricerca
-                const distanceCondition = !this.isSearchClicked || (
-                    this.referencePoint &&
-                    this.haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude)) <= 20
-                );
+                const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
 
                 return distanceCondition &&
                     this.filterByRoomsBathroomsSize(apartment) &&
@@ -213,6 +220,7 @@ export default {
             });
         },
     },
+
 
 
     mounted() {
@@ -263,6 +271,12 @@ export default {
                     {{ suggestion }}
                 </li>
             </ul>
+        </div>
+
+        <div class="mb-3">
+            <label for="distanceRange" class="form-label">Distanza (km)</label>
+            <input type="range" class="form-range" id="distanceRange" min="0" max="100" step="1" v-model="distanceRange">
+            <div>{{ distanceRange }} km</div>
         </div>
 
         <!-- FILTRI -->
