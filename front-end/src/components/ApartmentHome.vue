@@ -103,6 +103,31 @@ export default {
         },
 
 
+
+        getUserLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    axios.get(`https://api.tomtom.com/search/2/reverseGeocode/${lat},${lng}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
+                        .then(response => {
+                            const country = response.data.addresses[0].address.country;
+                            this.userCountry = country;
+                        })
+                        .catch(error => {
+                            console.error("Error obtaining country:", error);
+                        });
+
+                }, error => {
+                    console.error("Error obtaining geolocation:", error);
+                });
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        },
+
+
         // DISTANZA date COORDINATE
         haversineDistance(coord1, coord2) {
             const toRadians = (angle) => angle * (Math.PI / 180);
