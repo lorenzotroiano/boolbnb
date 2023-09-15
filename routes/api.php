@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GuestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +14,6 @@ use App\Http\Controllers\GuestController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::prefix('v1')->group(function () {
-
-    Route::get('/', [GuestController::class, 'index']);
-    Route::get('/service', [GuestController::class, 'indexService']);
-    Route::get('/show/{id}', [GuestController::class, 'show']);
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
 });

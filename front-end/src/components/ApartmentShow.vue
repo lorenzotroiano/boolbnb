@@ -30,7 +30,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.latitude, this.apartment.longitude];

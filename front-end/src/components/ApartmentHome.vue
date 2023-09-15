@@ -185,7 +185,7 @@ export default {
 
                 // Condizione per filtrare per metri quadrati
                 const sizeCondition = !this.tempSize || apartment.size >= this.tempSize;
-                
+
                 return distanceCondition && servicesCondition && bathroomCondition && sizeCondition && roomCondition;
             });
         },
@@ -196,7 +196,7 @@ export default {
     mounted() {
         this.getUserLocation();
 
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -204,7 +204,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -258,12 +258,8 @@ export default {
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
-        <FilterSidebar
-            :services="services"
-            :selectedServices="selectedServices"
-            @apply-filters="applyFilters"
-            @apartments-updated="updateApartments"
-        ></FilterSidebar>
+            <FilterSidebar :services="services" :selectedServices="selectedServices" @apply-filters="applyFilters"
+                @apartments-updated="updateApartments"></FilterSidebar>
         </div>
 
         <!-- Lista degli appartamenti -->

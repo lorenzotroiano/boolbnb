@@ -5,7 +5,7 @@ export default {
         return {
             selectedServicesCopy: [...this.selectedServices],
             filteredApartments: [],
-            
+
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
@@ -41,7 +41,7 @@ export default {
             }
         },
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
             if (this.selectedRooms) {
                 apiUrl += `&room=${this.selectedRooms}`;
