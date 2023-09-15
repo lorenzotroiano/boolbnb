@@ -27,7 +27,7 @@ export default {
             userLocation: null,
             userCountry: null,
 
-            
+
 
 
             // Variabili temp per il filtering
@@ -100,7 +100,7 @@ export default {
             return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
         },
 
-        
+
         updateApartments(apartments) {
             this.apartments = apartments;
         },
@@ -133,7 +133,7 @@ export default {
 
                 // Condizione per filtrare per metri quadrati
                 const sizeCondition = !this.tempSize || apartment.size >= this.tempSize;
-                
+
                 return distanceCondition && servicesCondition && bathroomCondition && sizeCondition && roomCondition;
             });
         },
@@ -165,7 +165,7 @@ export default {
         this.$refs.searchBoxContainer.appendChild(searchBoxHTML);
         // this.getUserLocation();
 
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -173,7 +173,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -220,29 +220,18 @@ export default {
 
         </div>
 
-        
+
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
             <transition name="slide">
-                <FilterSidebar
-                v-show="isSidebarVisible"
-                :services="services"
-                :selectedServices="selectedServices"
-
-                :referencePoint="referencePoint"
-                :distanceRange="distanceRange"
-
-                
-                @update:distanceRange="value => distanceRange = value"
-
-                @close-sidebar="isSidebarVisible = false"
-                @filter-by-distance="handleDistanceFilter"
-                @apply-filters="applyFilters"
-                @apartments-updated="updateApartments"
-                ></FilterSidebar>
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :referencePoint="referencePoint" :distanceRange="distanceRange"
+                    @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
+                    @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
+                    @apartments-updated="updateApartments"></FilterSidebar>
             </transition>
-        
+
         </div>
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
@@ -407,10 +396,16 @@ export default {
     }
 
     // COMPONENT SIDEBARFILTER
-    .slide-enter-active, .slide-leave-active {
+    .slide-enter-active,
+    .slide-leave-active {
         transition: all 0.5s;
     }
-    .slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */ {
+
+    .slide-enter,
+    .slide-leave-to
+
+    /* .slide-leave-active in <2.1.8 */
+        {
         transform: translateX(-100%);
         visibility: hidden;
     }
@@ -421,10 +416,13 @@ export default {
         top: 0;
         left: 0;
         height: 100vh;
-        width: 40%;  /* width della sidebar */
+        width: 40%;
+        /* width della sidebar */
         background-color: white;
-        z-index: 1000; /* per assicurarsi che sia al di sopra di tutto il resto */
-        overflow-y: scroll; /* se la sidebar è troppo lunga, rendi scrollabile */
+        z-index: 1000;
+        /* per assicurarsi che sia al di sopra di tutto il resto */
+        overflow-y: scroll;
+        /* se la sidebar è troppo lunga, rendi scrollabile */
     }
 
     /* overlay style */
@@ -434,8 +432,10 @@ export default {
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: rgba(0,0,0,0.5); /* semi-transparent */
-        z-index: 999; /* dietro la sidebar ma al di sopra di tutto il resto */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* semi-transparent */
+        z-index: 999;
+        /* dietro la sidebar ma al di sopra di tutto il resto */
     }
 
 

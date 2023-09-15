@@ -5,13 +5,26 @@ export default {
         return {
             selectedServicesCopy: [...this.selectedServices],
             filteredApartments: [],
-            
+
+
+
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
+            rooms: Array.from({ length: 10 }, (_, i) => i + 1), // Crea un array da 1 a 10
+
+            bathrooms: Array.from({ length: 7 }, (_, i) => i + 1) // Crea un array da 1 a 10 per i bagni
         };
     },
     methods: {
+
+        selectRoom(room) {
+            this.selectedRooms = room;
+        },
+
+        selectBathroom(bathroom) {
+            this.selectedBathrooms = bathroom;
+        },
         filterByRoomsBathroomsSize(apartment) {
             const roomCondition = !this.selectedRooms || apartment.room === this.selectedRooms;
             const bathroomCondition = !this.selectedBathrooms || apartment.bathroom === this.selectedBathrooms;
@@ -47,7 +60,7 @@ export default {
             this.$emit('close-sidebar');
         },
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
             if (this.selectedRooms) {
                 apiUrl += `&room=${this.selectedRooms}`;
@@ -87,9 +100,10 @@ export default {
                 services: this.selectedServices,
             });
             this.$emit('apply-filters');
-            
+
             this.closeSidebar();
         }
+
     },
 };
 </script>
@@ -112,13 +126,23 @@ export default {
         <!-- Numero di stanze -->
         <div class="filter-group">
             <label for="selectedRooms">Stanze:</label>
-            <input v-model="selectedRooms" type="number" id="selectedRooms" placeholder="Numero di stanze">
+            <div class="room-buttons">
+                <button v-for="room in rooms" :key="room" @click="selectRoom(room)"
+                    :class="{ active: selectedRooms === room }">
+                    {{ room }}
+                </button>
+            </div>
         </div>
 
         <!-- Numero di bagni -->
         <div class="filter-group">
             <label for="selectedBathrooms">Bagni:</label>
-            <input v-model="selectedBathrooms" type="number" id="selectedBathrooms" placeholder="Numero di bagni">
+            <div class="room-buttons">
+                <button v-for="bathroom in bathrooms" :key="bathroom" @click="selectBathroom(bathroom)"
+                    :class="{ active: selectedBathrooms === bathroom }">
+                    {{ bathroom }}
+                </button>
+            </div>
         </div>
 
         <!-- Metri quadrati -->
@@ -132,7 +156,7 @@ export default {
 
         <!-- Elenco dei servizi -->
         <div class="row justify-between flex">
-            <div v-for="service in services" :key="service.id" class="col-6 mb-2">
+            <div v-for="  service   in   services  " :key="service.id" class="col-6 mb-2">
                 <button
                     :class="{ 'btn-selected': selectedServicesCopy.includes(service.id), 'btn': true, 'btn-icon': true }"
                     @click="updateSelectedServices(service.id)">
@@ -184,6 +208,7 @@ export default {
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 2; /* Assicurati che stia sopra gli altri elementi */
+    z-index: 2;
+    /* Assicurati che stia sopra gli altri elementi */
 }
 </style>
