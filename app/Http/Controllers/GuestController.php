@@ -12,10 +12,28 @@ use App\Models\ApartmentSponsor;
 
 class GuestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $apartments = Apartment::with('services')->get();
-        
+        $apartments = Apartment::with('services')
+            ->when($request->get('name'), function ($query, $name) {
+                return $query->where('name', 'LIKE', '%' . $name . '%');
+            })
+            ->when($request->get('room'), function ($query, $room) {
+                return $query->where('room', $room);
+            })
+            ->when($request->get('bathroom'), function ($query, $bathroom) {
+                return $query->where('bathroom', $bathroom);
+            })
+            ->when($request->get('mq'), function ($query, $mq) {
+                return $query->where('mq', $mq);
+            })
+            ->when($request->get('services'), function ($query, $services) {
+                $servicesArray = explode(',', $services);
+                return $query->whereHas('services', function ($q) use ($servicesArray) {
+                    $q->whereIn('services.id', $servicesArray);
+                });
+            })
+            ->get();
 
         return response()->json($apartments);
     }
