@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['services', 'selectedServices'],
+    props: ['services', 'selectedServices', 'referencePoint', 'distanceRange'],
     data() {
         return {
             selectedServicesCopy: [...this.selectedServices],
@@ -40,6 +40,12 @@ export default {
                 console.log("selectedServicesCopy:", this.selectedServicesCopy);
             }
         },
+        updateDistanceRange(event) {
+            this.$emit('update:distanceRange', event.target.value);
+        },
+        closeSidebar() {
+            this.$emit('close-sidebar');
+        },
         applyFilters() {
             let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
@@ -51,6 +57,10 @@ export default {
             }
             if (this.selectedSize) {
                 apiUrl += `&mq=${this.selectedSize}`;
+            }
+
+            if (this.referencePoint) {
+                this.$emit('filter-by-distance', this.referencePoint);
             }
 
             console.log(apiUrl);
@@ -77,6 +87,8 @@ export default {
                 services: this.selectedServices,
             });
             this.$emit('apply-filters');
+            
+            this.closeSidebar();
         }
     },
 };
@@ -84,6 +96,18 @@ export default {
 
 <template>
     <div class="filter-sidebar">
+
+        <!-- Button per chiudere il component -->
+        <button class="close" aria-label="Close" @click="closeSidebar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+        <!-- Filtri distanza -->
+        <div class="mb-3">
+            <label for="distanceRange" class="form-label">Distanza (km)</label>
+            <input type="range" :value="distanceRange" @input="updateDistanceRange" />
+            <div>{{ distanceRange }} km</div>
+        </div>
 
         <!-- Numero di stanze -->
         <div class="filter-group">
@@ -154,5 +178,12 @@ export default {
             font-size: 1.5em;
         }
     }
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2; /* Assicurati che stia sopra gli altri elementi */
 }
 </style>

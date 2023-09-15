@@ -27,9 +27,7 @@ export default {
             userLocation: null,
             userCountry: null,
 
-            // Toggle per l'offcanvas per i filtri
-            showFilters: false,
-            distanceRange: 20,
+            
 
 
             // Variabili temp per il filtering
@@ -39,7 +37,10 @@ export default {
             selectedBathrooms: null,
             tempSize: null,
             selectedSize: null,
-            applyFilters: null
+            applyFilters: null,
+            // Toggle per l'offcanvas per i filtri
+            isSidebarVisible: false,
+            distanceRange: 20,
 
         }
     },
@@ -99,8 +100,19 @@ export default {
             return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
         },
 
+        
         updateApartments(apartments) {
             this.apartments = apartments;
+        },
+
+        handleDistanceFilter(referencePoint) {
+            // Filtra gli appartamenti basandoti sulla distanza e aggiorna la lista degli appartamenti
+            const filteredApartments = this.apartments.filter(apartment => {
+                const distance = this.haversineDistance(referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+                return distance <= this.distanceRange;
+            });
+
+            this.updateApartments(filteredApartments);
         },
     },
 
@@ -190,6 +202,7 @@ export default {
                         @keyup.enter="searchApartments">
                     <div class="input-group-append">
                         <button type="button" class="btn btn-primary" @click="searchApartments">Search</button>
+                        <button @click="isSidebarVisible = !isSidebarVisible">Filtri avanzati</button>
                     </div>
                 </div>
             </div>
@@ -207,22 +220,32 @@ export default {
 
         </div>
 
-        <!-- Filtri distanza -->
-        <div class="mb-3">
-            <label for="distanceRange" class="form-label">Distanza (km)</label>
-            <input type="range" class="form-range" id="distanceRange" min="0" max="100" step="1" v-model="distanceRange">
-            <div>{{ distanceRange }} km</div>
-        </div>
+        
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
-        <FilterSidebar
-            :services="services"
-            :selectedServices="selectedServices"
-            @apply-filters="applyFilters"
-            @apartments-updated="updateApartments"
-        ></FilterSidebar>
+            <transition name="slide">
+                <FilterSidebar
+                v-show="isSidebarVisible"
+                :services="services"
+                :selectedServices="selectedServices"
+
+                :referencePoint="referencePoint"
+                :distanceRange="distanceRange"
+
+                
+                @update:distanceRange="value => distanceRange = value"
+
+                @close-sidebar="isSidebarVisible = false"
+                @filter-by-distance="handleDistanceFilter"
+                @apply-filters="applyFilters"
+                @apartments-updated="updateApartments"
+                ></FilterSidebar>
+            </transition>
+        
         </div>
+        <!-- Overlay quando SIDEBAR è TRUE -->
+        <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
 
         <!-- Lista degli appartamenti -->
         <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
@@ -381,6 +404,38 @@ export default {
         background-color: #28a745;
         /* Colore di sfondo verde per il pulsante Consigliato */
         color: #fff;
+    }
+
+    // COMPONENT SIDEBARFILTER
+    .slide-enter-active, .slide-leave-active {
+        transition: all 0.5s;
+    }
+    .slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */ {
+        transform: translateX(-100%);
+        visibility: hidden;
+    }
+
+    /* sidebar style */
+    .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 40%;  /* width della sidebar */
+        background-color: white;
+        z-index: 1000; /* per assicurarsi che sia al di sopra di tutto il resto */
+        overflow-y: scroll; /* se la sidebar è troppo lunga, rendi scrollabile */
+    }
+
+    /* overlay style */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.5); /* semi-transparent */
+        z-index: 999; /* dietro la sidebar ma al di sopra di tutto il resto */
     }
 
 
