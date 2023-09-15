@@ -6,8 +6,6 @@ export default {
             selectedServicesCopy: [...this.selectedServices],
             filteredApartments: [],
 
-
-
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
