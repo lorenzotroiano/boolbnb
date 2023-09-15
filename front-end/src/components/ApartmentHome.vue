@@ -144,28 +144,6 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        const options = {
-            searchOptions: {
-                key: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
-                language: "it-It",
-                limit: 5,
-            },
-            autocompleteOptions: {
-                key: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
-                language: "it-It",
-            },
-        };
-
-        // Crea un'istanza di SearchBox
-        const ttSearchBox = new SearchBox(services, options);
-
-        // Ottieni l'HTML della casella di ricerca
-        const searchBoxHTML = ttSearchBox.getSearchBoxHTML();
-
-        // Inserisci la casella di ricerca nell'elemento HTML desiderato
-        this.$refs.searchBoxContainer.appendChild(searchBoxHTML);
-        // this.getUserLocation();
-
         axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
@@ -190,8 +168,6 @@ export default {
 <!-- TEMPLATE -->
 <template>
     <div class="container-fluid">
-        <div ref="searchBoxContainer"></div>
-        <p>Risultato ricerca: {{ searchValue }}</p>
         <!-- SEARCH -->
         <div class="row justify-content-center flex-column align-content-center">
 
