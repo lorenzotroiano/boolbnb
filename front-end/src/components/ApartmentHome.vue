@@ -27,21 +27,22 @@ export default {
             userLocation: null,
             userCountry: null,
 
-
-
-
-
+            
             // Variabili temp per il filtering
             tempRooms: null,
-            selectedRooms: null,
             tempBathrooms: null,
-            selectedBathrooms: null,
             tempSize: null,
+            tempDistanceRange: null,
+
+            // Variabili 
+            selectedRooms: null,
+            selectedBathrooms: null,
             selectedSize: null,
-            applyFilters: null,
-            // Toggle per l'offcanvas per i filtri
-            isSidebarVisible: false,
             distanceRange: 20,
+            // Toggle per la parte di filtri avanzati
+            isSidebarVisible: false,
+            applyFilters: null,
+            
 
         }
     },
