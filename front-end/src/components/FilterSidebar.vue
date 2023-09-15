@@ -6,6 +6,8 @@ export default {
             selectedServicesCopy: [...this.selectedServices],
             filteredApartments: [],
 
+
+
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
@@ -171,6 +173,15 @@ export default {
 
 <style lang="scss">
 .filter-sidebar {
+
+    padding: 70px;
+
+    .filter-group {
+        margin: 60px auto;
+        // border: 0.5px solid rgb(0, 140, 255);
+        padding: 25px;
+    }
+
     #services {
         text-align: left;
         margin-bottom: 50px;
@@ -208,5 +219,29 @@ export default {
     right: 10px;
     z-index: 2;
     /* Assicurati che stia sopra gli altri elementi */
+}
+
+.room-buttons,
+.bathroom-buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px; // Imposta le dimensioni dei bottoni
+    border: none;
+    background-color: #fff; // Colore di sfondo iniziale
+    color: #007bff; // Colore del testo
+    border: 1px solid #007bff; // Bordo iniziale
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; // Aggiunge una transizione di colore fluida
+}
+
+button.active {
+    background-color: #007bff; // Cambia il colore di sfondo al clic
+    color: #fff; // Cambia il colore del testo al clic
+    border: 1px solid #007bff; // Cambia il bordo al clic
 }
 </style>
