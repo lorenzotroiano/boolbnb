@@ -28,15 +28,15 @@ export default {
             showFilters: false,
             distanceRange: 20,
 
-            // Filtri Temporanei
-            tempRooms: null,
-            tempBathrooms: null,
-            tempSize: null,
 
-            // Fitri Finali
+            // Variabili temp per il filtering
+            tempRooms: null,
             selectedRooms: null,
+            tempBathrooms: null,
             selectedBathrooms: null,
+            tempSize: null,
             selectedSize: null,
+            applyFilters: null
 
         }
     },
@@ -154,35 +154,6 @@ export default {
 
         // FILTRAGGIO
 
-        // SHOW OFFCANVAS
-        toggleFilters() {
-            this.showFilters = !this.showFilters;
-        },
-
-        // FILTRI BAGNI, STANZE, SIZE
-        filterByRoomsBathroomsSize(apartment) {
-            const roomCondition = !this.selectedRooms || apartment.room === this.selectedRooms;
-            const bathroomCondition = !this.selectedBathrooms || apartment.bathroom === this.selectedBathrooms;
-
-            let upperSizeLimit;
-            if (this.selectedSize === 50) {
-                upperSizeLimit = this.selectedSize + 50;
-            } else {
-                upperSizeLimit = this.selectedSize + 100;
-            }
-
-            const sizeCondition = !this.selectedSize || (apartment.mq >= this.selectedSize && apartment.mq < upperSizeLimit);
-
-            return roomCondition && bathroomCondition && sizeCondition;
-        },
-
-        // FILTRI SERVIZI
-        filterByServices(apartment) {
-            return this.selectedServices.every(serviceId =>
-                apartment.services.some(service => service.id === serviceId)
-            );
-        },
-
         // FILTRI DISTANZA
         filterByDistanceRange(apartment) {
             if (!this.referencePoint) return false;
@@ -192,20 +163,9 @@ export default {
             return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
         },
 
-        // APPLICA I FILTRI
-        applyFilters(selectedServices) {
-            try {
-                this.selectedServices = selectedServices;
-                this.selectedRooms = this.tempRooms;
-                this.selectedBathrooms = this.tempBathrooms;
-                this.selectedSize = this.tempSize;
-                this.showFilters = false;  // Chiudi l'offcanvas
-            } catch (error) {
-                console.error("Errore durante l'esecuzione del codice:", error);
-            }
+        updateApartments(apartments) {
+            this.apartments = apartments;
         },
-
-
     },
 
     // FILTRAGGIO ARRAY SECONDO FILTRI
@@ -214,9 +174,19 @@ export default {
             return this.apartments.filter(apartment => {
                 const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
 
-                return distanceCondition &&
-                    this.filterByRoomsBathroomsSize(apartment) &&
-                    this.filterByServices(apartment);
+                // Aggiungi filtro per servizi
+                const servicesCondition = this.selectedServices.every(service => apartment.services.includes(service));
+
+                // Condizione per filtrare per numero di stanze
+                const roomCondition = !this.selectedRooms || apartment.rooms === this.selectedRooms;
+
+                // Condizione per filtrare per numero di bagni
+                const bathroomCondition = !this.selectedBathrooms || apartment.bathrooms === this.selectedBathrooms;
+
+                // Condizione per filtrare per metri quadrati
+                const sizeCondition = !this.tempSize || apartment.size >= this.tempSize;
+                
+                return distanceCondition && servicesCondition && bathroomCondition && sizeCondition && roomCondition;
             });
         },
     },
@@ -226,7 +196,7 @@ export default {
     mounted() {
         this.getUserLocation();
 
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -234,7 +204,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8000/api/v1/service')
+            axios.get('http://127.0.0.1:8001/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -286,78 +256,15 @@ export default {
             <div>{{ distanceRange }} km</div>
         </div>
 
-        <!-- FILTRI -->
-        <button class="btn btn-primary" @click="toggleFilters">Filtri</button>
-
-        <!-- Page Filtri -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" :class="{ show: showFilters }">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title">Filtri</h5>
-                <button type="button" class="btn-close" @click="toggleFilters" aria-label="Chiudi"></button>
-            </div>
-
-
-            <div class="offcanvas-body">
-
-                <h3>Stanze e Letti</h3>
-
-                <!-- Filtro per camere da letto -->
-                <div class="mb-3 row">
-
-                    <!-- Titolo -->
-                    <label class="form-label col-4">Camere da letto:</label>
-
-                    <!-- Bottoni -->
-                    <div class="btn-group col-8" role="group" aria-label="Numero di camere">
-                        <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': tempRooms === null }" @click="tempRooms = null">Qualsiasi</button>
-                        <button type="button" class="btn btn-outline-secondary" v-for="n in 8"
-                            v-bind:class="{ 'active': tempRooms === n }" @click="tempRooms = n">{{ n }}</button>
-                    </div>
-                </div>
-
-                <!-- Filtro per bagni -->
-                <div class="mb-3 row">
-
-                    <!-- Titolo -->
-                    <label class="form-label col-4">Bagni:</label>
-
-                    <!-- Bottoni -->
-                    <div class="btn-group col-8" role="group" aria-label="Numero di bagni">
-                        <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': tempBathrooms === null }"
-                            @click="tempBathrooms = null">Qualsiasi</button>
-                        <button type="button" class="btn btn-outline-secondary" v-for="n in 5"
-                            v-bind:class="{ 'active': tempBathrooms === n }" @click="tempBathrooms = n">{{ n
-                            }}</button>
-                    </div>
-                </div>
-
-                <!-- Filtro per dimensione -->
-                <div class="mb-3 row">
-
-                    <!-- Titolo -->
-                    <label class="form-label col-4">Dimensione (mq):</label>
-
-                    <!-- Bottoni -->
-                    <div class="btn-group col-8" role="group" aria-label="Dimensione">
-                        <button type="button" class="btn btn-outline-secondary"
-                            v-bind:class="{ 'active': tempSize === null }" @click="tempSize = null">Qualsiasi</button>
-                        <button type="button" class="btn btn-outline-secondary"
-                            v-for="(size, index) in [50, 100, 200, 300, 400, 500]" :key="index"
-                            v-bind:class="{ 'active': tempSize === size }" @click="tempSize = size">
-                            {{ size }} </button>
-                    </div>
-                </div>
-
-                <!-- COMPONENTE SIDEBAR -->
-                <div class="mt-5">
-                    <filter-sidebar :services="services" :selectedServices="selectedServices"
-                        @apply-filters="applyFilters"></filter-sidebar>
-                </div>
-            </div>
+        <!-- COMPONENTE SIDEBAR -->
+        <div class="mt-5">
+        <FilterSidebar
+            :services="services"
+            :selectedServices="selectedServices"
+            @apply-filters="applyFilters"
+            @apartments-updated="updateApartments"
+        ></FilterSidebar>
         </div>
-
 
         <!-- Lista degli appartamenti -->
         <h1 class="display-4 text-center text-primary">Home BoolBNB</h1>
