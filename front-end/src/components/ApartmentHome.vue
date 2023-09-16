@@ -26,10 +26,6 @@ export default {
             userLocation: null,
             userCountry: null,
 
-
-
-
-
             // Variabili temp per il filtering
             tempRooms: null,
             selectedRooms: null,

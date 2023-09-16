@@ -22,15 +22,15 @@ export default {
     <FooterApp />
 </template>
 
-<style>
+<style lang="scss">
+@use "./styles/general.scss" as *;
+
 li {
     list-style: none;
-
 
 }
 
 i {
     padding: 15px;
-
 }
 </style>
