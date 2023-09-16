@@ -102,16 +102,6 @@ export default {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
         </div>
     </main>
 </template>
@@ -122,6 +112,7 @@ export default {
 <style scoped lang="scss">
 main {
     background-color: chartreuse;
+    padding-top: 200px;
 
     .container {
         max-width: 80%;
