@@ -268,11 +268,14 @@ export default {
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
+
             <transition name="slide">
                 <FilterSidebar
                 v-show="isSidebarVisible"
                 :services="services"
                 :selectedServices="selectedServices"
+                :isSidebarVisible="isSidebarVisible"
+
 
                 :referencePoint="referencePoint"
                 :distanceRange="distanceRange"
@@ -288,6 +291,7 @@ export default {
             </transition>
         
         </div>
+        
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
 
@@ -450,26 +454,26 @@ export default {
         color: #fff;
     }
 
-    // COMPONENT SIDEBARFILTER
-    .slide-enter-active, .slide-leave-active {
-        transition: all 0.5s;
-    }
-    .slide-enter, .slide-leave-to /* .slide-leave-active in <2.1.8 */ {
-        transform: translateX(-100%);
-        visibility: hidden;
-    }
 
-    /* sidebar style */
-    .filter-sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 40%;  /* width della sidebar */
-        background-color: white;
-        z-index: 1000; /* per assicurarsi che sia al di sopra di tutto il resto */
-        overflow-y: scroll; /* se la sidebar è troppo lunga, rendi scrollabile */
-    }
+    // // CSS PER IL COMPONENTE SIDEBAR
+    // .slide-enter {
+    //     transform: translateY(100%); 
+    // }
+
+    // /* Stile finale dell'animazione di entrata */
+    // .slide-enter-to, .slide-enter-active {
+    //     transform: translateY(-50%);
+    // }
+
+    // /* Stile iniziale dell'animazione di uscita */
+    // .slide-leave {
+    //     transform: translateY(-50%);
+    // }
+
+    // /* Stile finale dell'animazione di uscita */
+    // .slide-leave-to, .slide-leave-active {
+    //     transform: translateY(100%);
+    // }
 
     /* overlay style */
     .overlay {
