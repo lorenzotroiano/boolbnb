@@ -26,14 +26,14 @@ export default {
             userLocation: null,
             userCountry: null,
 
-            
+
             // Variabili temp per il filtering
             tempRooms: null,
             tempBathrooms: null,
             tempSize: null,
             tempDistanceRange: null,
 
-            // Variabili 
+            // Variabili
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
@@ -41,7 +41,7 @@ export default {
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             applyFilters: null,
-            
+
 
         }
     },
@@ -144,7 +144,7 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -152,7 +152,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -203,25 +203,16 @@ export default {
         <div class="mt-5">
 
             <transition name="slide">
-                <FilterSidebar 
-                    v-show="isSidebarVisible" 
-                    :services="services" 
-                    :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible"
-
-                    :referencePoint="referencePoint" 
-                    :distanceRange="distanceRange"
-
-                    @update:distanceRange="value => distanceRange = value" 
-                    @close-sidebar="isSidebarVisible = false"
-                    @filter-by-distance="handleDistanceFilter" 
-                    @apply-filters="applyFilters"
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" :referencePoint="referencePoint" :distanceRange="distanceRange"
+                    @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
+                    @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
                     @apartments-updated="updateApartments">
                 </FilterSidebar>
             </transition>
 
         </div>
-        
+
 
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
@@ -250,14 +241,14 @@ export default {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../styles/general.scss';
 @use '../styles/partials/_variables.scss' as *;
 
 .container-fluid {
     background-color: white;
     text-align: center;
-    padding: 70px;
+    padding-top: 200px;
 
     #suggest {
         margin: 0 auto; // Centra il div orizzontalmente
@@ -329,7 +320,7 @@ export default {
 
     // // CSS PER IL COMPONENTE SIDEBAR
     // .slide-enter {
-    //     transform: translateY(100%); 
+    //     transform: translateY(100%);
     // }
 
     // /* Stile finale dell'animazione di entrata */
@@ -354,8 +345,10 @@ export default {
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: rgba(0,0,0,0.5); /* semi-transparent */
-        z-index: 999; /* dietro la sidebar ma al di sopra di tutto il resto */
+        background-color: rgba(0, 0, 0, 0.5);
+        /* semi-transparent */
+        z-index: 999;
+        /* dietro la sidebar ma al di sopra di tutto il resto */
     }
 
 

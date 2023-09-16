@@ -19,6 +19,9 @@ export default {
                 <div class="logo">
                     <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
+                <div class="logo-mobile">
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
+                </div>
                 <div class="search">
                     <input type="text" placeholder="Vai ovunque">
                     <button><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
@@ -27,7 +30,6 @@ export default {
                     <ul class="menu">
                         <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
                         <li>Registrati</li>
-                        <li>Dashboard</li>
                     </ul>
                 </nav>
             </div>
@@ -41,7 +43,9 @@ export default {
 header {
     position: fixed;
     width: 100%;
+    height: 130px;
     background-color: white;
+    z-index: 999;
 
     .container {
         max-width: 80%;
@@ -51,7 +55,6 @@ header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
 
             .logo {
                 width: 180px;
@@ -63,6 +66,12 @@ header {
                 }
             }
 
+            @media screen and (min-width: 1200px) {
+                .logo-mobile {
+                    display: none;
+                }
+            }
+
             .search {
                 background-color: #fff;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -71,7 +80,7 @@ header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                max-width: 600px;
+                width: 40%;
                 margin: 50px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
@@ -86,7 +95,7 @@ header {
                 border: none;
                 padding: 4px;
                 border-radius: 30px;
-                width: 400px;
+                width: 80%;
                 outline: none;
 
             }
@@ -109,14 +118,30 @@ header {
             .menu {
                 display: flex;
                 align-items: center;
-                gap: 26px;
+                width: 40%;
 
-
+                li {
+                    margin: 0 12px;
+                }
             }
         }
+    }
+}
 
+@media screen and (max-width:1200px) {
+    .logo {
+        display: none;
     }
 
+    .logo-mobile {
+        width: 60px;
+        display: block;
 
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 80px;
+        }
+    }
 }
 </style>
