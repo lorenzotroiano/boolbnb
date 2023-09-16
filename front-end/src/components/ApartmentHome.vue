@@ -243,6 +243,9 @@ export default {
 </template>
 
 <style lang="scss">
+@use '../styles/general.scss';
+@use '../styles/partials/_home.scss';
+@use '../styles/partials/_variables.scss' as *;
 .container-fluid {
     background-color: white;
     text-align: center;
@@ -411,8 +414,4 @@ export default {
 
 
 }
-<style scoped lang="scss">
-@use '../styles/general.scss';
-@use '../styles/partials/_home.scss';
-@use '../styles/partials/_variables.scss' as *;
 </style>

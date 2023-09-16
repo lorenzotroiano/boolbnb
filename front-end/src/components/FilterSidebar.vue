@@ -245,7 +245,7 @@ export default {
             }
         }
     }
-}
+
 
 
 .filter-sidebar:focus {
