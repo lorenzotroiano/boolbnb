@@ -201,8 +201,11 @@ export default {
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
+
             <transition name="slide">
                 <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                :isSidebarVisible="isSidebarVisible"
+
                     :referencePoint="referencePoint" :distanceRange="distanceRange"
                     @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
                     @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
@@ -210,6 +213,7 @@ export default {
             </transition>
 
         </div>
+        
 
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
@@ -238,6 +242,175 @@ export default {
     </div>
 </template>
 
+<style lang="scss">
+.container-fluid {
+    background-color: white;
+    text-align: center;
+    padding: 70px;
+
+    #suggest {
+        margin: 0 auto; // Centra il div orizzontalmente
+
+
+        // Suggerimenti
+        .suggestions-list {
+            border: 1px solid #e0e0e0;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+
+            ul {
+                width: 100%;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            li {
+                padding: 10px 15px;
+                border-bottom: 1px solid #f1f1f1;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                    background-color: #f5f5f5;
+                }
+
+                &:active {
+                    background-color: #e0e0e0;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+
+
+    // Offcanvas
+    .offcanvas {
+        width: 900px;
+
+        h3 {
+            text-align: left;
+            margin-bottom: 50px;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            /* padding uniforme per centrare il testo */
+            font-weight: 600;
+            border-width: 1px;
+
+            &:not(.active):hover {
+                transform: scale(1.05);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            &.active {
+                background-color: #007BFF;
+                color: white;
+                border-color: #0056b3;
+            }
+
+            &:not(.active) {
+                background-color: white;
+                color: #333;
+
+                &:hover {
+                    background-color: #f8f9fa;
+                    border-color: #dae0e5;
+                }
+            }
+        }
+    }
+
+    ul {
+        list-style-type: none;
+
+        li {
+            a {
+                text-decoration: none;
+                transition: all 0.8s ease;
+                color: black;
+
+                &:hover {
+                    color: yellow; // Imposta il colore dei link
+                    text-decoration: underline;
+
+                }
+            }
+        }
+    }
+
+    .sponsored-card {
+        background-color: #ffe7e7;
+        /* Colore di sfondo leggermente rosato per le cards sponsorizzate */
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        /* Colore di sfondo blu per il pulsante Dettagli */
+        color: #fff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        /* Colore di sfondo verde per il pulsante Consigliato */
+        color: #fff;
+    }
+
+
+    // // CSS PER IL COMPONENTE SIDEBAR
+    // .slide-enter {
+    //     transform: translateY(100%); 
+    // }
+
+    // /* Stile finale dell'animazione di entrata */
+    // .slide-enter-to, .slide-enter-active {
+    //     transform: translateY(-50%);
+    // }
+
+    // /* Stile iniziale dell'animazione di uscita */
+    // .slide-leave {
+    //     transform: translateY(-50%);
+    // }
+
+    // /* Stile finale dell'animazione di uscita */
+    // .slide-leave-to, .slide-leave-active {
+    //     transform: translateY(100%);
+    // }
+
+    /* overlay style */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.5); /* semi-transparent */
+        z-index: 999; /* dietro la sidebar ma al di sopra di tutto il resto */
+    }
+
+
+}
 <style scoped lang="scss">
 @use '../styles/general.scss';
 @use '../styles/partials/_home.scss';

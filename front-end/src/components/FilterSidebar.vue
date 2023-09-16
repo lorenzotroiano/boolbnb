@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['services', 'selectedServices', 'referencePoint', 'distanceRange'],
+    props: ['services', 'selectedServices', 'referencePoint', 'distanceRange', 'isSidebarVisible'],
     data() {
         return {
             selectedServicesCopy: [...this.selectedServices],
@@ -8,10 +8,9 @@ export default {
 
             selectedRooms: null,
             selectedBathrooms: null,
-            selectedSize: null,
-            rooms: Array.from({ length: 10 }, (_, i) => i + 1), // Crea un array da 1 a 10
+            selectedSize: 20,
 
-            bathrooms: Array.from({ length: 7 }, (_, i) => i + 1) // Crea un array da 1 a 10 per i bagni
+            tempDistanceRange: this.distanceRange, 
         };
     },
     methods: {
@@ -24,7 +23,13 @@ export default {
             this.selectedBathrooms = bathroom;
         },
         filterByRoomsBathroomsSize(apartment) {
-            const roomCondition = !this.selectedRooms || apartment.room === this.selectedRooms;
+            let roomCondition;
+            if (this.selectedRooms === 9) { 
+                roomCondition = apartment.room > 8;
+            } else {
+                roomCondition = apartment.room === this.selectedRooms;
+            }
+
             const bathroomCondition = !this.selectedBathrooms || apartment.bathroom === this.selectedBathrooms;
 
             let upperSizeLimit;
@@ -57,6 +62,8 @@ export default {
         closeSidebar() {
             this.$emit('close-sidebar');
         },
+        
+        // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
             let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
@@ -98,115 +105,150 @@ export default {
                 services: this.selectedServices,
             });
             this.$emit('apply-filters');
-
+            this.$emit('update:distanceRange', this.tempDistanceRange);
+            
             this.closeSidebar();
-        }
+        },
 
+        // Metodi per gestire lo scrolling attraverso lo style
+        disableBodyScroll() {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
+            document.body.style.overflow = 'hidden';
+        },
+        enableBodyScroll() {
+            document.body.style.paddingRight = '0px';
+            document.body.style.overflow = '';
+        }
     },
+
+    // Watcher per eventi che controlla se la variabile passata da ApartmentHome cambia
+    watch: {
+    isSidebarVisible(newVal) {
+        if (newVal) {
+            this.disableBodyScroll();
+        } else {
+            this.enableBodyScroll();
+        }
+    }
+}
 };
 </script>
 
 <template>
-    <div class="filter-sidebar">
+    <div class="filter-sidebar p-3">
 
         <!-- Button per chiudere il component -->
-        <button class="close" aria-label="Close" @click="closeSidebar">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button class="btn-close" aria-label="Close" @click="closeSidebar"></button>
 
         <!-- Filtri distanza -->
         <div class="mb-3">
             <label for="distanceRange" class="form-label">Distanza (km)</label>
-            <input type="range" :value="distanceRange" @input="updateDistanceRange" />
-            <div>{{ distanceRange }} km</div>
+            <input type="range" class="form-range" v-model="tempDistanceRange" />
+            <div>{{ tempDistanceRange }} km</div>
         </div>
 
-        <!-- Numero di stanze -->
-        <div class="filter-group">
-            <label for="selectedRooms">Stanze:</label>
-            <div class="room-buttons">
-                <button v-for="room in rooms" :key="room" @click="selectRoom(room)"
-                    :class="{ active: selectedRooms === room }">
-                    {{ room }}
+       <!-- Numero di stanze -->
+        <div class="mb-3">
+            <label class="form-label">Stanze:</label>
+            <div>
+                <button v-for="n in 8" :key="n" 
+                    @click="selectedRooms = n" 
+                    :class="['btn', selectedRooms === n ? 'btn-primary' : 'btn-outline-primary']">
+                    {{ n }}
+                </button>
+                <button @click="selectedRooms = 9" 
+                    :class="['btn', selectedRooms === 9 ? 'btn-primary' : 'btn-outline-primary']">
+                    9+
                 </button>
             </div>
         </div>
 
         <!-- Numero di bagni -->
-        <div class="filter-group">
-            <label for="selectedBathrooms">Bagni:</label>
-            <div class="room-buttons">
-                <button v-for="bathroom in bathrooms" :key="bathroom" @click="selectBathroom(bathroom)"
-                    :class="{ active: selectedBathrooms === bathroom }">
-                    {{ bathroom }}
+        <div class="mb-3">
+            <label class="form-label">Bagni:</label>
+            <div>
+                <button v-for="n in 5" :key="n" 
+                    @click="selectedBathrooms = n" 
+                    :class="['btn', selectedBathrooms === n ? 'btn-primary' : 'btn-outline-primary']">
+                    {{ n }}
                 </button>
             </div>
         </div>
 
         <!-- Metri quadrati -->
-        <div class="filter-group">
-            <label for="selectedSize">Metri Quadrati:</label>
-            <input v-model="selectedSize" type="number" id="selectedSize" placeholder="Metri quadrati">
+        <div class="mb-3">
+            <label class="form-label">Metri Quadrati: {{ selectedSize }}</label>
+            <input v-model="selectedSize" type="range" min="20" max="500" step="10" class="form-control-range">
         </div>
 
         <!-- Title -->
-        <h3 id="services">Servizi</h3>
+        <h3 id="services" class="my-3">Servizi</h3>
 
         <!-- Elenco dei servizi -->
-        <div class="row justify-between flex">
-            <div v-for="  service   in   services  " :key="service.id" class="col-6 mb-2">
+        <div class="row">
+            <div v-for="service in services" :key="service.id" class="col-6 mb-2">
                 <button
-                    :class="{ 'btn-selected': selectedServicesCopy.includes(service.id), 'btn': true, 'btn-icon': true }"
+                    :class="['btn', 'btn-light', 'mb-2', selectedServicesCopy.includes(service.id) ? 'active' : '']"
                     @click="updateSelectedServices(service.id)">
-                    <i :class="service.icon"></i>
+                    <i :class="service.icon"></i> {{ service.name }}
                 </button>
-                <span>{{ service.name }}</span>
             </div>
         </div>
 
         <!-- Pulsante "Applica filtri" -->
-        <button id="applyFilter" class="btn btn-primary mt-3" @click="applyFilters">Applica filtri</button>
+        <button class="btn btn-primary mt-3 w-100" @click="applyFilters">Applica filtri</button>
     </div>
 </template>
 
 <style lang="scss">
 .filter-sidebar {
-    #services {
-        text-align: left;
-        margin-bottom: 50px;
-    }
-
-    #applyFilter {
-        width: 20%;
-        text-align: center;
-        border-radius: 4px;
-    }
-
-    .btn {
-        width: 100%;
-        text-align: center;
-        border-radius: 4px;
-
-        &:hover {
-            cursor: pointer;
+    position: absolute;
+        top: 50%;  
+        left: 50%;  
+        transform: translate(-50%, -50%);
+        height: 90vh; 
+        width: 40vw;
+        background-color: white;
+        z-index: 1000; 
+        overflow-y: scroll;
+        border-radius: 10px 10px 10px 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent; 
+        
+        /* Personalizza la scrollbar */
+        .filter-sidebar::-webkit-scrollbar-thumb {
+            background-color: #888; /* Cambia il colore del cursore della scrollbar */
+            border-radius: 10px; /* Aggiungi bordi arrotondati al cursore */
         }
 
-        &.btn-selected {
-            background-color: dodgerblue;
-            color: white;
+        .filter-sidebar::-webkit-scrollbar-track {
+            background-color: #f1f1f1; /* Cambia il colore del track della scrollbar */
         }
 
-        &.btn-icon i {
-            font-size: 1.5em;
+        h3 {
+            text-align: left;
+        }
+
+        .btn {
+            &.active {
+                background-color: dodgerblue;
+                color: white;
+                &:hover {
+                    background-color: darkblue;
+                }
+            }
+
+            i {
+                margin-right: 5px;
+            }
         }
     }
 }
 
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
-    /* Assicurati che stia sopra gli altri elementi */
+
+.filter-sidebar:focus {
+    outline: none;
 }
 </style>
