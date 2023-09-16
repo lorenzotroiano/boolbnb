@@ -26,15 +26,14 @@ export default {
             userLocation: null,
             userCountry: null,
 
-
-
+            
             // Variabili temp per il filtering
             tempRooms: null,
             tempBathrooms: null,
             tempSize: null,
             tempDistanceRange: null,
 
-            // Variabili
+            // Variabili 
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
@@ -42,7 +41,7 @@ export default {
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             applyFilters: null,
-
+            
 
         }
     },
@@ -145,7 +144,7 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
@@ -153,7 +152,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8000/api/v1/service')
+            axios.get('http://127.0.0.1:8001/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -204,15 +203,25 @@ export default {
         <div class="mt-5">
 
             <transition name="slide">
-                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible" :referencePoint="referencePoint" :distanceRange="distanceRange"
-                    @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
-                    @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
-                    @apartments-updated="updateApartments"></FilterSidebar>
+                <FilterSidebar 
+                    v-show="isSidebarVisible" 
+                    :services="services" 
+                    :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible"
+
+                    :referencePoint="referencePoint" 
+                    :distanceRange="distanceRange"
+
+                    @update:distanceRange="value => distanceRange = value" 
+                    @close-sidebar="isSidebarVisible = false"
+                    @filter-by-distance="handleDistanceFilter" 
+                    @apply-filters="applyFilters"
+                    @apartments-updated="updateApartments">
+                </FilterSidebar>
             </transition>
 
         </div>
-
+        
 
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
@@ -243,7 +252,6 @@ export default {
 
 <style lang="scss">
 @use '../styles/general.scss';
-@use '../styles/partials/_home.scss';
 @use '../styles/partials/_variables.scss' as *;
 
 .container-fluid {
@@ -292,68 +300,6 @@ export default {
     }
 
 
-    // Offcanvas
-    .offcanvas {
-        width: 900px;
-
-        h3 {
-            text-align: left;
-            margin-bottom: 50px;
-        }
-
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: row;
-            transition: all 0.3s ease-in-out;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            /* padding uniforme per centrare il testo */
-            font-weight: 600;
-            border-width: 1px;
-
-            &:not(.active):hover {
-                transform: scale(1.05);
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            &.active {
-                background-color: #007BFF;
-                color: white;
-                border-color: #0056b3;
-            }
-
-            &:not(.active) {
-                background-color: white;
-                color: #333;
-
-                &:hover {
-                    background-color: #f8f9fa;
-                    border-color: #dae0e5;
-                }
-            }
-        }
-    }
-
-    ul {
-        list-style-type: none;
-
-        li {
-            a {
-                text-decoration: none;
-                transition: all 0.8s ease;
-                color: black;
-
-                &:hover {
-                    color: yellow; // Imposta il colore dei link
-                    text-decoration: underline;
-
-                }
-            }
-        }
-    }
-
     .sponsored-card {
         background-color: #ffe7e7;
         /* Colore di sfondo leggermente rosato per le cards sponsorizzate */
@@ -383,7 +329,7 @@ export default {
 
     // // CSS PER IL COMPONENTE SIDEBAR
     // .slide-enter {
-    //     transform: translateY(100%);
+    //     transform: translateY(100%); 
     // }
 
     // /* Stile finale dell'animazione di entrata */
@@ -408,10 +354,8 @@ export default {
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        /* semi-transparent */
-        z-index: 999;
-        /* dietro la sidebar ma al di sopra di tutto il resto */
+        background-color: rgba(0,0,0,0.5); /* semi-transparent */
+        z-index: 999; /* dietro la sidebar ma al di sopra di tutto il resto */
     }
 
 

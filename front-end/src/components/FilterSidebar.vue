@@ -65,7 +65,7 @@ export default {
         
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
             if (this.selectedRooms) {
                 apiUrl += `&room=${this.selectedRooms}`;
@@ -202,30 +202,19 @@ export default {
 </template>
 
 <style lang="scss">
+
 .filter-sidebar {
-    position: absolute;
+        position: absolute;
         top: 50%;  
         left: 50%;  
         transform: translate(-50%, -50%);
         height: 90vh; 
         width: 40vw;
         background-color: white;
-        z-index: 1000; 
+        z-index: 99999; 
         overflow-y: scroll;
         border-radius: 10px 10px 10px 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent; 
-        
-        /* Personalizza la scrollbar */
-        .filter-sidebar::-webkit-scrollbar-thumb {
-            background-color: #888; /* Cambia il colore del cursore della scrollbar */
-            border-radius: 10px; /* Aggiungi bordi arrotondati al cursore */
-        }
-
-        .filter-sidebar::-webkit-scrollbar-track {
-            background-color: #f1f1f1; /* Cambia il colore del track della scrollbar */
-        }
 
         h3 {
             text-align: left;

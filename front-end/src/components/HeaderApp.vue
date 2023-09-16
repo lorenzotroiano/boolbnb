@@ -25,7 +25,7 @@ export default {
                 </div>
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
                         <li>Registrati</li>
                         <li>Dashboard</li>
                     </ul>
@@ -36,12 +36,12 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-@use "../styles/general.scss" as *;
+@use "../styles/partials/variables" as *;
 
 header {
-    // position: fixed;
-    // width: 100%;
-    // background-color: white;
+    position: fixed;
+    width: 100%;
+    background-color: white;
 
     .container {
         max-width: 80%;
