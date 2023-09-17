@@ -48,10 +48,12 @@ export default {
     <main>
         <div class="container">
             <h1>{{ apartment.name }}</h1>
-            <span class="address">{{ apartment.address }}</span>
+
+            <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
 
             <div class="flex-map">
                 <img :src="apartment.cover" alt="Copertina dell'appartamento">
+
                 <div ref="map" style="width: 35%; height: 400px;"></div>
             </div>
 
@@ -88,20 +90,21 @@ export default {
             <h2 v-if="apartment && apartment.services && apartment.services.length > 0">Servizi disponibili:</h2>
             <h2 v-else>Nessun servizio disponibile</h2>
 
-            <div class="container" v-if="apartment && apartment.services && apartment.services.length > 0">
-                <div class="row justify-content-center"> <!-- Centra gli elementi orizzontalmente -->
-                    <div class="col-md-3" v-for="service in apartment.services" :key="service.id">
-                        <!-- Riduci la larghezza delle colonne per fare spazio -->
-                        <div class="card mb-3">
-                            <div class="card-body text-center">
-                                <i :class="service.icon" class="service-icon" style="font-size: 24px;"></i>
-                                <!-- Riduci la dimensione dell'icona -->
-                                <p class="card-text">{{ service.name }}</p>
-                            </div>
+            <div class="row justify-content-center services"
+                v-if="apartment && apartment.services && apartment.services.length > 0">
+                <!-- Centra gli elementi orizzontalmente -->
+                <div class="col-md-3" v-for="service in apartment.services" :key="service.id">
+                    <!-- Riduci la larghezza delle colonne per fare spazio -->
+                    <div class="card mb-3">
+                        <div class="card-body text-center">
+                            <i :class="service.icon" class="service-icon"></i>
+                            <!-- Riduci la dimensione dell'icona -->
+                            <p class="card-text">{{ service.name }}</p>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
 </template>
@@ -111,13 +114,26 @@ export default {
 
 <style scoped lang="scss">
 main {
-    background-color: chartreuse;
-    padding-top: 200px;
+    background-color: rgb(255, 255, 255);
+
 
     .container {
         max-width: 80%;
         margin: 0 auto;
-        padding: 70px 0;
+        padding-top: 200px;
+        padding-bottom: 30px;
+
+        p {
+            color: grey;
+        }
+
+        span {
+            color: grey;
+        }
+
+        i {
+            color: grey;
+        }
 
         .address {
             font-size: 20px;
@@ -181,11 +197,20 @@ main {
                     margin: 0 15px;
                 }
             }
+
+
         }
+
+
 
         // background-color: chartreuse;
 
 
+    }
+
+    .services {
+
+        margin: 90px 0;
     }
 
 }
@@ -193,13 +218,13 @@ main {
 
 
 .service-icon {
-    font-size: 24px;
+    font-size: 20px;
 
 }
 
 
 .card:hover {
-    background-color: #007bff;
+    background-color: #f0f0f0;
 
     color: #fff;
 
