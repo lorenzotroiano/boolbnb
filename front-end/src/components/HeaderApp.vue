@@ -43,9 +43,9 @@ export default {
 header {
     position: fixed;
     width: 100%;
-    height: 130px;
     background-color: white;
     z-index: 999;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 
     .container {
         max-width: 80%;
@@ -62,7 +62,7 @@ header {
                 img {
                     max-width: 100%;
                     max-height: 100%;
-                    border-radius: 22px;
+                    border-radius: 18px;
                 }
             }
 
@@ -75,13 +75,13 @@ header {
             .search {
                 background-color: #fff;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border-radius: 30px;
-                padding: 10px;
+                border-radius: 18px;
+                padding: 8px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 40%;
-                margin: 50px auto;
+                width: 38%;
+                margin: 20px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
             }
@@ -94,7 +94,7 @@ header {
             input {
                 border: none;
                 padding: 4px;
-                border-radius: 30px;
+                border-radius: 20px;
                 width: 80%;
                 outline: none;
 
@@ -104,9 +104,9 @@ header {
                 background-color: $color-blue;
                 color: #fff;
                 border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 40px;
+                width: 30px;
+                height: 30px;
+                border-radius: 30px;
                 cursor: pointer;
                 transition: background-color 0.3s;
             }
