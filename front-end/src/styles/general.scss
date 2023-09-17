@@ -1,3 +1,17 @@
+/* Definizione del font-face */
+@font-face {
+    font-family: 'cereal';
+    src: url('../assets/fonts/AirbnbCereal_W_Md.otf') format('otf'),
+         url('../assets/fonts/AirbnbCereal_W_Bd.otf') format('otf'),
+         url('../assets/fonts/AirbnbCereal_W_Bk.otf') format('otf'),
+         url('../assets/fonts/AirbnbCereal_W_Blk.otf') format('otf'),
+         url('../assets/fonts/AirbnbCereal_W_Lt.otf') format('otf'),
+         url('../assets/fonts/AirbnbCereal_W_XBd.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Applicazione del font-family a tutti gli elementi */
 * {
     padding: 0;
     margin: 0;

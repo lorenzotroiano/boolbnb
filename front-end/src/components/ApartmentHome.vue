@@ -174,6 +174,7 @@ export default {
 <template>
     <div class="container-fluid">
 
+
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
 
@@ -196,7 +197,9 @@ export default {
         <div id="apartmentList">
 
             <!-- Singola card -->
-            <div class="single" v-for="apartment in filteredApartments" :key="apartment.id">
+            <div class="single"
+                v-for="apartment in [...filteredApartments.filter(apartment => apartment.sponsor === 1), ...filteredApartments.filter(apartment => apartment.sponsor !== 1)]"
+                :key="apartment.id">
 
                 <!-- Immagine -->
                 <div class="single-img">
