@@ -9,7 +9,7 @@
                 @keyup.enter="searchApartments">
             <div class="input-group-append">
                 <button type="button" class="btn btn-primary" @click="searchApartments">Search</button>
-                <button @click="isSidebarVisible = !isSidebarVisible">Filtri avanzati</button>
+                
             </div>
         </div>
     </div>

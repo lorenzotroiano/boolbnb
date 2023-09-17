@@ -1,8 +1,21 @@
 <script>
-
+import FilterSidebar from './FilterSidebar.vue';
 
 export default {
     name: "HeaderApp",
+    components: {
+        FilterSidebar
+    },
+    props: [
+        'services',
+        'selectedServices',
+        'referencePoint',
+        'distanceRange',
+        'isSidebarVisible',
+        'apartments',
+        'isSearchClicked',
+        'tempSize',
+    ],
     data() {
         return {
 
@@ -17,23 +30,42 @@ export default {
         <div class="container">
             <div class="flex">
                 <div class="logo">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
                 <div class="logo-mobile">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
                 <div class="search">
                     <input type="text" placeholder="Vai ovunque">
                     <button><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+                    <button @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
+                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
+
+        <!-- COMPONENTE SIDEBAR -->
+        <div class="mt-5">
+
+        <transition name="slide">
+            <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
+                :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
+
+                @filter-by-distance="$emit('filter-by-distance', $event)"
+                @update:distanceRange="$emit('update:distanceRange', $event)"
+                @close-sidebar="$emit('close-sidebar')"
+                @apply-filters="$emit('apply-filters')"
+                @apartments-updated="$emit('apartments-updated', $event)"
+            ></FilterSidebar>
+        </transition>
+
+</div>
     </header>
 </template>
 

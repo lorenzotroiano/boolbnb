@@ -1,13 +1,15 @@
 <script>
 import axios from 'axios';
-import FilterSidebar from './FilterSidebar.vue';
+
+import HeaderApp from './HeaderApp.vue';
+
 import tt from '@tomtom-international/web-sdk-maps';
 import { services } from '@tomtom-international/web-sdk-services';
 
 export default {
     name: 'ApartmentHome',
     components: {
-        FilterSidebar,
+        HeaderApp
     },
     data() {
         return {
@@ -147,20 +149,20 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/v1/')
+        axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
-                // this.dataLoaded = true;
+                
             })
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8000/api/v1/service')
+            axios.get('http://127.0.0.1:8001/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
-                    // this.dataLoaded = true;
+                    
                 })
                 .catch(error => {
                     console.log(error);
@@ -172,21 +174,16 @@ export default {
 
 <!-- TEMPLATE -->
 <template>
+   <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
+        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
+        :distanceRange="distanceRange" :apartments="apartments" 
+        @update:distanceRange="value => distanceRange = value"
+        @close-sidebar="isSidebarVisible = false"
+        @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
+        @filter-by-distance="handleDistanceFilter"
+        @apply-filters="applyFilters" @apartments-updated="updateApartments">
+    </HeaderApp>
     <div class="container-fluid">
-
-        <!-- COMPONENTE SIDEBAR -->
-        <div class="mt-5">
-
-            <transition name="slide">
-                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
-                    :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
-                    @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
-                    @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
-                    @apartments-updated="updateApartments"></FilterSidebar>
-            </transition>
-
-        </div>
 
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>

@@ -1,18 +1,26 @@
 <script>
 export default {
-    props: [
-        'services',
-        'selectedServices',
-        'referencePoint',
-        'distanceRange',
-        'isSidebarVisible',
-        'apartments',
-        'isSearchClicked',
-        'tempSize',
-    ],
+    props: {
+        selectedServices: {
+            type: Array,
+            default: () => []
+        },
+        services: Array,
+        referencePoint: Object,
+        distanceRange: Number,
+        isSidebarVisible: Boolean,
+        apartments: {
+            type: Array,
+            default: () => []
+        },
+        isSearchClicked: Boolean,
+        tempSize: Number
+    },
     data() {
         return {
-            selectedServicesCopy: [...this.selectedServices],
+            localSelectedServices: Array.isArray(this.selectedServices) ? this.selectedServices : [],
+            // selectedServicesCopy: [...this.selectedServices],
+            
             filteredApartments: [],
 
             counterFilter: null,
@@ -21,6 +29,7 @@ export default {
             selectedSize: null,
 
             tempDistanceRange: this.distanceRange,
+            
         };
     },
     methods: {
@@ -114,7 +123,7 @@ export default {
 
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
             if (this.selectedRooms) {
                 apiUrl += `&room=${this.selectedRooms}`;
@@ -201,8 +210,11 @@ export default {
     },
     computed: {
         filteredApartmentsCount() {
-            return this.counterFilter !== null ? this.counterFilter : this.apartments.length;
+            return this.counterFilter !== null ? this.counterFilter : (this.apartments ? this.apartments.length : 0);
         },
+    },
+    created() {
+        this.selectedServicesCopy = [...this.selectedServices];
     }
 };
 </script>
