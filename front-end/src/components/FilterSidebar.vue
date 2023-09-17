@@ -14,7 +14,7 @@ export default {
         return {
             selectedServicesCopy: [...this.selectedServices],
             filteredApartments: [],
-            
+
             counterFilter: null,
             selectedRooms: null,
             selectedBathrooms: null,
@@ -109,10 +109,10 @@ export default {
         closeSidebar() {
             this.$emit('close-sidebar');
         },
-        
+
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
 
             if (this.selectedRooms) {
                 apiUrl += `&room=${this.selectedRooms}`;
@@ -120,7 +120,7 @@ export default {
             if (this.selectedBathrooms) {
                 apiUrl += `&bathroom=${this.selectedBathrooms}`;
             }
-            
+
             if (this.selectedSize !== null) {
                 apiUrl += `&mq=${this.selectedSize}`;
             }
@@ -155,7 +155,7 @@ export default {
             });
             this.$emit('apply-filters');
             this.$emit('update:distanceRange', this.tempDistanceRange);
-            
+
             this.closeSidebar();
             this.initializeFilters();
         },
@@ -197,7 +197,7 @@ export default {
             }
         }
     },
-    computed:{
+    computed: {
         filteredApartmentsCount() {
             return this.counterFilter !== null ? this.counterFilter : this.apartments.length;
         },
@@ -228,15 +228,15 @@ export default {
             <div class="mb-3">
                 <label class="form-label">Stanze:</label>
                 <div>
-                    <button @click="resetRoomFilter" :class="['btn', selectedRooms === null ? 'btn-primary' : 'btn-outline-primary']">
+                    <button @click="resetRoomFilter"
+                        :class="['btn', selectedRooms === null ? 'btn-primary' : 'btn-outline-primary']">
                         Qualsiasi
                     </button>
-                    <button v-for="n in 8" :key="n" 
-                        @click="selectedRooms = n" 
+                    <button v-for="n in 8" :key="n" @click="selectedRooms = n"
                         :class="['btn', selectedRooms === n ? 'btn-primary' : 'btn-outline-primary']">
                         {{ n }}
                     </button>
-                    <button @click="selectedRooms = 9" 
+                    <button @click="selectedRooms = 9"
                         :class="['btn', selectedRooms === 9 ? 'btn-primary' : 'btn-outline-primary']">
                         9+
                     </button>
@@ -247,11 +247,11 @@ export default {
             <div class="mb-3">
                 <label class="form-label">Bagni:</label>
                 <div>
-                    <button @click="resetBathroomFilter" :class="['btn', selectedBathrooms === null ? 'btn-primary' : 'btn-outline-primary']">
+                    <button @click="resetBathroomFilter"
+                        :class="['btn', selectedBathrooms === null ? 'btn-primary' : 'btn-outline-primary']">
                         Qualsiasi
                     </button>
-                    <button v-for="n in 5" :key="n" 
-                        @click="selectedBathrooms = n" 
+                    <button v-for="n in 5" :key="n" @click="selectedBathrooms = n"
                         :class="['btn', selectedBathrooms === n ? 'btn-primary' : 'btn-outline-primary']">
                         {{ n }}
                     </button>
@@ -261,20 +261,13 @@ export default {
             <!-- Metri quadrati -->
             <div class="mb-3">
                 <label class="form-label">Metri Quadrati:</label>
-                <input
-                    type="range"
-                    min="20"
-                    max="500"
-                    v-model="selectedSize"
-                    step="1"
-                    @input="updateCounter"
-                />
+                <input type="range" min="20" max="500" v-model="selectedSize" step="1" @input="updateCounter" />
                 <div class="range-values">
                     <span>Filtra da 0 a {{ selectedSize }} mq</span>
                 </div>
             </div>
 
-            
+
 
             <!-- Title -->
             <h3 id="services" class="my-3">Servizi</h3>
@@ -282,8 +275,7 @@ export default {
             <!-- Elenco dei servizi -->
             <div class="row">
                 <div v-for="service in services" :key="service.id" class="col-6 mb-2">
-                    <button
-                        :class="['btn', 'btn-light', 'mb-2', selectedServicesCopy.includes(service.id) ? 'active' : '']"
+                    <button :class="['btn', 'btn-light', 'mb-2', selectedServicesCopy.includes(service.id) ? 'active' : '']"
                         @click="updateSelectedServices(service.id)">
                         <i :class="service.icon"></i> {{ service.name }}
                     </button>
@@ -304,20 +296,19 @@ export default {
 </template>
 
 <style lang="scss">
-
 .filter-sidebar {
     position: absolute;
-    top: 50%;  
-    left: 50%;  
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    height: 90vh; 
+    height: 90vh;
     width: 40vw;
     background-color: white;
-    z-index: 1000; 
+    z-index: 1000;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     scrollbar-width: thin;
-    scrollbar-color: transparent transparent; 
+    scrollbar-color: transparent transparent;
 
     // Header
     .header {
@@ -327,7 +318,7 @@ export default {
         justify-content: center;
         padding: 1rem;
         position: relative;
-        
+
         h3 {
             flex-grow: 1;
             text-align: center;
@@ -349,8 +340,8 @@ export default {
 
         // Personalizza la scrollbar
         &::-webkit-scrollbar-thumb {
-            background-color: #888; 
-            border-radius: 10px; 
+            background-color: #888;
+            border-radius: 10px;
         }
 
         &::-webkit-scrollbar-track {
