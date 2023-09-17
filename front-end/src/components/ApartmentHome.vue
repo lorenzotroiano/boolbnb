@@ -185,8 +185,7 @@ export default {
     </HeaderApp>
     <div class="container-fluid">
 
-        <!-- Overlay quando SIDEBAR è TRUE -->
-        <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
+        
 
 
         <!-- LISTA APPARTAMENTI -->

@@ -72,6 +72,8 @@ export default {
             ></FilterSidebar>
         </transition>
         </div>
+        <!-- Overlay quando SIDEBAR è TRUE -->
+        <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
     </header>
     
 </template>
@@ -171,6 +173,16 @@ header {
 .spacer {
     height: calc(100vh - 100px);
     position: relative;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 800; 
 }
 
 @media screen and (max-width:1200px) {
