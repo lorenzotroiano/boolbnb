@@ -48,9 +48,8 @@ export default {
                 </nav>
             </div>
         </div>
-
+        <div class="spacer">
         <!-- COMPONENTE SIDEBAR -->
-        <div class="mt-5">
 
         <transition name="slide">
             <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
@@ -64,9 +63,9 @@ export default {
                 @apartments-updated="$emit('apartments-updated', $event)"
             ></FilterSidebar>
         </transition>
-
-</div>
+        </div>
     </header>
+    
 </template>
 
 <style lang="scss" scoped>
@@ -75,6 +74,7 @@ export default {
 header {
     position: fixed;
     width: 100%;
+    height: 100px;
     background-color: white;
     z-index: 999;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
@@ -158,6 +158,11 @@ header {
             }
         }
     }
+}
+
+.spacer {
+    height: calc(100vh - 100px);
+    position: relative;
 }
 
 @media screen and (max-width:1200px) {

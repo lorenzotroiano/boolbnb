@@ -18,8 +18,7 @@ export default {
     },
     data() {
         return {
-            localSelectedServices: Array.isArray(this.selectedServices) ? this.selectedServices : [],
-            // selectedServicesCopy: [...this.selectedServices],
+            selectedServicesCopy: [...this.selectedServices],
             
             filteredApartments: [],
 
@@ -52,7 +51,7 @@ export default {
             this.selectedBathrooms = null;
             this.selectedSize = null;
             this.selectedServicesCopy = [];
-            this.updateCounter();
+            this.fetchAllApartments();
         },
 
         // INIZIALIZZA I FILTRI RESETTANDO E FACENDO IL CONTEGGIO
@@ -119,6 +118,7 @@ export default {
         },
         closeSidebar() {
             this.$emit('close-sidebar');
+            this.fetchAllApartments();
         },
 
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
@@ -181,6 +181,26 @@ export default {
             document.body.style.paddingRight = '0px';
             document.body.style.overflow = '';
         },
+
+        fetchAllApartments() {
+            let apiUrl = `http://127.0.0.1:8001/api/v1/`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    this.apartments = data;
+                    this.filteredApartments = data;
+                    this.updateCounter();
+                })
+                .catch(error => {
+                    console.log('There was a problem with the fetch operation:', error.message);
+                });
+        }
     },
 
     // Watcher per eventi che controlla se la variabile passata da ApartmentHome cambia
@@ -213,9 +233,6 @@ export default {
             return this.counterFilter !== null ? this.counterFilter : (this.apartments ? this.apartments.length : 0);
         },
     },
-    created() {
-        this.selectedServicesCopy = [...this.selectedServices];
-    }
 };
 </script>
 
@@ -306,7 +323,7 @@ export default {
         <div class="footer border-top">
             <button class="btn btn-outline-danger" @click="resetAllFilters">Cancella tutto</button>
             <button class="btn btn-dark" @click="applyFilters">
-                Mostra ({{ filteredApartmentsCount }}) appartamenti
+                Mostra ({{ filteredApartmentsCount }}) alloggi
             </button>
         </div>
 
@@ -316,8 +333,6 @@ export default {
 <style lang="scss">
 .filter-sidebar {
     position: absolute;
-    top: 50%;
-    left: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
