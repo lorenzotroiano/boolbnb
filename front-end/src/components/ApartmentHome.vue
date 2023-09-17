@@ -173,36 +173,6 @@ export default {
 <!-- TEMPLATE -->
 <template>
     <div class="container-fluid">
-        <!-- SEARCH -->
-        <div class="row justify-content-center flex-column align-content-center">
-
-            <!-- Ricerca -->
-            <div class="col-8 mb-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Cerca appartamento..." aria-label="Cerca..."
-                        aria-describedby="button-addon2" v-model="search" @input="getSuggestions"
-                        @keyup.enter="searchApartments">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-primary" @click="searchApartments">Search</button>
-                        <button @click="isSidebarVisible = !isSidebarVisible">Filtri avanzati</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SUGGERIMENTI -->
-            <div class="col-2" id="suggest">
-                <div v-if="suggestions.length" class="suggestions-list d-flex justify-content-center">
-                    <ul>
-                        <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-                            {{ suggestion }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-
 
         <!-- COMPONENTE SIDEBAR -->
         <div class="mt-5">
@@ -218,28 +188,41 @@ export default {
 
         </div>
 
-
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
 
-        <!-- Lista degli appartamenti -->
-        <div class="d-flex flex-wrap">
-            <div v-for="apartment in filteredApartments" :key="apartment.id" class="col-lg-4 col-md-6 col-sm-12 mb-4"
-                :style="{ 'order': apartment.sponsor ? -1 : 0 }">
-                <div class="card h-100 " :class="{ 'sponsored-card': apartment.sponsor }">
-                    <img :src="apartment.cover" class="card-img-top" alt="Cover dell'appartamento"
-                        style="max-height: 200px;" />
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ apartment.name }}</h5>
-                        <p class="card-text flex-grow-1">{{ apartment.description }}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }"
-                                class="btn btn-primary">Dettagli</router-link>
-                            <!-- Aggiungi un pulsante "Consigliato" se l'appartamento ha sponsor -->
-                            <button v-if="apartment.sponsor" class="btn btn-success ml-2">Consigliato</button>
-                        </div>
-                    </div>
+
+        <!-- LISTA APPARTAMENTI -->
+        <div id="apartmentList">
+
+            <!-- Singola card -->
+            <div class="single" v-for="apartment in filteredApartments" :key="apartment.id">
+
+                <!-- Immagine -->
+                <div class="single-img">
+                    <img :src="apartment.cover" :alt="apartment.cover">
                 </div>
+
+                <!-- Descrizione -->
+                <div class="single-body">
+
+                    <!-- Titolo -->
+                    <div class="title">
+                        <h5>{{ apartment.name }}</h5>
+                    </div>
+
+                    <!-- Bottoni e Link show -->
+                    <div class="show">
+                        <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }">
+                            <button class="visit-button">
+                                Explore
+                                <i class="fa-solid fa-house"></i>
+                            </button>
+                        </router-link>
+                    </div>
+
+                </div>
+
             </div>
         </div>
 
