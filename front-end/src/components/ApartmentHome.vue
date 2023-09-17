@@ -40,6 +40,9 @@ export default {
             distanceRange: 20,
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
+            // Flag per vedere se ha caricato i dati
+            // dataLoaded: false,
+            // Flag per capire quando mettere in v-show false
             applyFilters: null,
 
 
@@ -148,6 +151,7 @@ export default {
             .then(response => {
                 const data = response.data;
                 this.apartments = data;
+                // this.dataLoaded = true;
             })
             .catch(error => {
                 console.log(error);
@@ -156,6 +160,7 @@ export default {
                 .then(response => {
                     const data = response.data;
                     this.services = data;
+                    // this.dataLoaded = true;
                 })
                 .catch(error => {
                     console.log(error);
@@ -203,12 +208,28 @@ export default {
         <div class="mt-5">
 
             <transition name="slide">
-                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible" :referencePoint="referencePoint" :distanceRange="distanceRange"
-                    @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
-                    @filter-by-distance="handleDistanceFilter" @apply-filters="applyFilters"
-                    @apartments-updated="updateApartments">
-                </FilterSidebar>
+                <FilterSidebar
+                v-show="isSidebarVisible"
+                :services="services"
+                :selectedServices="selectedServices"
+
+                :isSidebarVisible="isSidebarVisible"
+                :isSearchClicked="isSearchClicked"
+                :tempSize="tempSize"
+
+
+                :referencePoint="referencePoint"
+                :distanceRange="distanceRange"
+                :apartments="apartments"
+                
+
+                
+                @update:distanceRange="value => distanceRange = value"
+                @close-sidebar="isSidebarVisible = false"
+                @filter-by-distance="handleDistanceFilter"
+                @apply-filters="applyFilters"
+                @apartments-updated="updateApartments"
+                ></FilterSidebar>
             </transition>
 
         </div>

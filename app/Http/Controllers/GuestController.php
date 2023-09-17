@@ -19,13 +19,17 @@ class GuestController extends Controller
                 return $query->where('name', 'LIKE', '%' . $name . '%');
             })
             ->when($request->get('room'), function ($query, $room) {
-                return $query->where('room', $room);
+                if ($room <= 8) {
+                    return $query->where('room', $room);
+                } else {
+                    return $query->where('room', '>', 8);
+                }
             })
             ->when($request->get('bathroom'), function ($query, $bathroom) {
                 return $query->where('bathroom', $bathroom);
             })
             ->when($request->get('mq'), function ($query, $mq) {
-                return $query->where('mq', $mq);
+                return $query->where('mq', '<=', $mq);
             })
             ->when($request->get('services'), function ($query, $services) {
                 $servicesArray = explode(',', $services);
