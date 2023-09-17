@@ -88,7 +88,9 @@ export default {
         // SERVIZI
         filterByServices(apartment) {
             if (!this.selectedServicesCopy.length) return true;
-            return this.selectedServicesCopy.some(serviceId => apartment.services.includes(serviceId));
+            return this.selectedServicesCopy.every(serviceId => 
+                apartment.services.some(service => service.id === serviceId)
+            );
         },
 
         updateSelectedServices(serviceId) {
