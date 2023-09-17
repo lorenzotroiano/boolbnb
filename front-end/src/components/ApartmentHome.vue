@@ -192,11 +192,17 @@ export default {
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
 
+        <div>
+            <img src="../../../storage/app/public/apartments/pexels-asad-photo-maldives-1268871.jpg" alt="">
+
+        </div>
 
         <!-- LISTA APPARTAMENTI -->
         <div id="apartmentList">
 
             <!-- Singola card -->
+
+            <!-- Inserisco prima l'array con sponsor === 1 e poi concateno l'array con sponsor === 0 -->
             <div class="single"
                 v-for="apartment in [...filteredApartments.filter(apartment => apartment.sponsor === 1), ...filteredApartments.filter(apartment => apartment.sponsor !== 1)]"
                 :key="apartment.id">
