@@ -207,163 +207,163 @@ export default {
 
 <template>
     <div class="filter-sidebar p-3">
-
-        <!-- Header fisso -->
-        <div class="header border-bottom">
-            <button class="btn-close" aria-label="Close" @click="closeSidebar"></button>
-            <h3>Filtri</h3>
+  
+      <!-- Header fisso -->
+      <div class="header border-bottom">
+        <button class="btn-close" aria-label="Close" @click="closeSidebar"></button>
+        <h3>Filtri</h3>
+      </div>
+  
+      <!-- Sezione scrollabile dei filtri -->
+      <div class="scrollable-section">
+  
+        <!-- Filtri distanza -->
+        <div class="mb-3">
+          <label for="distanceRange" class="form-label">Distanza (km)</label>
+          <input type="range" class="form-range custom-range" v-model="tempDistanceRange" @input="updateCounter" />
+          <div>{{ tempDistanceRange }} km</div>
         </div>
-
-        <!-- Sezione scrollabile dei filtri -->
-        <div class="scrollable-section">
-
-            <!-- Filtri distanza -->
-            <div class="mb-3">
-                <label for="distanceRange" class="form-label">Distanza (km)</label>
-                <input type="range" class="form-range" v-model="tempDistanceRange" @input="updateCounter" />
-                <div>{{ tempDistanceRange }} km</div>
-            </div>
-
-            <!-- Numero di stanze -->
-            <div class="mb-3">
-                <label class="form-label">Stanze:</label>
-                <div>
-                    <button @click="resetRoomFilter" :class="['btn', selectedRooms === null ? 'btn-primary' : 'btn-outline-primary']">
-                        Qualsiasi
-                    </button>
-                    <button v-for="n in 8" :key="n" 
-                        @click="selectedRooms = n" 
-                        :class="['btn', selectedRooms === n ? 'btn-primary' : 'btn-outline-primary']">
-                        {{ n }}
-                    </button>
-                    <button @click="selectedRooms = 9" 
-                        :class="['btn', selectedRooms === 9 ? 'btn-primary' : 'btn-outline-primary']">
-                        9+
-                    </button>
-                </div>
-            </div>
-
-            <!-- Numero di bagni -->
-            <div class="mb-3">
-                <label class="form-label">Bagni:</label>
-                <div>
-                    <button @click="resetBathroomFilter" :class="['btn', selectedBathrooms === null ? 'btn-primary' : 'btn-outline-primary']">
-                        Qualsiasi
-                    </button>
-                    <button v-for="n in 5" :key="n" 
-                        @click="selectedBathrooms = n" 
-                        :class="['btn', selectedBathrooms === n ? 'btn-primary' : 'btn-outline-primary']">
-                        {{ n }}
-                    </button>
-                </div>
-            </div>
-
-            <!-- Metri quadrati -->
-            <div class="mb-3">
-                <label class="form-label">Metri Quadrati:</label>
-                <input
-                    type="range"
-                    min="20"
-                    max="500"
-                    v-model="selectedSize"
-                    step="1"
-                    @input="updateCounter"
-                />
-                <div class="range-values">
-                    <span>Filtra da 0 a {{ selectedSize }} mq</span>
-                </div>
-            </div>
-
-            
-
-            <!-- Title -->
-            <h3 id="services" class="my-3">Servizi</h3>
-
-            <!-- Elenco dei servizi -->
-            <div class="row">
-                <div v-for="service in services" :key="service.id" class="col-6 mb-2">
-                    <button
-                        :class="['btn', 'btn-light', 'mb-2', selectedServicesCopy.includes(service.id) ? 'active' : '']"
-                        @click="updateSelectedServices(service.id)">
-                        <i :class="service.icon"></i> {{ service.name }}
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Footer fisso -->
-        <div class="footer border-top">
-            <button class="btn btn-outline-danger mt-4" @click="resetAllFilters">Cancella tutto</button>
-            <button class="btn btn-primary mt-3 w-100 mt-4" @click="applyFilters">
-                Mostra ({{ filteredApartmentsCount }}) appartamenti
+  
+        <!-- Stanze -->
+        <div class="mb-3">
+        <label class="form-label d-flex justify-content-center">Stanze:</label>
+        <div class="btn-group" role="group">
+            <button @click="resetRoomFilter" :class="['btn', selectedRooms === null ? 'btn-dark' : 'btn-outline-dark', 'btn-sm', 'rounded-pill', 'me-2', 'px-3']">
+            Qualsiasi
+            </button>
+            <button v-for="n in 8" :key="n" @click="selectedRooms = n" :class="['btn', selectedRooms === n ? 'btn-dark' : 'btn-outline-dark', 'btn-sm', 'rounded-pill', 'me-2', 'px-3']">
+            {{ n }}
+            </button>
+            <button @click="selectedRooms = 9" :class="['btn', selectedRooms === 9 ? 'btn-dark' : 'btn-outline-dark', 'btn-sm', 'rounded-pill', 'px-3']">
+            9+
             </button>
         </div>
+        </div>
 
+        <!-- Bagni -->
+        <div class="mb-3">
+        <label class="form-label d-flex justify-content-center">Bagni:</label>
+        <div class="btn-group" role="group">
+            <button @click="resetBathroomFilter" :class="['btn', selectedBathrooms === null ? 'btn-dark' : 'btn-outline-dark', 'btn-sm', 'rounded-pill', 'me-2', 'px-3']">
+            Qualsiasi
+            </button>
+            <button v-for="n in 5" :key="n" @click="selectedBathrooms = n" :class="['btn', selectedBathrooms === n ? 'btn-dark' : 'btn-outline-dark', 'btn-sm', 'rounded-pill', 'me-2', 'px-3']">
+            {{ n }}
+            </button>
+        </div>
+        </div>
+
+  
+        <!-- Metri quadrati -->
+        <div class="mb-3">
+          <label class="form-label">Metri Quadrati:</label>
+          <input type="range" min="20" max="500" v-model="selectedSize" step="1" @input="updateCounter" />
+          <div class="range-values">
+            <span>Filtra da 0 a {{ selectedSize }} mq</span>
+          </div>
+        </div>
+  
+        <!-- Title -->
+        <h3 id="services" class="my-3">Servizi</h3>
+
+        <!-- Elenco dei servizi -->
+        <div class="row">
+        <div v-for="service in services" :key="service.id" class="col-6 mb-3">
+            <div
+            class="card shadow-sm"
+            :class="selectedServicesCopy.includes(service.id) ? 'bg-dark text-white' : ''"
+            @click="updateSelectedServices(service.id)"
+            >
+            <div class="card-body text-center">
+                <i :class="['fa', service.icon]"></i>
+                <div>{{ service.name }}</div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+  
+      </div>
+  
+      <!-- Footer fisso -->
+      <div class="footer border-top">
+        <button class="btn btn-outline-danger" @click="resetAllFilters">Cancella tutto</button>
+        <button class="btn btn-dark" @click="applyFilters">
+          Mostra ({{ filteredApartmentsCount }}) appartamenti
+        </button>
+      </div>
+  
     </div>
 </template>
 
 <style lang="scss">
 .filter-sidebar {
     position: absolute;
-    top: 50%;  
-    left: 50%;  
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    height: 90vh; 
+    height: 90vh;
     width: 40vw;
-    background-color: white;
-    z-index: 1000; 
+    background-color: white; /* Sfondo bianco */
+    z-index: 1000;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Shadow box più pronunciata */
     scrollbar-width: thin;
-    scrollbar-color: transparent transparent; 
-
+    scrollbar-color: transparent transparent;
+  
     // Header
     .header {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        position: relative;
-        
-        h3 {
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        .btn-close {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+  
+      h3 {
+        flex-grow: 1;
+        text-align: center;
+        color: black; /* Testo nero */
+      }
+  
+      .btn-close {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
-
+  
     // Sezione scrollabile
     .scrollable-section {
-        max-height: calc(85vh - 120px);
-        overflow-y: auto;
-        padding: 1rem;
-
-        // Personalizza la scrollbar
-        &::-webkit-scrollbar-thumb {
-            background-color: #888; 
-            border-radius: 10px; 
-        }
-
-        &::-webkit-scrollbar-track {
-            background-color: #f1f1f1;
-        }
+      max-height: calc(85vh - 120px);
+      overflow-y: auto;
+      padding: 1rem;
+  
+      // Personalizza la scrollbar
+      &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+      }
+  
+      &::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+      }
     }
-
+  
+    .card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+    transition: box-shadow 0.2s ease, transform 0.3s ease;
+    }
     // Footer
     .footer {
-        height: 60px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
     }
-}
-</style>
+  }
+  </style>
+  
