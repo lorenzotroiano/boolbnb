@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
 
     // Show the sponsorship form
-    Route::get('/apartment/{id}/sponsor', [ApartmentController::class, 'showSponshorshipForm'])->name('sponsor-form');
+    Route::get('/apartment/{id}/sponsor', [ApartmentController::class, 'showSponsorshipForm'])->name('sponsor-form');
 
     // Process the sponsorship form
     Route::post('/apartment/{id}/sponsor', [ApartmentController::class, 'applySponsorship'])->name('apply-sponsorship');

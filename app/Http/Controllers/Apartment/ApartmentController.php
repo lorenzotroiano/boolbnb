@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Apartment;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,8 @@ class ApartmentController extends Controller
     public function dashboard()
     {
         $apartments = Apartment::all();
-        return view("dashboard", compact("apartments"));
+        $sponsors = Sponsor::all();
+        return view("dashboard", compact("apartments", 'sponsors'));
     }
 
 
@@ -126,16 +128,38 @@ class ApartmentController extends Controller
         $apartment = Apartment::findOrFail($id);
         $sponsor = Sponsor::findOrFail($request->sponsor_id);
 
-        $now = now();
-        $end_date = $now->addHours($sponsor->duration);
+        // Prendi l'ultima sponsorizzazione per l'appartamento
+        // Ottieni tutte le sponsorizzazioni per l'appartamento
+        $sponsorships = $apartment->sponsors()->withPivot('end_date')->get();
+
+        // Ordina la collezione in base alla end_date
+        $lastSponsorship = $sponsorships->sortByDesc(function ($sponsorship) {
+            return $sponsorship->pivot->end_date;
+        })->first();
+
+
+        // Se esiste una sponsorizzazione e la sua end_date è nel futuro, 
+        // usa quella come punto di partenza. Altrimenti, usa l'ora corrente.
+        $now = ($lastSponsorship && $lastSponsorship->pivot->end_date > Carbon::now())
+            ? Carbon::parse($lastSponsorship->pivot->end_date)
+            : Carbon::now();
+
+        $end_date = $now->copy()->addHours($sponsor->duration);
 
         $apartment->sponsors()->attach($sponsor->id, [
             'start_date' => $now,
             'end_date' => $end_date,
         ]);
 
+        // Se la nuova end_date della sponsorizzazione è nel futuro, allora aggiorna la flag sponsor a 1
+        if ($end_date > Carbon::now()) {
+            $apartment->sponsor = 1;
+            $apartment->save();
+        }
+
         return redirect()->route('dashboard')->with('success', 'Sponsorship applied successfully!');
     }
+
 
 
 

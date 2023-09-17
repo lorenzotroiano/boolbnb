@@ -18,6 +18,6 @@ class Sponsor extends Model
 
     public function apartments()
     {
-        return $this->belongsToMany(Apartment::class);
+        return $this->belongsToMany(Apartment::class, 'apartment_sponsors')->withTimestamps();
     }
 }
