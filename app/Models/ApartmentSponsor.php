@@ -10,10 +10,10 @@ class ApartmentSponsor extends Pivot
 {
     use HasFactory;
 
+    protected $table = 'apartment_sponsors';
+
     protected $fillable = [
         'start_date',
         'end_date'
     ];
 }
-
-
