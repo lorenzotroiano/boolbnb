@@ -40,6 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ApartmentController::class, 'dashboard'])->name('dashboard');
 
 
+    // Show the sponsorship form
+    Route::get('/apartment/{id}/sponsor', [ApartmentController::class, 'showSponshorshipForm'])->name('sponsor-form');
+
+    // Process the sponsorship form
+    Route::post('/apartment/{id}/sponsor', [ApartmentController::class, 'applySponsorship'])->name('apply-sponsorship');
+
     // Rotta Auth CREATE
     Route::get('/create', [ApartmentController::class, 'create'])
         ->name('create');

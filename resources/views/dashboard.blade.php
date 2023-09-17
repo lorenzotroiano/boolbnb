@@ -117,6 +117,7 @@
                                             <p class="card-text">Metri quadrati: {{ $apartment->mq }}</p>
                                             <a href="{{ route('show', $apartment->id) }}" class="btn btn-primary">Visualizza</a>
                                             <a href="{{ route('edit', $apartment->id) }}" class="btn btn-secondary">Modifica</a>
+                                            <a href="{{ route('sponsor-form', $apartment->id) }}" class="btn btn-primary">Sponsor</a>
                                             
 
                                             <form action="{{ route('delete', $apartment->id) }}" method="POST">

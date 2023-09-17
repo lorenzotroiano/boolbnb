@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Apartment;
 use App\Models\Message;
 use App\Models\Service;
+use App\Models\Sponsor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -109,6 +110,31 @@ class ApartmentController extends Controller
 
         // Reindirizza all'URL della vista 'show' per visualizzare l'appartamento appena creato
         return redirect()->route('show', $apartment->id);
+    }
+
+    // Show the sponsorship form
+    public function showSponsorshipForm($id)
+    {
+        $apartment = Apartment::findOrFail($id);
+        $sponsors = Sponsor::all();
+        return view('sponsor', compact('apartment', 'sponsors'));
+    }
+
+    // Process the sponsorship form
+    public function applySponsorship(Request $request, $id)
+    {
+        $apartment = Apartment::findOrFail($id);
+        $sponsor = Sponsor::findOrFail($request->sponsor_id);
+
+        $now = now();
+        $end_date = $now->addHours($sponsor->duration);
+
+        $apartment->sponsors()->attach($sponsor->id, [
+            'start_date' => $now,
+            'end_date' => $end_date,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Sponsorship applied successfully!');
     }
 
 
