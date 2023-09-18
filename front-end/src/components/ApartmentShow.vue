@@ -162,7 +162,7 @@ main {
     .container {
         max-width: 80%;
         margin: 0 auto;
-        padding-top: 200px;
+        padding-top: 140px;
         padding-bottom: 30px;
 
         p {
@@ -215,44 +215,24 @@ main {
                 display: flex;
                 justify-content: space-around;
                 font-size: 24px;
-
-
                 padding: 40px 0;
-
 
                 .custom-button {
                     border: none;
                     border-radius: 12px;
                     background-color: $color-blue-hover;
                     padding: 5px 10px;
-
-                    cursor: pointer;
                     transition: background-color 0.3s ease, transform 0.2s ease;
                     font-size: 20px;
                     display: flex;
                     align-items: center;
                 }
 
-                .custom-button:hover {
-                    background-color: $color-dark-purple;
-                    /* Colore grigio chiaro al passaggio del mouse */
-                    // transform: scale(1.05);
-                    /* Ingrandimento al passaggio del mouse */
-                }
-
                 .button-text {
                     margin: 0 15px;
                 }
             }
-
-
         }
-
-
-
-        // background-color: chartreuse;
-
-
     }
 
     .services {
