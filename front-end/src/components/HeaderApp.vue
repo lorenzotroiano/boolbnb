@@ -80,7 +80,7 @@ export default {
                     <button @click="onSearch">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                     </button>
-                    <button @click="$emit('toggle-sidebar')">Filtri</button>
+                    <button class="button-filter" @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
 
                 <!-- Nav -->
@@ -159,6 +159,12 @@ header {
                 margin: 20px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
+
+
+                .button-filter {
+                    width: 75px;
+                    margin-left: 7px;
+                }
             }
 
             .search:hover {
@@ -237,20 +243,14 @@ header {
 
 .menu a {
     text-decoration: none;
-    /* Rimuovi la sottolineatura predefinita */
     display: inline-block;
-    /* Imposta il display su inline-block per evitare spostamenti */
     transition: transform 0.3s;
-    /* Aggiungi una transizione fluida per la trasformazione */
     transform-origin: bottom;
-    /* Imposta il punto di trasformazione alla base del testo */
 }
 
 /* Stile al passaggio del mouse */
 .menu a:hover {
     border-bottom: 2px solid #007bff;
-    /* Aggiungi una linea sotto il testo al passaggio del mouse */
     transform: scale(1.3);
-    /* Ingrandisci il testo al passaggio del mouse */
 }
 </style>

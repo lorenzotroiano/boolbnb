@@ -117,6 +117,8 @@ export default {
 
 
 <style scoped lang="scss">
+@use "../styles/partials/variables" as *;
+
 main {
     background-color: rgb(255, 255, 255);
 
@@ -132,15 +134,20 @@ main {
         }
 
         span {
-            color: grey;
+            color: rgb(255, 255, 255);
         }
 
         i {
-            color: grey;
+            color: rgb(255, 255, 255);
         }
 
         .address {
             font-size: 20px;
+            color: grey;
+
+            i {
+                color: grey;
+            }
         }
 
         .flex-map {
@@ -180,7 +187,7 @@ main {
                 .custom-button {
                     border: none;
                     border-radius: 12px;
-                    background-color: white;
+                    background-color: $color-blue-hover;
                     padding: 5px 10px;
 
                     cursor: pointer;
@@ -191,9 +198,9 @@ main {
                 }
 
                 .custom-button:hover {
-                    background-color: #f0f0f0;
+                    background-color: $color-dark-purple;
                     /* Colore grigio chiaro al passaggio del mouse */
-                    transform: scale(1.05);
+                    // transform: scale(1.05);
                     /* Ingrandimento al passaggio del mouse */
                 }
 
@@ -215,6 +222,14 @@ main {
     .services {
 
         margin: 90px 0;
+
+        .card {
+            background-color: $color-blue-hover;
+
+            p {
+                color: white;
+            }
+        }
     }
 
 }
@@ -228,7 +243,7 @@ main {
 
 
 .card:hover {
-    background-color: #f0f0f0;
+    background-color: $color-dark-purple;
 
     color: #fff;
 
