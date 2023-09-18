@@ -13,7 +13,7 @@ export default {
 
     methods: {
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -35,7 +35,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -46,10 +46,10 @@ export default {
             });
     },
     beforeDestroy() {
-    if (this.map) {
-        this.map.remove();
+        if (this.map) {
+            this.map.remove();
+        }
     }
-}
 };
 </script>
 

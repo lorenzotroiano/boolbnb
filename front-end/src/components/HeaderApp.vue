@@ -36,7 +36,7 @@ export default {
             this.$emit('update:search', event.target.value);
         },
 
-       
+
         // FILTRI DISTANZA
         filterByDistanceRange(apartment) {
             if (!this.referencePoint) return false;
@@ -86,32 +86,28 @@ export default {
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
+                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="spacer" ref="spacer">
-        <!-- COMPONENTE SIDEBAR -->
+            <!-- COMPONENTE SIDEBAR -->
 
-        <transition name="slide">
-            <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
-                :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
-
-                @filter-by-distance="$emit('filter-by-distance', $event)"
-                @update:distanceRange="$emit('update:distanceRange', $event)"
-                @close-sidebar="$emit('close-sidebar')"
-                @apply-filters="$emit('apply-filters')"
-                @apartments-updated="$emit('apartments-updated', $event)"
-            ></FilterSidebar>
-        </transition>
+            <transition name="slide">
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
+                    :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
+                    @filter-by-distance="$emit('filter-by-distance', $event)"
+                    @update:distanceRange="$emit('update:distanceRange', $event)" @close-sidebar="$emit('close-sidebar')"
+                    @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
+                </FilterSidebar>
+            </transition>
         </div>
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
     </header>
-    
 </template>
 
 <style lang="scss" scoped>
@@ -133,6 +129,7 @@ header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
 
             .logo {
                 width: 180px;
@@ -197,13 +194,20 @@ header {
                 align-items: center;
                 width: 40%;
 
+
                 li {
                     margin: 0 12px;
+
+                    a {
+                        text-decoration: none;
+                        color: $color-blue-hover;
+                    }
                 }
             }
         }
     }
 }
+
 .overlay {
     position: fixed;
     top: 0;
@@ -211,7 +215,7 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999; 
+    z-index: 999;
 }
 
 @media screen and (max-width:1200px) {
@@ -229,5 +233,24 @@ header {
             border-radius: 80px;
         }
     }
+}
+
+.menu a {
+    text-decoration: none;
+    /* Rimuovi la sottolineatura predefinita */
+    display: inline-block;
+    /* Imposta il display su inline-block per evitare spostamenti */
+    transition: transform 0.3s;
+    /* Aggiungi una transizione fluida per la trasformazione */
+    transform-origin: bottom;
+    /* Imposta il punto di trasformazione alla base del testo */
+}
+
+/* Stile al passaggio del mouse */
+.menu a:hover {
+    border-bottom: 2px solid #007bff;
+    /* Aggiungi una linea sotto il testo al passaggio del mouse */
+    transform: scale(1.3);
+    /* Ingrandisci il testo al passaggio del mouse */
 }
 </style>
