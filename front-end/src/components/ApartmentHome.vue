@@ -59,9 +59,9 @@ export default {
     methods: {
 
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
-        
+
         async getCoordinatesFromAddress(address) {
             const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
             console.log("Sending Request:", requestUrl);
@@ -128,60 +128,45 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.originalApartments = data;  // Store all data in originalApartments
                 this.apartments = data;
-                
+
             })
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
-                    
+
                 })
                 .catch(error => {
                     console.log(error);
                 })
     },
     watch: {
-    referencePoint(newVal, oldVal) {
-        console.log("Reference point changed:", newVal);
+        referencePoint(newVal, oldVal) {
+            console.log("Reference point changed:", newVal);
+        }
     }
-}
 };
 </script>
 
 
 <!-- TEMPLATE -->
 <template>
-   <HeaderApp 
-        :services="services" 
-        :selectedServices="selectedServices" 
-        :isSidebarVisible="isSidebarVisible"
-        :isSearchClicked="isSearchClicked" 
-        :tempSize="tempSize" 
-        :referencePoint="referencePoint"
-        :distanceRange="distanceRange" 
-        :apartments="apartments"
-        :search="search"
-        @update:search="search = $event"
-        
-        @request-coordinates="getCoordinatesFromAddress"
-        @filtered="updateApartments"
-
-        @search-clicked="isSearchClicked = true"
-        @request-filter-by-distance="handleDistanceFilter"
-        @update:distanceRange="value => distanceRange = value"
-        @close-sidebar="isSidebarVisible = false"
-        @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
-        @filter-by-distance="handleDistanceFilter"
-        @apply-filters="applyFilters" 
-        @apartments-updated="updateApartments">
+    <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
+        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
+        :distanceRange="distanceRange" :apartments="apartments" :search="search" @update:search="search = $event"
+        @request-coordinates="getCoordinatesFromAddress" @filtered="updateApartments"
+        @search-clicked="isSearchClicked = true" @request-filter-by-distance="handleDistanceFilter"
+        @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
+        @toggle-sidebar="isSidebarVisible = !isSidebarVisible" @filter-by-distance="handleDistanceFilter"
+        @apply-filters="applyFilters" @apartments-updated="updateApartments">
     </HeaderApp>
     <div class="container-fluid">
 

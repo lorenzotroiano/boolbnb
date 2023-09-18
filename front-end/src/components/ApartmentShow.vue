@@ -18,7 +18,7 @@ export default {
 
     methods: {
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -51,7 +51,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -62,10 +62,10 @@ export default {
             });
     },
     beforeDestroy() {
-    if (this.map) {
-        this.map.remove();
+        if (this.map) {
+            this.map.remove();
+        }
     }
-}
 };
 </script>
 
@@ -153,6 +153,8 @@ export default {
 
 
 <style scoped lang="scss">
+@use "../styles/partials/variables" as *;
+
 main {
     background-color: rgb(255, 255, 255);
 
@@ -168,15 +170,20 @@ main {
         }
 
         span {
-            color: grey;
+            color: rgb(255, 255, 255);
         }
 
         i {
-            color: grey;
+            color: rgb(255, 255, 255);
         }
 
         .address {
             font-size: 20px;
+            color: grey;
+
+            i {
+                color: grey;
+            }
         }
 
         .flex-map {
@@ -216,7 +223,7 @@ main {
                 .custom-button {
                     border: none;
                     border-radius: 12px;
-                    background-color: white;
+                    background-color: $color-blue-hover;
                     padding: 5px 10px;
 
                     cursor: pointer;
@@ -227,9 +234,9 @@ main {
                 }
 
                 .custom-button:hover {
-                    background-color: #f0f0f0;
+                    background-color: $color-dark-purple;
                     /* Colore grigio chiaro al passaggio del mouse */
-                    transform: scale(1.05);
+                    // transform: scale(1.05);
                     /* Ingrandimento al passaggio del mouse */
                 }
 
@@ -251,6 +258,14 @@ main {
     .services {
 
         margin: 90px 0;
+
+        .card {
+            background-color: $color-blue-hover;
+
+            p {
+                color: white;
+            }
+        }
     }
 
 }
@@ -264,7 +279,7 @@ main {
 
 
 .card:hover {
-    background-color: #f0f0f0;
+    background-color: $color-dark-purple;
 
     color: #fff;
 

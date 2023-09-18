@@ -36,7 +36,7 @@ export default {
             this.$emit('update:search', event.target.value);
         },
 
-       
+
         // FILTRI DISTANZA
         filterByDistanceRange(apartment) {
             if (!this.referencePoint) return false;
@@ -80,38 +80,34 @@ export default {
                     <button @click="onSearch">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                     </button>
-                    <button @click="$emit('toggle-sidebar')">Filtri</button>
+                    <button class="button-filter" @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
 
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
+                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="spacer" ref="spacer">
-        <!-- COMPONENTE SIDEBAR -->
+            <!-- COMPONENTE SIDEBAR -->
 
-        <transition name="slide">
-            <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
-                :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
-
-                @filter-by-distance="$emit('filter-by-distance', $event)"
-                @update:distanceRange="$emit('update:distanceRange', $event)"
-                @close-sidebar="$emit('close-sidebar')"
-                @apply-filters="$emit('apply-filters')"
-                @apartments-updated="$emit('apartments-updated', $event)"
-            ></FilterSidebar>
-        </transition>
+            <transition name="slide">
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
+                    :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
+                    @filter-by-distance="$emit('filter-by-distance', $event)"
+                    @update:distanceRange="$emit('update:distanceRange', $event)" @close-sidebar="$emit('close-sidebar')"
+                    @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
+                </FilterSidebar>
+            </transition>
         </div>
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
     </header>
-    
 </template>
 
 <style lang="scss" scoped>
@@ -133,6 +129,7 @@ header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
 
             .logo {
                 width: 180px;
@@ -162,6 +159,12 @@ header {
                 margin: 20px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
+
+
+                .button-filter {
+                    width: 75px;
+                    margin-left: 7px;
+                }
             }
 
             .search:hover {
@@ -197,13 +200,20 @@ header {
                 align-items: center;
                 width: 40%;
 
+
                 li {
                     margin: 0 12px;
+
+                    a {
+                        text-decoration: none;
+                        color: $color-blue-hover;
+                    }
                 }
             }
         }
     }
 }
+
 .overlay {
     position: fixed;
     top: 0;
@@ -211,7 +221,7 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999; 
+    z-index: 999;
 }
 
 @media screen and (max-width:1200px) {
@@ -229,5 +239,18 @@ header {
             border-radius: 80px;
         }
     }
+}
+
+.menu a {
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.3s;
+    transform-origin: bottom;
+}
+
+/* Stile al passaggio del mouse */
+.menu a:hover {
+    border-bottom: 2px solid #007bff;
+    transform: scale(1.3);
 }
 </style>
