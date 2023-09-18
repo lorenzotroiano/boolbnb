@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import tt from '@tomtom-international/web-sdk-maps';
+
 export default {
     data() {
         return {
@@ -37,17 +38,23 @@ export default {
         axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
-                this.center = [this.apartment.latitude, this.apartment.longitude];
+                this.center = [this.apartment.longitude, this.apartment.latitude];
+                this.initializeTomTomMap(); // Move this inside the then() block after setting this.center
             })
             .catch(error => {
                 console.log(error);
-            })
-        this.initializeTomTomMap();
+            });
     },
+    beforeDestroy() {
+    if (this.map) {
+        this.map.remove();
+    }
+}
 };
 </script>
 
 <template>
+    <link rel='stylesheet' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.14.0/maps/maps.css'>
     <main>
         <div class="container">
             <h1>{{ apartment.name }}</h1>
@@ -55,7 +62,7 @@ export default {
             <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
 
             <div class="flex-map">
-                <img :src="getImageUrl(apartment.cover)" alt="Apartment Image">
+                <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image">
 
                 <div ref="map" style="width: 35%; height: 400px;"></div>
             </div>
@@ -82,12 +89,6 @@ export default {
 
 
             </div>
-
-            <!-- <p>Latitudine: {{ apartment.latitude }}</p>
-        <p>Longitudine: {{ apartment.longitude }}</p> -->
-            <!-- <p>Visibile: {{ apartment.visible }}</p>
-        <p>Sponsorizzato: {{ apartment.sponsor }}</p> -->
-
 
             <!-- Servizi -->
             <h2 v-if="apartment && apartment.services && apartment.services.length > 0">Servizi disponibili:</h2>
