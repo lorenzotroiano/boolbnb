@@ -21,19 +21,20 @@ class ApartmentTableSeeder extends Seeder
 
         // Ottieni la lista di tutti i file nella cartella "apartments"
         $imageFiles = File::allFiles(storage_path('app/public/apartments'));
+        $totalImages = count($imageFiles);
 
-        foreach ($apartments as $apartment) {
+        foreach ($apartments as $index => $apartment) {
             $users = User::inRandomOrder()->first();
             $apartment->user_id = $users->id;
 
-            // Seleziona una immagine casuale dalla lista dei file
-            $randomImage = $imageFiles[array_rand($imageFiles)];
+            // Seleziona un'immagine ciclando attraverso l'array delle immagini
+            $selectedImage = $imageFiles[$index % $totalImages];
 
             // Imposta il percorso dell'immagine come URL dell'appartamento
-            $apartment->cover = 'storage/app/public/apartments/' . $randomImage->getFilename();
-
+            $apartment->cover = 'apartments/' . $selectedImage->getFilename();
 
             $apartment->save();
         }
     }
+
 }

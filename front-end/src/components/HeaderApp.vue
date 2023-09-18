@@ -1,5 +1,6 @@
 <script>
 import FilterSidebar from './FilterSidebar.vue';
+import { haversineDistance } from '../../utils';
 
 export default {
     name: "HeaderApp",
@@ -15,12 +16,45 @@ export default {
         'apartments',
         'isSearchClicked',
         'tempSize',
+        'search'
     ],
     data() {
         return {
 
         }
 
+    },
+    methods: {
+
+        onSearch() {
+            console.log("onSearch called with value:", this.search);
+            this.$emit('request-coordinates', this.search);
+            this.$emit('update:isSearchClicked', true); // Emette un evento quando viene eseguita una ricerca
+        },
+
+        updateSearch(event) {
+            this.$emit('update:search', event.target.value);
+        },
+
+       
+        // FILTRI DISTANZA
+        filterByDistanceRange(apartment) {
+            if (!this.referencePoint) return false;
+
+            const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+
+            return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
+        },
+
+        handleDistanceFilter() {
+            const filteredApartments = this.apartments.filter(this.filterByDistanceRange);
+            this.updateApartments(filteredApartments);
+        },
+
+        filterApartmentsByDistance() {
+            const filteredApartments = this.apartments.filter(this.filterByDistanceRange);
+            this.$emit('apartments-updated', filteredApartments);
+        },
     }
 }
 </script>
@@ -42,8 +76,10 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <input type="text" placeholder="Vai ovunque">
-                    <button><font-awesome-icon icon="fa-solid fa-magnifying-glass" /></button>
+                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch">
+                    <button @click="onSearch">
+                        <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                    </button>
                     <button @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
 
@@ -56,7 +92,7 @@ export default {
                 </nav>
             </div>
         </div>
-        <div class="spacer">
+        <div class="spacer" ref="spacer">
         <!-- COMPONENTE SIDEBAR -->
 
         <transition name="slide">
@@ -129,7 +165,6 @@ header {
             }
 
             .search:hover {
-                transform: scale(1.05);
                 transition: transform 0.2s ease-in-out;
             }
 
@@ -143,7 +178,7 @@ header {
             }
 
             button {
-                background-color: $color-blue;
+                background-color: $color-blue-hover;
                 color: #fff;
                 border: none;
                 width: 30px;
@@ -154,7 +189,7 @@ header {
             }
 
             button:hover {
-                background-color: $color-blue-hover;
+                background-color: $color-dark-purple;
             }
 
             .menu {
@@ -169,12 +204,6 @@ header {
         }
     }
 }
-
-.spacer {
-    height: calc(100vh - 100px);
-    position: relative;
-}
-
 .overlay {
     position: fixed;
     top: 0;
@@ -182,7 +211,7 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 800; 
+    z-index: 999; 
 }
 
 @media screen and (max-width:1200px) {

@@ -54,5 +54,9 @@ class Apartment extends Model
     {
         return $this->belongsToMany(Sponsor::class, 'apartment_sponsors')->withTimestamps();
     }
+    public function getCoverUrlAttribute()
+    {
+        return asset('storage/apartments/' . $this->cover);
+    }
 
 }

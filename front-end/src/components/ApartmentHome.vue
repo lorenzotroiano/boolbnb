@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 import HeaderApp from './HeaderApp.vue';
+import { haversineDistance } from '../../utils';
 
 import tt from '@tomtom-international/web-sdk-maps';
 import { services } from '@tomtom-international/web-sdk-services';
@@ -13,6 +14,7 @@ export default {
     },
     data() {
         return {
+            originalApartments: [],
             apartments: [],
             services: [],
 
@@ -20,6 +22,10 @@ export default {
             search: '',
             isSearchClicked: false,
             searchValue: '',
+
+            // Distanza
+            currentCoordinates: null,
+            distanceFilter: 10,
 
             // Suggerimenti
             suggestions: [],
@@ -39,7 +45,7 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
-            distanceRange: 20,
+            distanceRange: 80000,
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             // Flag per vedere se ha caricato i dati
@@ -52,73 +58,47 @@ export default {
     },
     methods: {
 
-        // COORDINATE SEARCH
-        searchApartments() {
-            if (this.search === '') {
-                this.isSearchClicked = false; // Imposta isSearchClicked su false al clic del pulsante
-            } else {
-                this.isSearchClicked = true; // Imposta isSearchClicked su true al clic del pulsante
+        getImageUrl(imageName) {
+            return `http://127.0.0.1:8001/storage/${imageName}`;
+        },
+        
+        async getCoordinatesFromAddress(address) {
+            const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
+            console.log("Sending Request:", requestUrl);
+            console.log("Attempting to get coordinates for address:", address);  // Log the request
+
+            try {
+                const response = await axios.get(requestUrl);
+                console.log("Received Response:", response.data);  // Log the response
+
+                if (response.data && response.data.results && response.data.results.length) {
+                    const result = response.data.results[0];
+                    this.referencePoint = {
+                        lat: result.position.lat,
+                        lon: result.position.lon
+                    };
+                    this.handleDistanceFilter();  // Filter apartments based on distance after setting the reference point
+                    console.log("Reference point set:", this.referencePoint);
+                }
+            } catch (error) {
+                console.error("Error fetching coordinates:", error);
             }
-
-            // Prende coordinate del primo suggerimento
-            axios.get(`https://api.tomtom.com/search/2/geocode/${this.search}.json?key=ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK`)
-                .then(response => {
-                    const position = response.data.results[0].position;
-                    this.referencePoint = new tt.LngLat(position.lon, position.lat); // Utilizza tt.LngLat per creare un oggetto LngLat
-                })
-                .catch(error => {
-                    console.log(error);
-                });
         },
 
-        // DISTANZA date COORDINATE
-        haversineDistance(coord1, coord2) {
-            const toRadians = (angle) => angle * (Math.PI / 180);
-            const radius = 6371; // Raggio della Terra in chilometri
-
-            const lat1 = coord1.lat;
-            const lon1 = coord1.lng;
-            const lat2 = coord2.lat;
-            const lon2 = coord2.lng;
-
-            const dLat = toRadians(lat2 - lat1);
-            const dLon = toRadians(lon2 - lon1);
-
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            const distance = radius * c;
-
-            return distance;
+        updateApartments(filtered) {
+            this.apartments = filtered;
+        },
+        handleDistanceFilter() {
+            const filteredApartments = this.originalApartments.filter(this.filterByDistanceRange);
+            this.updateApartments(filteredApartments);
         },
 
-
-        // FILTRAGGIO
-
-        // FILTRI DISTANZA
         filterByDistanceRange(apartment) {
             if (!this.referencePoint) return false;
 
-            const distance = this.haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+            const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
 
-            return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
-        },
-
-
-        updateApartments(apartments) {
-            this.apartments = apartments;
-        },
-
-        handleDistanceFilter(referencePoint) {
-            // Filtra gli appartamenti basandoti sulla distanza e aggiorna la lista degli appartamenti
-            const filteredApartments = this.apartments.filter(apartment => {
-                const distance = this.haversineDistance(referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
-                return distance <= this.distanceRange;
-            });
-
-            this.updateApartments(filteredApartments);
+            return distance <= this.distanceRange;
         },
     },
 
@@ -143,7 +123,6 @@ export default {
                 return distanceCondition && servicesCondition && bathroomCondition && sizeCondition && roomCondition;
             });
         },
-
     },
 
 
@@ -152,6 +131,7 @@ export default {
         axios.get('http://127.0.0.1:8001/api/v1/')
             .then(response => {
                 const data = response.data;
+                this.originalApartments = data;  // Store all data in originalApartments
                 this.apartments = data;
                 
             })
@@ -168,29 +148,42 @@ export default {
                     console.log(error);
                 })
     },
+    watch: {
+    referencePoint(newVal, oldVal) {
+        console.log("Reference point changed:", newVal);
+    }
+}
 };
 </script>
 
 
 <!-- TEMPLATE -->
 <template>
-   <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
-        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
-        :distanceRange="distanceRange" :apartments="apartments" 
+   <HeaderApp 
+        :services="services" 
+        :selectedServices="selectedServices" 
+        :isSidebarVisible="isSidebarVisible"
+        :isSearchClicked="isSearchClicked" 
+        :tempSize="tempSize" 
+        :referencePoint="referencePoint"
+        :distanceRange="distanceRange" 
+        :apartments="apartments"
+        :search="search"
+        @update:search="search = $event"
+        
+        @request-coordinates="getCoordinatesFromAddress"
+        @filtered="updateApartments"
+
+        @search-clicked="isSearchClicked = true"
+        @request-filter-by-distance="handleDistanceFilter"
         @update:distanceRange="value => distanceRange = value"
         @close-sidebar="isSidebarVisible = false"
         @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
         @filter-by-distance="handleDistanceFilter"
-        @apply-filters="applyFilters" @apartments-updated="updateApartments">
+        @apply-filters="applyFilters" 
+        @apartments-updated="updateApartments">
     </HeaderApp>
     <div class="container-fluid">
-
-        
-
-        <div>
-            <img src="../../../storage/app/public/apartments/pexels-asad-photo-maldives-1268871.jpg" alt="">
-
-        </div>
 
         <!-- LISTA APPARTAMENTI -->
         <div id="apartmentList">
@@ -204,7 +197,7 @@ export default {
 
                 <!-- Immagine -->
                 <div class="single-img">
-                    <img :src="apartment.cover" :alt="apartment.cover">
+                    <img :src="getImageUrl(apartment.cover)" alt="Apartment Image">
                 </div>
 
                 <!-- Descrizione -->
@@ -212,13 +205,13 @@ export default {
 
                     <!-- Titolo -->
                     <div class="title">
-                        <h5>{{ apartment.name }}</h5>
+                        <h5 class="apartment-name">{{ apartment.name }}</h5>
                     </div>
 
                     <!-- Bottoni e Link show -->
                     <div class="show">
                         <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }">
-                            <button class="visit-button">
+                            <button class="visit-button button-color">
                                 Explore
                                 <i class="fa-solid fa-house"></i>
                             </button>
@@ -237,4 +230,15 @@ export default {
 @use '../styles/general.scss';
 @use '../styles/partials/_home.scss';
 @use '../styles/partials/_variables.scss' as *;
+
+.button-color {
+    background-color: #879ae8;
+    border: none;
+    color: white; // Puoi scegliere il colore del testo che preferisci
+    // Aggiungi altre proprietà come necessario
+}
+
+.apartment-name {
+    color: #879ae8;
+}
 </style>

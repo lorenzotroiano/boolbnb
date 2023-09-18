@@ -332,7 +332,7 @@ export default {
 
 <style lang="scss">
 .filter-sidebar {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -341,7 +341,7 @@ export default {
     width: 40vw;
     background-color: white;
     /* Sfondo bianco */
-    z-index: 1000;
+    z-index: 99999;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     /* Shadow box più pronunciata */

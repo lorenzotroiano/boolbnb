@@ -75,7 +75,7 @@ class ApartmentController extends Controller
         );
 
         // Carica l'immagine del copertina e memorizza il percorso
-        $img_path = Storage::put('uploads', $data['cover']);
+        $img_path = Storage::put('apartments', $data['cover']);
         $data['cover'] = $img_path;
 
         // Chiamata API per ottenere latitudine e longitudine basata sull'indirizzo
@@ -237,7 +237,7 @@ class ApartmentController extends Controller
             }
 
             // Carica la nuova immagine di copertina e memorizza il percorso
-            $data['cover'] = Storage::put('uploads', $data['cover']);
+            $data['cover'] = Storage::put('apartments', $data['cover']);
         }
 
         // Aggiorna l'appartamento con i dati validati
