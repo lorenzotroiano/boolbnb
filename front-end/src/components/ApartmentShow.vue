@@ -171,6 +171,7 @@ main {
         max-width: 80%;
         margin: 0 auto;
         padding-top: 140px;
+        padding-top: 140px;
         padding-bottom: 30px;
 
         p {
