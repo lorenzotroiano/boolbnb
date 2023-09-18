@@ -9,6 +9,7 @@ use App\Models\Apartment;
 use App\Models\Service;
 use App\Models\View;
 use App\Models\ApartmentSponsor;
+use App\Models\Message;
 
 class GuestController extends Controller
 {
@@ -65,5 +66,24 @@ class GuestController extends Controller
             'apartment' => $apartment,
             'apartmentsponsors' => $apartmentsponsors
         ]);
+    }
+
+    public function sendMessage(Request $request, $id)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'body' => 'required|string',
+        ]);
+
+        $data['apartment_id'] = $id;
+
+        Message::create($data);
+
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Messaggio inviato con successo!'
+        ], 200);
     }
 }

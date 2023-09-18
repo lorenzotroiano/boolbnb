@@ -39,29 +39,21 @@
                 @endforeach
             </ul>
 
-            {{-- Message --}}
-            <h4 class="mt-5 mb-3">Send a message</h4>
-            <form action="{{ route('send.message', $apartment->id) }}" method="POST">
-                @csrf
+            
 
-                {{-- Message per guest --}}
-                @if(!Auth::check())
-                    <div class="form-group">
-                        <label for="name">Nome:</label>
-                        <input type="text" name="name" id="name" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                @endif
+        @foreach($apartment->messages as $message)
+            
+            <p><strong>Nome:</strong> {{ $message->name }}</p>
 
-                {{-- Parte comune del message --}}
-                <div class="form-group">
-                    <textarea name="body" placeholder="Inserisci un messaggio" id="body" class="form-control" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Invia</button>
-            </form>
+            
+            <p><strong>Messaggio:</strong> {{ $message->body }}</p>
+
+            
+            <p><strong>Da:</strong> {{ $message->email }}</p>
+
+            
+            <hr>
+        @endforeach
 
 
             {{-- Numero di visualizzazioni --}}

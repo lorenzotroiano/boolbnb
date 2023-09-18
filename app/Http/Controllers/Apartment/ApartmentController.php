@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Apartment;
 
+use App\Models\ApartmentSponsor;
+use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -182,6 +184,20 @@ class ApartmentController extends Controller
 
 
 
+    public function show($id)
+    {
+        $apartment = Apartment::with(['services', 'messages'])->findOrFail($id);
+        $apartmentsponsors = ApartmentSponsor::all();
+
+        // NUOVA VISUALIZZAZIONE
+        $view = new View();
+        $view->apartment_id = $id;
+        $view->IP_address = request()->ip();
+        $view->date = now();
+        $view->save();
+
+        return view("show", compact("apartment", "apartmentsponsors"));
+    }
 
     // EDIT
     public function edit($id)

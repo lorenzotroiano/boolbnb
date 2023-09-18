@@ -8,6 +8,11 @@ export default {
             apartment: [],
             map: null,
             apiKey: "ePmJI0VGJsx4YELF5NbrXSe90uKPnMKK",
+            formData: {
+                name: '',
+                email: '',
+                body: ''
+            }
         };
     },
 
@@ -32,6 +37,17 @@ export default {
                 console.error("Errore durante l'inizializzazione della mappa TomTom:", error);
             }
         },
+        sendMessage() {
+            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+                .then(response => {
+                    console.log(response.data);
+                    this.formData = { name: '', email: '', body: '' };
+                    console.log("Messaggio inviato");
+                })
+                .catch(error => {
+                    console.error("Errore durante l'invio del messaggio:", error);
+                });
+        }
     },
     props: ['id'],
     mounted() {
@@ -107,6 +123,26 @@ export default {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Messaggi -->
+            <div class="message-form">
+                <h3>Invia un messaggio</h3>
+                <form @submit.prevent="sendMessage">
+                    <div class="form-group">
+                        <label for="name">Nome:</label>
+                        <input type="text" id="name" v-model="formData.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" v-model="formData.email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="body">Messaggio:</label>
+                        <textarea id="body" v-model="formData.body" required></textarea>
+                    </div>
+                    <button type="submit">Invia</button>
+                </form>
             </div>
 
         </div>

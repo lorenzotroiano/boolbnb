@@ -24,4 +24,5 @@ Route::prefix('v1')->group(function () {
     Route::get('/', [GuestController::class, 'index']);
     Route::get('/service', [GuestController::class, 'indexService']);
     Route::get('/show/{id}', [GuestController::class, 'show']);
+    Route::post('/show/{id}/messages', [GuestController::class, 'sendMessage']);
 });

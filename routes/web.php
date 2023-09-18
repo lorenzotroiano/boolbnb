@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [ApartmentController::class, 'dashboard'])->name('dashboard');
 
+    Route::get('/show/{id}', [ApartmentController::class, 'show'])->name('show');
+
 
     // Show the sponsorship form
     Route::get('/apartment/{id}/sponsor', [ApartmentController::class, 'showSponsorshipForm'])->name('sponsor-form');
