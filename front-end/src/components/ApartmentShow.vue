@@ -26,11 +26,15 @@ export default {
                     key: this.apiKey,
                     container: this.$refs.map, // Usa il riferimento al div della mappa
                     center: this.center, // Utilizza this.center come centro iniziale
-                    zoom: 10,
+                    zoom: 15,
 
                 });
 
+                // Aggiungi un marker alle coordinate specificate
+
+
                 this.map.on('load', () => {
+
                     new tt.Marker().setLngLat(this.center).addTo(this.map); // Utilizza this.center come posizione del marcatore
                 });
             } catch (error) {
@@ -38,7 +42,7 @@ export default {
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -74,13 +78,9 @@ export default {
     <main>
         <div class="container">
             <h1>{{ apartment.name }}</h1>
-
             <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
-
-            <div class="flex-map">
+            <div class="img">
                 <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image">
-
-                <div ref="map" style="width: 35%; height: 400px;"></div>
             </div>
 
             <!-- <p>ID: {{ apartment.id }}</p> -->
@@ -89,21 +89,19 @@ export default {
                 <p>{{ apartment.description }}</p>
 
                 <div class="description-flex">
-                    <button class="custom-button">
+                    <button class="btn">
                         <i class="fa-solid fa-house"></i>
                         <span class="button-text">{{ apartment.room }}</span>
                     </button>
-                    <button class="custom-button">
+                    <button class="btn">
                         <i class="fa-solid fa-toilet"></i>
                         <span class="button-text">{{ apartment.bathroom }}</span>
                     </button>
-                    <button class="custom-button">
+                    <button class="btn">
                         <i class="fa-brands fa-squarespace"></i>
                         <span class="button-text">{{ apartment.mq }} Mq</span>
                     </button>
                 </div>
-
-
             </div>
 
             <!-- Servizi -->
@@ -125,26 +123,32 @@ export default {
                 </div>
             </div>
 
+            <!-- Mappa -->
+            <h3>Mappa</h3>
+            <div ref="map" style="width: 75%; margin: 30px auto; height: 400px"></div>
+
             <!-- Messaggi -->
             <div class="message-form">
                 <h3>Invia un messaggio</h3>
                 <form @submit.prevent="sendMessage">
-                    <div class="form-group">
-                        <label for="name">Nome:</label>
-                        <input type="text" id="name" v-model="formData.name" required>
+                    <div class="mb-3 form-group">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="name" v-model="formData.name" required
+                            placeholder="Inserisci il tuo nome..">
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" v-model="formData.email" required>
+                    <div class="mb-3 form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" v-model="formData.email" required
+                            placeholder="Insirisci la tua email..">
                     </div>
-                    <div class="form-group">
-                        <label for="body">Messaggio:</label>
-                        <textarea id="body" v-model="formData.body" required></textarea>
+                    <div class="mb-3 form-group">
+                        <label for="body" class="form-label">Testo</label>
+                        <textarea class="form-control" id="body" rows="3" v-model="formData.body" required
+                            placeholder="Inserisci testo.."></textarea>
                     </div>
-                    <button type="submit">Invia</button>
+                    <div class="text-center"> <button type="submit" class="btn">Invia</button></div>
                 </form>
             </div>
-
         </div>
     </main>
 </template>
@@ -158,11 +162,15 @@ export default {
 main {
     background-color: rgb(255, 255, 255);
 
+    h2,
+    h3 {
+        text-align: center;
+    }
 
     .container {
         max-width: 80%;
         margin: 0 auto;
-        padding-top: 200px;
+        padding-top: 140px;
         padding-bottom: 30px;
 
         p {
@@ -186,78 +194,81 @@ main {
             }
         }
 
-        .flex-map {
-
-            margin: 50px 0;
-            display: flex;
-            justify-content: space-between;
+        .img {
+            text-align: center;
+            padding: 50px;
+            margin: 35px 0;
 
             img {
                 height: 400px;
-                width: 60%;
+                width: 80%;
             }
         }
 
         .apartment-description {
             border-top: 1px black solid;
             font-size: 20px;
-
             padding: 45px 0;
 
             h3 {
-                text-align: center;
                 margin-bottom: 40px;
             }
-
 
             .description-flex {
                 border-bottom: 1px black solid;
                 display: flex;
                 justify-content: space-around;
                 font-size: 24px;
-
-
                 padding: 40px 0;
 
-
-                .custom-button {
+                .btn {
                     border: none;
                     border-radius: 12px;
                     background-color: $color-blue-hover;
                     padding: 5px 10px;
-
-                    cursor: pointer;
+                    cursor: auto;
                     transition: background-color 0.3s ease, transform 0.2s ease;
                     font-size: 20px;
                     display: flex;
                     align-items: center;
                 }
 
-                .custom-button:hover {
+                .btn:hover {
                     background-color: $color-dark-purple;
-                    /* Colore grigio chiaro al passaggio del mouse */
-                    // transform: scale(1.05);
-                    /* Ingrandimento al passaggio del mouse */
                 }
 
                 .button-text {
                     margin: 0 15px;
                 }
             }
-
-
         }
 
 
 
-        // background-color: chartreuse;
+        .message-form {
+            border-top: 0.1px solid black;
+            border-bottom: 0.1px solid black;
+            padding: 40px;
 
+            form {
+                width: 40%;
+                margin: 0 auto;
+                margin-top: 60px;
 
+                .btn {
+                    background-color: $color-blue-hover;
+                    color: white;
+                }
+            }
+        }
     }
 
-    .services {
 
-        margin: 90px 0;
+
+    .services {
+        margin: 40px 0;
+        padding: 50px;
+        border-bottom: 0.1px solid black;
 
         .card {
             background-color: $color-blue-hover;
@@ -267,21 +278,14 @@ main {
             }
         }
     }
-
 }
-
-
 
 .service-icon {
     font-size: 20px;
-
 }
-
 
 .card:hover {
     background-color: $color-dark-purple;
-
     color: #fff;
-
 }
 </style>

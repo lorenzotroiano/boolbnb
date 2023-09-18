@@ -66,12 +66,12 @@ export default {
 
                 <!-- Logo immagine -->
                 <div class="logo">
-                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
+                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
 
                 <!-- Logo -->
                 <div class="logo-mobile">
-                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
+                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
 
                 <!-- Searchbar -->
@@ -251,6 +251,6 @@ header {
 /* Stile al passaggio del mouse */
 .menu a:hover {
     border-bottom: 2px solid #007bff;
-    transform: scale(1.3);
+    transform: scale(1.1);
 }
 </style>

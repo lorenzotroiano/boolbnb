@@ -216,6 +216,12 @@ export default {
 @use '../styles/partials/_home.scss';
 @use '../styles/partials/_variables.scss' as *;
 
+.single {
+    .single-img {
+        width: 100%;
+    }
+}
+
 .button-color {
     background-color: #879ae8;
     border: none;
