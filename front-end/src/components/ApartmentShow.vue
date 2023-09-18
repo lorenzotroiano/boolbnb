@@ -11,6 +11,9 @@ export default {
     },
 
     methods: {
+        getImageUrl(imageName) {
+            return `http://127.0.0.1:8001/storage/${imageName}`;
+        },
         initializeTomTomMap() {
             try {
                 this.map = tt.map({
@@ -52,7 +55,7 @@ export default {
             <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
 
             <div class="flex-map">
-                <img :src="apartment.cover" alt="Copertina dell'appartamento">
+                <img :src="getImageUrl(apartment.cover)" alt="Apartment Image">
 
                 <div ref="map" style="width: 35%; height: 400px;"></div>
             </div>
