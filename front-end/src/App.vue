@@ -30,7 +30,7 @@ li {
 
 }
 
-i {
-    padding: 15px;
-}
+// i {
+//     padding: 5px;
+// }
 </style>

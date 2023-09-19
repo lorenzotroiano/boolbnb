@@ -79,53 +79,54 @@ export default {
         <div class="container">
             <h1>{{ apartment.name }}</h1>
             <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
-            <div class="img">
-                <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image">
-            </div>
-
-            <!-- <p>ID: {{ apartment.id }}</p> -->
-            <div class="apartment-description">
-                <h3>Info Appartamento</h3>
-                <p>{{ apartment.description }}</p>
-
-                <div class="description-flex">
-                    <button class="btn">
-                        <i class="fa-solid fa-house"></i>
-                        <span class="button-text">{{ apartment.room }}</span>
-                    </button>
-                    <button class="btn">
-                        <i class="fa-solid fa-toilet"></i>
-                        <span class="button-text">{{ apartment.bathroom }}</span>
-                    </button>
-                    <button class="btn">
-                        <i class="fa-brands fa-squarespace"></i>
-                        <span class="button-text">{{ apartment.mq }} Mq</span>
-                    </button>
+            <div class="flex-info">
+                <div class="img">
+                    <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image">
                 </div>
-            </div>
 
-            <!-- Servizi -->
-            <h2 v-if="apartment && apartment.services && apartment.services.length > 0">Servizi disponibili:</h2>
-            <h2 v-else>Nessun servizio disponibile</h2>
+                <div class="apartment-description">
+                    <h3>Info Appartamento</h3>
+                    <div class="description-flex">
+                        <span class="">Stanze: {{ apartment.room }}</span>
+                        <span class="">Bagni: {{ apartment.bathroom }}</span>
+                        <span class="">Mq: {{ apartment.mq }}</span>
+                    </div>
+                    <div class="only-description">
+                        <p>{{ apartment.description }}</p>
+                    </div>
 
-            <div class="row justify-content-center services"
-                v-if="apartment && apartment.services && apartment.services.length > 0">
-                <!-- Centra gli elementi orizzontalmente -->
-                <div class="col-md-3" v-for="service in apartment.services" :key="service.id">
-                    <!-- Riduci la larghezza delle colonne per fare spazio -->
-                    <div class="card mb-3">
-                        <div class="card-body text-center">
-                            <i :class="service.icon" class="service-icon"></i>
-                            <!-- Riduci la dimensione dell'icona -->
-                            <p class="card-text">{{ service.name }}</p>
+
+
+                    <!-- Servizi -->
+                    <span v-if="apartment && apartment.services && apartment.services.length > 0">Servizi
+                        disponibili:</span>
+                    <span v-else>Nessun servizio disponibile</span>
+
+                    <div class="services" v-if="apartment && apartment.services && apartment.services.length > 0">
+                        <!-- Centra gli elementi orizzontalmente -->
+                        <div class="" v-for="service in apartment.services" :key="service.id">
+                            <!-- Riduci la larghezza delle colonne per fare spazio -->
+                            <div class="">
+                                <div class="label-services">
+                                    <i :class="service.icon" class="service-icon"></i>
+                                    <!-- Riduci la dimensione dell'icona -->
+                                    <span class="">{{ service.name }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
+
+
+
+
 
             <!-- Mappa -->
             <h3>Mappa</h3>
-            <div ref="map" style="width: 75%; margin: 30px auto; height: 400px"></div>
+            <div ref="map" style="width: 75%; margin: 30px auto; height: 400px;"></div>
 
             <!-- Messaggi -->
             <div class="message-form">
@@ -168,7 +169,7 @@ main {
     }
 
     .container {
-        max-width: 80%;
+
         margin: 0 auto;
         padding-top: 140px;
         padding-bottom: 30px;
@@ -194,60 +195,67 @@ main {
             }
         }
 
-        .img {
-            text-align: center;
-            padding: 50px;
-            margin: 35px 0;
+        .flex-info {
 
-            img {
-                height: 400px;
-                width: 80%;
+            display: flex;
+            justify-content: space-between;
+
+            padding: 80px;
+            height: 550px;
+
+            .img {
+
+                border-radius: 20px;
+                width: 40%;
+                height: 100%;
+
+                img {
+
+                    max-height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .apartment-description {
+                width: 50%;
+
+                padding: 20px;
+
+                span {
+                    color: gray;
+                }
+
+                .only-description {
+                    width: 100%;
+                }
+
+
+                .description-flex {
+                    text-align: center;
+                    padding: 10px;
+
+
+                    span {
+                        color: $color-blue-hover;
+                        margin: 0 30px;
+                    }
+
+
+
+
+                }
             }
         }
 
-        .apartment-description {
-            border-top: 1px black solid;
-            font-size: 20px;
-            padding: 45px 0;
 
-            h3 {
-                margin-bottom: 40px;
-            }
 
-            .description-flex {
-                border-bottom: 1px black solid;
-                display: flex;
-                justify-content: space-around;
-                font-size: 24px;
-                padding: 40px 0;
 
-                .btn {
-                    border: none;
-                    border-radius: 12px;
-                    background-color: $color-blue-hover;
-                    padding: 5px 10px;
-                    cursor: auto;
-                    transition: background-color 0.3s ease, transform 0.2s ease;
-                    font-size: 20px;
-                    display: flex;
-                    align-items: center;
-                }
-
-                .btn:hover {
-                    background-color: $color-dark-purple;
-                }
-
-                .button-text {
-                    margin: 0 15px;
-                }
-            }
-        }
 
 
 
         .message-form {
-            border-top: 0.1px solid black;
-            border-bottom: 0.1px solid black;
+            border-top: 0.1px solid gray;
+
             padding: 40px;
 
             form {
@@ -266,26 +274,40 @@ main {
 
 
     .services {
-        margin: 40px 0;
-        padding: 50px;
-        border-bottom: 0.1px solid black;
 
-        .card {
-            background-color: $color-blue-hover;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 15px;
 
-            p {
-                color: white;
-            }
+
+        .label-services {
+            border: 1px solid blue;
+            width: 150px;
+            display: flex;
+
+            align-items: center;
+
+            padding: 8px;
+
+            text-align: center;
         }
+
+        i {
+            color: $color-blue-hover;
+            font-size: 16px;
+            margin-right: 10px;
+
+        }
+
+        // span {
+        //     font-size: 15px;
+        // }
+
+
+
+
+
     }
-}
-
-.service-icon {
-    font-size: 20px;
-}
-
-.card:hover {
-    background-color: $color-dark-purple;
-    color: #fff;
 }
 </style>

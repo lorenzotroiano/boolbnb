@@ -153,6 +153,10 @@
                     </div>
                 </div>
 
+
+
+
+
                 {{-- CREATE --}}
                 <div class="text-center my-3">
                     <a href="{{ route('create') }}" class="btn btn-success">ADD NEW APARTMENT</a>
