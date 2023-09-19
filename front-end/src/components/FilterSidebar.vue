@@ -1,4 +1,5 @@
 <script>
+
 export default {
     props: {
         selectedServices: {
@@ -18,17 +19,18 @@ export default {
     },
     data() {
         return {
+            // Copia di selected services perché le props sono readonly
             selectedServicesCopy: [...this.selectedServices],
 
             filteredApartments: [],
 
+            // Copia di apartments perché le props sono readonly
+            // localApartments: this.apartments,
+
             counterFilter: null,
             selectedRooms: null,
             selectedBathrooms: null,
-            selectedSize: null,
-
-            tempDistanceRange: this.distanceRange,
-
+            selectedSize: null,    
         };
     },
     methods: {
@@ -51,7 +53,6 @@ export default {
             this.selectedBathrooms = null;
             this.selectedSize = null;
             this.selectedServicesCopy = [];
-            this.fetchAllApartments();
         },
 
         // INIZIALIZZA I FILTRI RESETTANDO E FACENDO IL CONTEGGIO
@@ -112,52 +113,29 @@ export default {
             this.updateCounter();
         },
 
-        updateDistanceRange(event) {
-            this.$emit('update:distanceRange', event.target.value);
+        handleSliderChange() {
+            this.$emit('update:distanceRange', this.tempDistanceRange);
             this.updateCounter();
         },
+
         closeSidebar() {
             this.$emit('close-sidebar');
-            this.fetchAllApartments();
         },
 
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8000/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            this.filteredApartments = this.apartments.filter((apartment) => {
+                return (
+                    this.filterByRooms(apartment) &&
+                    this.filterByBathrooms(apartment) &&
+                    this.filterBySize(apartment) &&
+                    this.filterByServices(apartment)
+                );
+            });
 
-            if (this.selectedRooms) {
-                apiUrl += `&room=${this.selectedRooms}`;
-            }
-            if (this.selectedBathrooms) {
-                apiUrl += `&bathroom=${this.selectedBathrooms}`;
-            }
-
-            if (this.selectedSize !== null) {
-                apiUrl += `&mq=${this.selectedSize}`;
-            }
-
-            if (this.referencePoint) {
-                this.$emit('filter-by-distance', this.referencePoint);
-            }
-
-            console.log(apiUrl);
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    this.filteredApartments = data;
-                    this.$emit('apartments-updated', this.filteredApartments);
-                    this.updateCounter();
-                })
-                .catch(error => {
-                    console.log('There was a problem with the fetch operation:', error.message);
-                });
-
+            this.$emit('apartments-updated', this.filteredApartments);
+            this.updateCounter();
+            
             this.$emit('update-filters', {
                 rooms: this.selectedRooms,
                 bathrooms: this.selectedBathrooms,
@@ -165,7 +143,6 @@ export default {
                 services: this.selectedServices,
             });
             this.$emit('apply-filters');
-            this.$emit('update:distanceRange', this.tempDistanceRange);
 
             this.closeSidebar();
             this.initializeFilters();
@@ -181,30 +158,17 @@ export default {
             document.body.style.paddingRight = '0px';
             document.body.style.overflow = '';
         },
-
-        fetchAllApartments() {
-            let apiUrl = `http://127.0.0.1:8000/api/v1/`;
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    this.apartments = data;
-                    this.filteredApartments = data;
-                    this.updateCounter();
-                })
-                .catch(error => {
-                    console.log('There was a problem with the fetch operation:', error.message);
-                });
-        }
     },
 
-    // Watcher per eventi che controlla se la variabile passata da ApartmentHome cambia
     watch: {
+
+        // Watcher sugli apartments per fare l'update del counter
+        apartments: {
+            immediate: true,
+            handler() {
+                this.updateCounter();
+            }
+        },
 
         selectedRooms: 'updateCounter',
         selectedBathrooms: 'updateCounter',
@@ -226,13 +190,18 @@ export default {
             } else {
                 this.enableBodyScroll();
             }
-        }
+        },
     },
     computed: {
         filteredApartmentsCount() {
-            return this.counterFilter !== null ? this.counterFilter : (this.apartments ? this.apartments.length : 0);
+            return this.counterFilter !== null ? this.counterFilter : (this.localApartments ? this.localApartments.length : 0);
         },
     },
+    mounted() {
+
+        this.updateCounter();
+    }
+
 };
 </script>
 
@@ -247,13 +216,6 @@ export default {
 
         <!-- Sezione scrollabile dei filtri -->
         <div class="scrollable-section">
-
-            <!-- Filtri distanza -->
-            <div class="mb-3">
-                <label for="distanceRange" class="form-label">Distanza (km)</label>
-                <input type="range" class="form-range custom-range" v-model="tempDistanceRange" @input="updateCounter" />
-                <div>{{ tempDistanceRange }} km</div>
-            </div>
 
             <!-- Stanze -->
             <div class="mb-3">
@@ -323,7 +285,7 @@ export default {
         <div class="footer border-top">
             <button class="btn btn-outline-danger" @click="resetAllFilters">Cancella tutto</button>
             <button class="btn btn-dark" @click="applyFilters">
-                Mostra ({{ filteredApartmentsCount }}) alloggi
+                Mostra ({{ counterFilter  }}) alloggi
             </button>
         </div>
 

@@ -2,9 +2,7 @@
 import axios from 'axios';
 
 import HeaderApp from './HeaderApp.vue';
-import { haversineDistance } from '../../utils';
 
-import tt from '@tomtom-international/web-sdk-maps';
 import { services } from '@tomtom-international/web-sdk-services';
 
 export default {
@@ -14,18 +12,13 @@ export default {
     },
     data() {
         return {
+            // Appartamenti e servizi
             originalApartments: [],
             apartments: [],
             services: [],
 
-            // Barra di ricerca
-            search: '',
-            isSearchClicked: false,
-            searchValue: '',
-
             // Distanza
             currentCoordinates: null,
-            distanceFilter: 10,
 
             // Suggerimenti
             suggestions: [],
@@ -45,12 +38,9 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
-            distanceRange: 80000,
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
-            // Flag per vedere se ha caricato i dati
-            // dataLoaded: false,
-            // Flag per capire quando mettere in v-show false
+            
             applyFilters: null,
 
 
@@ -61,45 +51,17 @@ export default {
         getImageUrl(imageName) {
             return `http://127.0.0.1:8000/storage/${imageName}`;
         },
-
-        async getCoordinatesFromAddress(address) {
-            const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
-            console.log("Sending Request:", requestUrl);
-            console.log("Attempting to get coordinates for address:", address);  // Log the request
-
-            try {
-                const response = await axios.get(requestUrl);
-                console.log("Received Response:", response.data);  // Log the response
-
-                if (response.data && response.data.results && response.data.results.length) {
-                    const result = response.data.results[0];
-                    this.referencePoint = {
-                        lat: result.position.lat,
-                        lon: result.position.lon
-                    };
-                    this.handleDistanceFilter();  // Filter apartments based on distance after setting the reference point
-                    console.log("Reference point set:", this.referencePoint);
-                }
-            } catch (error) {
-                console.error("Error fetching coordinates:", error);
-            }
-        },
-
+        
         updateApartments(filtered) {
+            console.log("Updating apartments list with:", filtered);
             this.apartments = filtered;
         },
-        handleDistanceFilter() {
-            const filteredApartments = this.originalApartments.filter(this.filterByDistanceRange);
-            this.updateApartments(filteredApartments);
-        },
 
-        filterByDistanceRange(apartment) {
-            if (!this.referencePoint) return false;
+        // Appartmenti filtrati
+        handleUpdatedApartments(filteredApartments) {
+            this.apartments = filteredApartments;
+        }
 
-            const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
-
-            return distance <= this.distanceRange;
-        },
     },
 
     // FILTRAGGIO ARRAY SECONDO FILTRI
@@ -132,8 +94,7 @@ export default {
             .then(response => {
                 const data = response.data;
                 this.originalApartments = data;  // Store all data in originalApartments
-                this.apartments = data;
-
+                this.apartments = data;  
             })
             .catch(error => {
                 console.log(error);
@@ -148,26 +109,37 @@ export default {
                     console.log(error);
                 })
     },
-    watch: {
-        referencePoint(newVal, oldVal) {
-            console.log("Reference point changed:", newVal);
-        }
-    }
 };
 </script>
 
 
 <!-- TEMPLATE -->
 <template>
-    <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
-        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
-        :distanceRange="distanceRange" :apartments="apartments" :search="search" @update:search="search = $event"
-        @request-coordinates="getCoordinatesFromAddress" @filtered="updateApartments"
-        @search-clicked="isSearchClicked = true" @request-filter-by-distance="handleDistanceFilter"
-        @update:distanceRange="value => distanceRange = value" @close-sidebar="isSidebarVisible = false"
-        @toggle-sidebar="isSidebarVisible = !isSidebarVisible" @filter-by-distance="handleDistanceFilter"
-        @apply-filters="applyFilters" @apartments-updated="updateApartments">
+    <HeaderApp 
+    :services="services" 
+    :selectedServices="selectedServices" 
+    :isSidebarVisible="isSidebarVisible"
+    :isSearchClicked="isSearchClicked" 
+    :tempSize="tempSize" 
+    :referencePoint="referencePoint"
+    :distanceRange="distanceRange" 
+    :search="search"
+
+    
+    :apartments="originalApartments"
+    @update-apartments="handleUpdatedApartments"
+
+    @update:search="updateSearchValue"
+    @request-coordinates="getCoordinatesFromAddress"
+    @search-clicked="handleSearchClick"
+    @request-filter-by-distance="handleDistanceFilter"
+    @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
+    @close-sidebar="isSidebarVisible = false"
+    @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
+    @apply-filters="applyFilters" 
+    @apartments-updated="updateApartments">
     </HeaderApp>
+    <!-- @filter-by-distance="handleDistanceFilter" -->
     <div class="container-fluid">
 
         <!-- LISTA APPARTAMENTI -->
