@@ -125,8 +125,10 @@ export default {
 
 
             <!-- Mappa -->
+
             <h3>Mappa</h3>
             <div ref="map" style="width: 75%; margin: 30px auto; height: 400px;"></div>
+
 
             <!-- Messaggi -->
             <div class="message-form">
@@ -200,8 +202,9 @@ main {
 
             display: flex;
             justify-content: space-between;
-
-            padding: 80px;
+            margin-bottom: 40px;
+            margin-top: 90px;
+            padding: 10px 50px;
             height: 550px;
 
             .img {
@@ -209,16 +212,18 @@ main {
                 border-radius: 20px;
                 width: 40%;
                 height: 100%;
+                padding: 50px;
 
                 img {
-
+                    border: 1px black solid;
                     max-height: 100%;
+                    max-width: 150%;
                     object-fit: cover;
                 }
             }
 
             .apartment-description {
-                width: 50%;
+                width: 45%;
 
                 padding: 20px;
 
@@ -253,7 +258,6 @@ main {
 
 
 
-
         .message-form {
             border-top: 0.1px solid gray;
 
@@ -278,20 +282,21 @@ main {
 
         display: flex;
         flex-wrap: wrap;
+        width: calc(100% / 1);
         justify-content: space-around;
         padding: 15px;
 
 
         .label-services {
             border: 1px solid blue;
-            width: 150px;
-            display: flex;
 
+            display: flex;
+            width: 150px;
             align-items: center;
 
             padding: 8px;
 
-            text-align: center;
+
         }
 
         i {
