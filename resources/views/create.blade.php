@@ -21,7 +21,7 @@
 
                         <div class="mb-3 col-12">
                             <label class="form-label" for="description"> <strong>Descrizione</strong></label>
-                            <textarea class="form-control" name="description" id="description" required maxlength="255">{{ old('description') }}</textarea>
+                            <textarea class="form-control" name="description" id="description" maxlength="255">{{ old('description') }}</textarea>
                             @error('description')
                                 <div class="alert alert-danger mt-2">{{ $message }}</div>
                             @enderror
