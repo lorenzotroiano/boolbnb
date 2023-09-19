@@ -116,6 +116,7 @@ class ApartmentController extends Controller
         return redirect()->route('show', $apartment->id);
     }
 
+
     // Show the sponsorship form
     public function showSponsorshipForm($id)
     {
@@ -140,7 +141,7 @@ class ApartmentController extends Controller
         })->first();
 
 
-        // Se esiste una sponsorizzazione e la sua end_date è nel futuro, 
+        // Se esiste una sponsorizzazione e la sua end_date è nel futuro,
         // usa quella come punto di partenza. Altrimenti, usa l'ora corrente.
         $now = ($lastSponsorship && $lastSponsorship->pivot->end_date > Carbon::now())
             ? Carbon::parse($lastSponsorship->pivot->end_date)
