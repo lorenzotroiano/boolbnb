@@ -21,6 +21,8 @@ export default {
     data() {
         return {
 
+            // Creo una copia locale perché VUE va contro il modificare le props direttamente
+            localApartments: this.apartments
         }
 
     },
@@ -47,15 +49,17 @@ export default {
         },
 
         handleDistanceFilter() {
-            const filteredApartments = this.apartments.filter(this.filterByDistanceRange);
+            const filteredApartments = this.localApartments.filter(this.filterByDistanceRange);
             this.updateApartments(filteredApartments);
         },
 
         filterApartmentsByDistance() {
-            const filteredApartments = this.apartments.filter(this.filterByDistanceRange);
-            this.$emit('apartments-updated', filteredApartments);
+            const filteredApartments = this.localApartments.filter(this.filterByDistanceRange);
+            this.localApartments = filteredApartments;
+            this.$emit('update-apartments', this.localApartments);
         },
-    }
+
+    },
 }
 </script>
 
@@ -101,7 +105,7 @@ export default {
                 :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
 
                 @filter-by-distance="$emit('filter-by-distance', $event)"
-                @update:distanceRange="$emit('update:distanceRange', $event)"
+                @update:distanceRange="tempDistanceRange => $emit('update:distanceRange', Number(tempDistanceRange))"
                 @close-sidebar="$emit('close-sidebar')"
                 @apply-filters="$emit('apply-filters')"
                 @apartments-updated="$emit('apartments-updated', $event)"

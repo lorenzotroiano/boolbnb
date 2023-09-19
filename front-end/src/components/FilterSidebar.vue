@@ -18,9 +18,12 @@ export default {
     },
     data() {
         return {
+            // Copia di selected services perché le props sono readonly
             selectedServicesCopy: [...this.selectedServices],
             
             filteredApartments: [],
+            // Copia di apartments perché le props sono readonly
+            localApartments: this.apartments,
 
             counterFilter: null,
             selectedRooms: null,
@@ -62,7 +65,7 @@ export default {
 
         // UPDATE DEL COUNTER DEGLI APPARTAMENTI IN "MOSTRA X APPARTAMENTI"
         updateCounter() {
-            const filteredApartments = this.apartments.filter((apartment) => {
+            const filteredApartments = this.localApartments.filter((apartment) => {
                 return (
                     this.filterByRooms(apartment) &&
                     this.filterByBathrooms(apartment) &&
@@ -112,10 +115,11 @@ export default {
             this.updateCounter();
         },
 
-        updateDistanceRange(event) {
-            this.$emit('update:distanceRange', event.target.value);
+        handleSliderChange() {
+            this.$emit('update:distanceRange', this.tempDistanceRange);
             this.updateCounter();
         },
+
         closeSidebar() {
             this.$emit('close-sidebar');
             this.fetchAllApartments();
@@ -193,14 +197,14 @@ export default {
                     return response.json();
                 })
                 .then(data => {
-                    this.apartments = data;
+                    this.localApartments = data;
                     this.filteredApartments = data;
                     this.updateCounter();
                 })
                 .catch(error => {
                     console.log('There was a problem with the fetch operation:', error.message);
                 });
-        }
+        },
     },
 
     // Watcher per eventi che controlla se la variabile passata da ApartmentHome cambia
@@ -230,9 +234,14 @@ export default {
     },
     computed: {
         filteredApartmentsCount() {
-            return this.counterFilter !== null ? this.counterFilter : (this.apartments ? this.apartments.length : 0);
+            return this.counterFilter !== null ? this.counterFilter : (this.localApartments ? this.localApartments.length : 0);
         },
     },
+    mounted() {
+
+        this.updateCounter();
+    }
+
 };
 </script>
 
@@ -248,10 +257,14 @@ export default {
         <!-- Sezione scrollabile dei filtri -->
         <div class="scrollable-section">
 
-            <!-- Filtri distanza -->
+            <!-- Distanza -->
             <div class="mb-3">
                 <label for="distanceRange" class="form-label">Distanza (km)</label>
-                <input type="range" class="form-range custom-range" v-model="tempDistanceRange" @input="updateCounter" />
+                <input 
+                    type="range" 
+                    class="form-range custom-range" 
+                    v-model="tempDistanceRange" 
+                    @change="handleSliderChange" />
                 <div>{{ tempDistanceRange }} km</div>
             </div>
 
@@ -323,7 +336,7 @@ export default {
         <div class="footer border-top">
             <button class="btn btn-outline-danger" @click="resetAllFilters">Cancella tutto</button>
             <button class="btn btn-dark" @click="applyFilters">
-                Mostra ({{ filteredApartmentsCount }}) alloggi
+                Mostra ({{ counterFilter  }}) alloggi
             </button>
         </div>
 

@@ -45,7 +45,7 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
-            distanceRange: 80000,
+            distanceRange: 80,
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             // Flag per vedere se ha caricato i dati
@@ -63,13 +63,14 @@ export default {
         },
         
         async getCoordinatesFromAddress(address) {
+            console.log("Received request to get coordinates for address:", address);
             const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
             console.log("Sending Request:", requestUrl);
-            console.log("Attempting to get coordinates for address:", address);  // Log the request
+            
 
             try {
                 const response = await axios.get(requestUrl);
-                console.log("Received Response:", response.data);  // Log the response
+                console.log("Coordinates received for", address, ":", response.data);
 
                 if (response.data && response.data.results && response.data.results.length) {
                     const result = response.data.results[0];
@@ -79,6 +80,8 @@ export default {
                     };
                     this.handleDistanceFilter();  // Filter apartments based on distance after setting the reference point
                     console.log("Reference point set:", this.referencePoint);
+                } else {
+                    console.warn("No results found for address:", address);
                 }
             } catch (error) {
                 console.error("Error fetching coordinates:", error);
@@ -86,11 +89,14 @@ export default {
         },
 
         updateApartments(filtered) {
+            console.log("Updating apartments list with:", filtered);
             this.apartments = filtered;
         },
         handleDistanceFilter() {
             const filteredApartments = this.originalApartments.filter(this.filterByDistanceRange);
             this.updateApartments(filteredApartments);
+            console.log("Filtered apartments based on distance:", filteredApartments);
+            console.log("Current distance range for filtering:", this.distanceRange);
         },
 
         filterByDistanceRange(apartment) {
@@ -98,8 +104,12 @@ export default {
 
             const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
 
+            console.log("Distance for apartment", apartment.id, ":", distance);
+            console.log("Coordinates for apartment X:", apartment.latitude, apartment.longitude);
             return distance <= this.distanceRange;
+            
         },
+        
     },
 
     // FILTRAGGIO ARRAY SECONDO FILTRI
@@ -176,13 +186,14 @@ export default {
 
         @search-clicked="isSearchClicked = true"
         @request-filter-by-distance="handleDistanceFilter"
-        @update:distanceRange="value => distanceRange = value"
+        @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
         @close-sidebar="isSidebarVisible = false"
         @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
-        @filter-by-distance="handleDistanceFilter"
+        
         @apply-filters="applyFilters" 
         @apartments-updated="updateApartments">
     </HeaderApp>
+    <!-- @filter-by-distance="handleDistanceFilter" -->
     <div class="container-fluid">
 
         <!-- LISTA APPARTAMENTI -->
