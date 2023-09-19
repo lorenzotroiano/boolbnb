@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
-import tt from '@tomtom-international/web-sdk-maps';
+// import tt from '@tomtom-international/web-sdk-maps';
+import * as tt from '@tomtom-international/web-sdk-maps';
 
 export default {
     data() {
@@ -18,31 +19,30 @@ export default {
 
     methods: {
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8001/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
-                this.map = tt.map({
-                    key: this.apiKey,
-                    container: this.$refs.map, // Usa il riferimento al div della mappa
-                    center: this.center, // Utilizza this.center come centro iniziale
-                    zoom: 15,
-
+                
+                this._nonReactiveMap = tt.map({
+                        container: 'map',
+                        key: this.apiKey,
+                        center: this.center,
+                        zoom: 12.5,
                 });
 
-                // Aggiungi un marker alle coordinate specificate
-
-
-                this.map.on('load', () => {
-
-                    new tt.Marker().setLngLat(this.center).addTo(this.map); // Utilizza this.center come posizione del marcatore
+                this._nonReactiveMap.on('load', () => {
+                    let marker = new tt.Marker().setLngLat(this.center);
+                    marker.addTo(this._nonReactiveMap);
                 });
+                
+
             } catch (error) {
                 console.error("Errore durante l'inizializzazione della mappa TomTom:", error);
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -55,7 +55,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -127,7 +127,7 @@ export default {
             <!-- Mappa -->
 
             <h3>Mappa</h3>
-            <div ref="map" style="width: 75%; margin: 30px auto; height: 400px;"></div>
+            <div ref="mapContainer" id="map" style="width: 75%; margin: 30px auto; height: 400px;"></div>
 
 
             <!-- Messaggi -->

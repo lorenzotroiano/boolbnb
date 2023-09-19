@@ -182,12 +182,12 @@ export default {
 
                 <!-- Logo immagine -->
                 <div class="logo">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
 
                 <!-- Logo mobile -->
                 <div class="logo-mobile">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
 
                 <!-- Searchbar -->
@@ -220,8 +220,8 @@ export default {
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
+                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
