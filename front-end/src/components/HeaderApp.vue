@@ -1,5 +1,11 @@
 <script>
+import axios from 'axios';
+
 import FilterSidebar from './FilterSidebar.vue';
+
+import { services } from '@tomtom-international/web-sdk-services';
+import tt from '@tomtom-international/web-sdk-maps';
+
 import { haversineDistance } from '../../utils';
 
 export default {
@@ -10,56 +16,86 @@ export default {
     props: [
         'services',
         'selectedServices',
-        'referencePoint',
-        'distanceRange',
         'isSidebarVisible',
         'apartments',
         'isSearchClicked',
         'tempSize',
-        'search'
     ],
     data() {
         return {
+            distanceRange: 50,
+            referencePoint: null,
+            search: '',
 
-            // Creo una copia locale perché VUE va contro il modificare le props direttamente
-            localApartments: this.apartments
-        }
-
+            // Dati da mandare a FilterSidebar per filtrare sugli appartamenti
+            // che escono dalla ricerca per distanza
+            apartmentsInRange: []
+        };
     },
     methods: {
-
         onSearch() {
+            if (!this.search.trim()) {
+                console.warn("Search value is empty, enter a city");
+                return;
+            }
             console.log("onSearch called with value:", this.search);
-            this.$emit('request-coordinates', this.search);
-            this.$emit('update:isSearchClicked', true); // Emette un evento quando viene eseguita una ricerca
+            this.getCoordinatesFromAddress(this.search);
         },
-
-        updateSearch(event) {
-            this.$emit('update:search', event.target.value);
-        },
-
        
-        // FILTRI DISTANZA
-        filterByDistanceRange(apartment) {
-            if (!this.referencePoint) return false;
-
-            const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
-
-            return distance <= this.distanceRange;  // Verifica solo che la distanza sia entro il raggio impostato
+        updateSearch(event) {
+            this.search = event.target.value;
         },
 
-        handleDistanceFilter() {
-            const filteredApartments = this.localApartments.filter(this.filterByDistanceRange);
-            this.updateApartments(filteredApartments);
+        handleSliderChange() {
+            this.filterByDistanceRange();
         },
 
-        filterApartmentsByDistance() {
-            const filteredApartments = this.localApartments.filter(this.filterByDistanceRange);
-            this.localApartments = filteredApartments;
-            this.$emit('update-apartments', this.localApartments);
+        filterByDistanceRange() {
+            if (!this.referencePoint || !this.apartments) return;
+
+            const filteredApartments = this.apartments.filter(apartment => {
+                const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+                return distance <= this.distanceRange;
+            });
+
+            this.$emit('update-apartments', filteredApartments);
+        },
+        
+        async getCoordinatesFromAddress(address) {
+            console.log("Received request to get coordinates for address:", address);
+            
+            const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
+
+            console.log("Sending Request:", requestUrl);
+            try {
+                const response = await axios.get(requestUrl);
+                console.log("Coordinates received for", address, ":", response.data);
+
+                if (response.data && response.data.results && response.data.results.length) {
+                    const result = response.data.results[0];
+                    this.referencePoint = {
+                        lat: result.position.lat,
+                        lon: result.position.lon
+                    };
+                    this.filterByDistanceRange();  // Chiamiamo la funzione corretta qui
+                    console.log("Reference point set:", this.referencePoint);
+                } else {
+                    console.warn("No results found for address:", address);
+                }
+            } catch (error) {
+                console.error("Error fetching coordinates:", error);
+            }
         },
 
+        handleSearchClick() {
+            this.isSearchClicked = true;
+        }, 
     },
+    watch: {
+        search(newSearch) {
+            this.search = newSearch;  // Aggiorniamo search quando search cambia
+        }
+    }
 }
 </script>
 
@@ -73,7 +109,7 @@ export default {
                     <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
 
-                <!-- Logo -->
+                <!-- Logo mobile -->
                 <div class="logo-mobile">
                     <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
@@ -86,6 +122,16 @@ export default {
                     </button>
                     <button @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
+                <!-- Distanza -->
+                <div class="mb-3">
+                        <label for="distanceRange" class="form-label">Distanza (km)</label>
+                        <input 
+                            type="range" 
+                            class="form-range custom-range" 
+                            v-model="distanceRange" 
+                            @change="handleSliderChange" />
+                        <div>{{ distanceRange }} km</div>
+                    </div>
 
                 <!-- Nav -->
                 <nav>
@@ -96,27 +142,32 @@ export default {
                 </nav>
             </div>
         </div>
+
         <div class="spacer" ref="spacer">
-        <!-- COMPONENTE SIDEBAR -->
-
-        <transition name="slide">
-            <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
-                :referencePoint="referencePoint" :distanceRange="distanceRange" :apartments="apartments"
-
-                @filter-by-distance="$emit('filter-by-distance', $event)"
-                @update:distanceRange="tempDistanceRange => $emit('update:distanceRange', Number(tempDistanceRange))"
-                @close-sidebar="$emit('close-sidebar')"
-                @apply-filters="$emit('apply-filters')"
-                @apartments-updated="$emit('apartments-updated', $event)"
-            ></FilterSidebar>
-        </transition>
+            <transition name="slide">
+                <FilterSidebar 
+                    v-show="isSidebarVisible" 
+                    :services="services" 
+                    :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" 
+                    :isSearchClicked="isSearchClicked" 
+                    :tempSize="tempSize"
+                    
+                    :apartments="apartments"
+                    
+    
+                    @close-sidebar="$emit('close-sidebar')"
+                    @apply-filters="$emit('apply-filters')"
+                    @apartments-updated="$emit('apartments-updated', $event)"
+                ></FilterSidebar>
+            </transition>
         </div>
+
         <!-- Overlay quando SIDEBAR è TRUE -->
         <div v-if="isSidebarVisible" class="overlay" @click="isSidebarVisible = false"></div>
     </header>
-    
 </template>
+
 
 <style lang="scss" scoped>
 @use "../styles/partials/variables" as *;

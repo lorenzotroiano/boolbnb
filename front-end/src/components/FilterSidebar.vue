@@ -22,16 +22,14 @@ export default {
             selectedServicesCopy: [...this.selectedServices],
             
             filteredApartments: [],
+
             // Copia di apartments perché le props sono readonly
-            localApartments: this.apartments,
+            // localApartments: this.apartments,
 
             counterFilter: null,
             selectedRooms: null,
             selectedBathrooms: null,
-            selectedSize: null,
-
-            tempDistanceRange: this.distanceRange,
-            
+            selectedSize: null,    
         };
     },
     methods: {
@@ -54,7 +52,6 @@ export default {
             this.selectedBathrooms = null;
             this.selectedSize = null;
             this.selectedServicesCopy = [];
-            this.fetchAllApartments();
         },
 
         // INIZIALIZZA I FILTRI RESETTANDO E FACENDO IL CONTEGGIO
@@ -65,7 +62,7 @@ export default {
 
         // UPDATE DEL COUNTER DEGLI APPARTAMENTI IN "MOSTRA X APPARTAMENTI"
         updateCounter() {
-            const filteredApartments = this.localApartments.filter((apartment) => {
+            const filteredApartments = this.apartments.filter((apartment) => {
                 return (
                     this.filterByRooms(apartment) &&
                     this.filterByBathrooms(apartment) &&
@@ -122,7 +119,6 @@ export default {
 
         closeSidebar() {
             this.$emit('close-sidebar');
-            this.fetchAllApartments();
         },
 
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
@@ -140,10 +136,6 @@ export default {
                 apiUrl += `&mq=${this.selectedSize}`;
             }
 
-            if (this.referencePoint) {
-                this.$emit('filter-by-distance', this.referencePoint);
-            }
-
             console.log(apiUrl);
 
             fetch(apiUrl)
@@ -157,6 +149,7 @@ export default {
                     this.filteredApartments = data;
                     this.$emit('apartments-updated', this.filteredApartments);
                     this.updateCounter();
+                    
                 })
                 .catch(error => {
                     console.log('There was a problem with the fetch operation:', error.message);
@@ -169,7 +162,6 @@ export default {
                 services: this.selectedServices,
             });
             this.$emit('apply-filters');
-            this.$emit('update:distanceRange', this.tempDistanceRange);
 
             this.closeSidebar();
             this.initializeFilters();
@@ -185,30 +177,17 @@ export default {
             document.body.style.paddingRight = '0px';
             document.body.style.overflow = '';
         },
-
-        fetchAllApartments() {
-            let apiUrl = `http://127.0.0.1:8001/api/v1/`;
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    this.localApartments = data;
-                    this.filteredApartments = data;
-                    this.updateCounter();
-                })
-                .catch(error => {
-                    console.log('There was a problem with the fetch operation:', error.message);
-                });
-        },
     },
 
-    // Watcher per eventi che controlla se la variabile passata da ApartmentHome cambia
     watch: {
+
+        // Watcher sugli apartments per fare l'update del counter
+        apartments: {
+            immediate: true,
+            handler() {
+                this.updateCounter();
+            }
+        },
 
         selectedRooms: 'updateCounter',
         selectedBathrooms: 'updateCounter',
@@ -230,7 +209,7 @@ export default {
             } else {
                 this.enableBodyScroll();
             }
-        }
+        },
     },
     computed: {
         filteredApartmentsCount() {
@@ -256,17 +235,6 @@ export default {
 
         <!-- Sezione scrollabile dei filtri -->
         <div class="scrollable-section">
-
-            <!-- Distanza -->
-            <div class="mb-3">
-                <label for="distanceRange" class="form-label">Distanza (km)</label>
-                <input 
-                    type="range" 
-                    class="form-range custom-range" 
-                    v-model="tempDistanceRange" 
-                    @change="handleSliderChange" />
-                <div>{{ tempDistanceRange }} km</div>
-            </div>
 
             <!-- Stanze -->
             <div class="mb-3">
