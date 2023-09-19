@@ -7,30 +7,18 @@
 
             <div class="row pb-3">
                 <h4 class="col-12 fw-bold">
-                    Benvenuto {{ Auth::user()->name }}!
+                    Benvenuto {{ Auth::user()->name }} !
                 </h4>
                 <p class="col-12 fs-6">
                     Benvenuto nella tua area personale! Qui potrai gestire facilmente i tuoi appartamenti con pieno
                     controllo.
                 </p>
             </div>
-
-            <nav id="navbarDashboard" class="mt-4">
-                <div class="container p-0">
-                    <ul class="row m-0 p-0 text-center">
-
-                        {{-- appartamenti --}}
-                        <li class="col-4 p-0 link" data-target="appartamenti" id="link-apart">
-                            {{ __('Appartamenti') }}
-                        </li>
-                    </ul>
-                </div>
-            </nav>
         </div>
         {{-- Appartamenti --}}
         <div class="container dashboard pt-4 pb-5 px-0">
             <div class="table-responsive">
-                <table class="table table-hover-dash table-borderless align-middle">
+                <table class="table table-dash table-borderless align-middle">
                     <thead class="table-light">
                         <tr class="border-bottom">
                             <th>Appartamenti pubblici</th>
@@ -75,8 +63,12 @@
                                                 @csrf
                                                 @method('delete')
 
-                                                <button class="btn-danger"
-                                                    onclick="return confirm('Sei sicuro di voler eliminare questo appartamento?');">Elimina</button>
+                                                <button type="submit"
+                                                    class="text-danger border-0 border bg-transparent elimina"
+                                                    title="Elimina Appartamento"
+                                                    onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
+                                                    Elimina appartamento</i>
+                                                </button>
                                             </form>
                                             <a href="{{ route('show', $apartment->id) }}"
                                                 class="text-decoration-none">Visualizza messaggi</a>
@@ -93,7 +85,7 @@
         {{-- Appartamenti privati --}}
         <div class="container dashboard pt-4 pb-5 px-0">
             <div class="table-responsive">
-                <table class="table table-hover-dash table-borderless align-middle">
+                <table class="table table-dash table-borderless align-middle">
                     <thead class="table-light">
                         <tr class="border-bottom">
                             <th>Appartamenti privati</th>
@@ -128,6 +120,7 @@
                                                     @endif
                                             </div>
                                         </div>
+                                    </td>
                                     <td class="my-1 azioni">
                                         <div class="d-flex gap-3">
                                             <a href="{{ route('edit', $apartment->id) }}"
@@ -138,10 +131,11 @@
                                                 @csrf
                                                 @method('delete')
 
-                                                <button type="submit" class="text-danger border-0 border bg-transparent"
+                                                <button type="submit"
+                                                    class="text-danger border-0 border bg-transparent elimina"
                                                     title="Elimina Appartamento"
                                                     onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
-                                                    Elimina appartamento</i>
+                                                    Elimina appartamento
                                                 </button>
                                             </form>
                                             <a href="{{ route('show', $apartment->id) }}"
@@ -157,8 +151,8 @@
         </div>
 
         {{-- CREATE --}}
-        <div class="text-center my-3">
-            <a href="{{ route('create') }}" class="text-decoration-none create-button">Crea un nuovo appartamento</a>
+        <div class="text-center py-3">
+            <a href="{{ route('create') }}" class="text-decoration-none create-apartament">Crea un nuovo appartamento</a>
         </div>
     </div>
     <style>
@@ -171,41 +165,8 @@
             padding-top: 40px;
         }
 
-        .container ul.row {
-            list-style-type: none;
-        }
-
-        li {
-            color: rgb(0, 0, 0);
-            font-size: 1.2rem;
-        }
-
-        li.active {
-            border-bottom: 4px solid #7c8cc6;
-            padding-bottom: 0.5rem;
-            color: #000000;
-            font-size: 1.4rem;
-        }
-
-        .container.dashboard-table {
-            display: none;
-        }
-
-        .table-responsive .table {
-
-            --bs-table-bg: transparent;
-        }
-
         .table-responsive tbody {
             background-color: #ffffff;
-        }
-
-        .table-hover-dash tbody tr:hover {
-            background-color: #7c8bc61c;
-        }
-
-        title - image a.apartment {
-            text-decoration: none;
         }
 
         .img img {
@@ -230,83 +191,41 @@
         }
 
         .table-responsive .azioni {
-            width: 20%;
-        }
-
-
-        #my-modal .modal {
-
-            display: none;
-            position: fixed;
-            z-index: 99999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 5px;
-        }
-
-        .modal-buttons {
-            text-align: right;
-            margin-top: 10px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .create-button {
-            font-size: 1.2rem;
-            color: #648be9;
-        }
-
-        .btn-danger {
-            border: 3px solid #ffffff;
-            background-color: #dc3545;
-            color: #ffffff;
-        }
-
-        .btn-danger :hover {
-            border: 3px solid #ffffff;
-            color: #ffffff;
-            background-color: #f54052ee;
-        }
-
-        .btn-danger :active {
-            border: 3px solid #ffffff !important;
-            color: #ffff !important;
-            background-color: #f54052ee;
+            width: 42%;
+            text-align: center;
 
         }
 
-
-        .btn-secondary {
-            background-color: #C6AB7C;
-            color: white;
-            border: 3px solid #ffffff;
+        .d-flex a {
+            font-size: 1rem;
+            transition: transform 0.5s ease-in-out;
+            color: #3b70ed;
         }
 
-        .btn-secondary:hover {
-            border: 3px solid #7c7dc6;
-            color: #7c7dc6;
-            background-color: #ffffff;
+        .d-flex a:hover {
+            transform: scale(1.14);
+            color: #0442d2;
         }
 
-        .btn-secondary :active {
-            color: #7d7cc6 !important;
+        .create-apartament {
+            font-size: 1.3rem;
+            color: #3b70ed;
+        }
+
+        .create-apartament:hover {
+            color: #0442d2;
+        }
+
+        .elimina {
+            font-size: 1rem !important;
+            transition: transform 0.5s ease-in-out !important;
+            color: rgb(222, 51, 51) !important;
+
+        }
+
+        .elimina:hover {
+            transform: scale(1.14) !important;
+            color: rgb(187, 0, 0) !important;
         }
     </style>
 @endsection

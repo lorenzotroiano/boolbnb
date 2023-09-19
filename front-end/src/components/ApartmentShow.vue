@@ -19,30 +19,30 @@ export default {
 
     methods: {
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
-                
+
                 this._nonReactiveMap = tt.map({
-                        container: 'map',
-                        key: this.apiKey,
-                        center: this.center,
-                        zoom: 12.5,
+                    container: 'map',
+                    key: this.apiKey,
+                    center: this.center,
+                    zoom: 12.5,
                 });
 
                 this._nonReactiveMap.on('load', () => {
                     let marker = new tt.Marker().setLngLat(this.center);
                     marker.addTo(this._nonReactiveMap);
                 });
-                
+
 
             } catch (error) {
                 console.error("Errore durante l'inizializzazione della mappa TomTom:", error);
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -55,7 +55,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -95,8 +95,6 @@ export default {
                         <p>{{ apartment.description }}</p>
                     </div>
 
-
-
                     <!-- Servizi -->
                     <span v-if="apartment && apartment.services && apartment.services.length > 0">Servizi
                         disponibili:</span>
@@ -116,13 +114,7 @@ export default {
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-
-
-
 
             <!-- Mappa -->
 

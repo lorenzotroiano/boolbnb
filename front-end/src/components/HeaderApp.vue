@@ -49,7 +49,7 @@ export default {
             console.log("onSearch called with value:", this.search);
             this.getCoordinatesFromAddress(this.search);
         },
-       
+
         updateSearch(event) {
             this.search = event.target.value;
             if (this.search.length >= 1) {  // Suggerisci solo se ci sono almeno 3 caratteri
@@ -74,9 +74,9 @@ export default {
 
             this.$emit('apartments-updated', this.apartmentsInRange);
         },
-        
+
         // SUGGESTIONS METHODS**************************
-    
+
         async fetchSuggestions(query) {
             const requestUrl = `https://api.tomtom.com/search/2/search/${query}.json?typeahead=true&limit=200&sortBy=relevance&categorySet=7315&countrySet=IT&language=it-IT&minFuzzyLevel=2&maxFuzzyLevel=3&key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
             try {
@@ -133,7 +133,7 @@ export default {
         // FETCH COORDINATES FROM THE ADDRESS THE USER INPUTS IN
         async getCoordinatesFromAddress(address) {
             console.log("Received request to get coordinates for address:", address);
-            
+
             const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
 
             console.log("Sending Request:", requestUrl);
@@ -160,7 +160,7 @@ export default {
         // Controlla se clicco la searchbar
         handleSearchClick() {
             this.isSearchClicked = true;
-        }, 
+        },
         hideSuggestions() {
             this.blurTimeout = setTimeout(() => {
                 this.suggestions = [];
@@ -192,14 +192,14 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch" @keyup.enter="onSearch" @focus="handleSearchClick"
-        @blur="hideSuggestions">
+                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch"
+                        @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
                     <!-- Suggerimenti -->
-                        <ul v-if="suggestions.length">
-                            <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-                                {{ suggestion }}
-                            </li>
-                        </ul>
+                    <ul v-if="suggestions.length">
+                        <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                            {{ suggestion }}
+                        </li>
+                    </ul>
                     <button @click="onSearch">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                     </button>
@@ -208,20 +208,17 @@ export default {
 
                 <!-- Distanza -->
                 <div class="mb-3">
-                        <label for="distanceRange" class="form-label">Distanza (km)</label>
-                        <input 
-                            type="range" 
-                            class="form-range custom-range" 
-                            v-model="distanceRange" 
-                            @change="handleSliderChange" />
-                        <div>{{ distanceRange }} km</div>
-                    </div>
+                    <label for="distanceRange" class="form-label">Distanza (km)</label>
+                    <input type="range" class="form-range custom-range" v-model="distanceRange"
+                        @change="handleSliderChange" />
+                    <div>{{ distanceRange }} km</div>
+                </div>
 
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
+                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
+                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
@@ -229,21 +226,11 @@ export default {
 
         <div class="spacer" ref="spacer">
             <transition name="slide">
-                <FilterSidebar 
-                    v-show="isSidebarVisible" 
-                    :services="services" 
-                    :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible" 
-                    :isSearchClicked="isSearchClicked" 
-                    :tempSize="tempSize"
-                    
-                    :apartments="referencePoint ? apartmentsInRange : apartments"
-                    
-    
-                    @close-sidebar="$emit('close-sidebar')"
-                    @apply-filters="$emit('apply-filters')"
-                    @apartments-updated="$emit('apartments-updated', $event)"
-                ></FilterSidebar>
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
+                    :apartments="referencePoint ? apartmentsInRange : apartments" @close-sidebar="$emit('close-sidebar')"
+                    @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
+                </FilterSidebar>
             </transition>
         </div>
 
@@ -330,7 +317,7 @@ header {
                         }
                     }
                 }
-             }
+            }
 
             .search:hover {
                 transition: transform 0.2s ease-in-out;
