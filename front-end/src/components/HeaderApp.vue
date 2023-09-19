@@ -7,6 +7,7 @@ import { services } from '@tomtom-international/web-sdk-services';
 import tt from '@tomtom-international/web-sdk-maps';
 
 import { haversineDistance } from '../../utils';
+import { levenshtein } from '../../utils';
 
 export default {
     name: "HeaderApp",
@@ -18,7 +19,6 @@ export default {
         'selectedServices',
         'isSidebarVisible',
         'apartments',
-        'isSearchClicked',
         'tempSize',
     ],
     data() {
@@ -27,12 +27,20 @@ export default {
             referencePoint: null,
             search: '',
 
+            isSearchClicked: Boolean,
             // Dati da mandare a FilterSidebar per filtrare sugli appartamenti
             // che escono dalla ricerca per distanza
-            apartmentsInRange: []
+            apartmentsInRange: [],
+
+            // Suggerimenti
+            suggestions: [],
+            // Timeout per il blur
+            blurTimeout: null
         };
     },
     methods: {
+
+        // SEARCH METHODS************************************************************
         onSearch() {
             if (!this.search.trim()) {
                 console.warn("Search value is empty, enter a city");
@@ -44,8 +52,14 @@ export default {
        
         updateSearch(event) {
             this.search = event.target.value;
+            if (this.search.length >= 1) {  // Suggerisci solo se ci sono almeno 3 caratteri
+                this.fetchSuggestions(this.search);
+            } else {
+                this.suggestions = [];  // Pulisci i suggerimenti
+            }
         },
 
+        // FILTERING BY DISTANCE METHODS**********************************************
         handleSliderChange() {
             this.filterByDistanceRange();
         },
@@ -53,14 +67,70 @@ export default {
         filterByDistanceRange() {
             if (!this.referencePoint || !this.apartments) return;
 
-            const filteredApartments = this.apartments.filter(apartment => {
+            this.apartmentsInRange = this.apartments.filter(apartment => {
                 const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
                 return distance <= this.distanceRange;
             });
 
-            this.$emit('update-apartments', filteredApartments);
+            this.$emit('apartments-updated', this.apartmentsInRange);
         },
         
+        // SUGGESTIONS METHODS**************************
+    
+        async fetchSuggestions(query) {
+            const requestUrl = `https://api.tomtom.com/search/2/search/${query}.json?typeahead=true&limit=200&sortBy=relevance&categorySet=7315&countrySet=IT&language=it-IT&minFuzzyLevel=2&maxFuzzyLevel=3&key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
+            try {
+                const response = await axios.get(requestUrl);
+                if (response.data && response.data.results) {
+                    this.suggestions = response.data.results.map(result => {
+                        let suggestionText = result.address.municipality || result.address.freeformAddress;
+                        if (result.address.administrativeAreaLevel2) {
+                            suggestionText += `, ${result.address.administrativeAreaLevel2}`;
+                        }
+                        if (result.address.country) {
+                            suggestionText += `, ${result.address.country}`;
+                        }
+                        return suggestionText;
+                    });
+
+                    // Remove duplicates
+                    this.suggestions = [...new Set(this.suggestions)];
+
+                    // Score each suggestion
+                    const scoreSuggestion = (suggestion) => {
+                        let score = 0;
+
+                        // Exact match
+                        if (suggestion.toLowerCase() === query.toLowerCase()) {
+                            score += 1000;  // Assigning a high score for exact matches
+                        }
+
+                        // Use Levenshtein distance for similarity
+                        score -= levenshtein(query, suggestion);  // Subtracting to make closer matches have higher scores
+
+                        return score;
+                    }
+
+                    // Sort based on scores
+                    this.suggestions.sort((a, b) => scoreSuggestion(b) - scoreSuggestion(a));  // Higher scores come first
+
+                    // Optionally, you can limit the suggestions again to the top 3 matches.
+                    this.suggestions = this.suggestions.slice(0, 3);
+                }
+            } catch (error) {
+                console.error("Error fetching suggestions:", error);
+            }
+        },
+
+        selectSuggestion(suggestion) {
+            clearTimeout(this.blurTimeout);
+            this.search = suggestion;
+            this.suggestions = [];
+            this.onSearch();
+        },
+
+
+        // FETCH COORDINATES FROM THE ADDRESS THE USER INPUTS IN
         async getCoordinatesFromAddress(address) {
             console.log("Received request to get coordinates for address:", address);
             
@@ -87,9 +157,15 @@ export default {
             }
         },
 
+        // Controlla se clicco la searchbar
         handleSearchClick() {
             this.isSearchClicked = true;
         }, 
+        hideSuggestions() {
+            this.blurTimeout = setTimeout(() => {
+                this.suggestions = [];
+            }, 150);  // ritardo di 200ms
+        }
     },
     watch: {
         search(newSearch) {
@@ -116,12 +192,20 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch">
+                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch" @keyup.enter="onSearch" @focus="handleSearchClick"
+        @blur="hideSuggestions">
+                    <!-- Suggerimenti -->
+                        <ul v-if="suggestions.length">
+                            <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                                {{ suggestion }}
+                            </li>
+                        </ul>
                     <button @click="onSearch">
                         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                     </button>
                     <button @click="$emit('toggle-sidebar')">Filtri</button>
                 </div>
+
                 <!-- Distanza -->
                 <div class="mb-3">
                         <label for="distanceRange" class="form-label">Distanza (km)</label>
@@ -153,7 +237,7 @@ export default {
                     :isSearchClicked="isSearchClicked" 
                     :tempSize="tempSize"
                     
-                    :apartments="apartments"
+                    :apartments="referencePoint ? apartmentsInRange : apartments"
                     
     
                     @close-sidebar="$emit('close-sidebar')"
@@ -217,11 +301,40 @@ header {
                 margin: 20px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
-            }
+                position: relative;
+
+                ul {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    background-color: white;
+                    border: 1px solid #ccc;
+                    width: 100%;
+                    list-style-type: none;
+                    padding: 0;
+                    z-index: 10;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                    li {
+                        padding: 10px;
+                        cursor: pointer;
+                        border-bottom: 1px solid #eee;
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+
+                        &:hover {
+                            background-color: #f5f5f5;
+                        }
+                    }
+                }
+             }
 
             .search:hover {
                 transition: transform 0.2s ease-in-out;
             }
+
 
             input {
                 border: none;

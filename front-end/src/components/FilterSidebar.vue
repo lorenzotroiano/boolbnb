@@ -1,4 +1,5 @@
 <script>
+
 export default {
     props: {
         selectedServices: {
@@ -123,38 +124,18 @@ export default {
 
         // Metodo per gestire l'applicazione dei filtri e gli emit al component padre ApartmentHome
         applyFilters() {
-            let apiUrl = `http://127.0.0.1:8001/api/v1/?services=${this.selectedServicesCopy.join(",")}`;
+            this.filteredApartments = this.apartments.filter((apartment) => {
+                return (
+                    this.filterByRooms(apartment) &&
+                    this.filterByBathrooms(apartment) &&
+                    this.filterBySize(apartment) &&
+                    this.filterByServices(apartment)
+                );
+            });
 
-            if (this.selectedRooms) {
-                apiUrl += `&room=${this.selectedRooms}`;
-            }
-            if (this.selectedBathrooms) {
-                apiUrl += `&bathroom=${this.selectedBathrooms}`;
-            }
-
-            if (this.selectedSize !== null) {
-                apiUrl += `&mq=${this.selectedSize}`;
-            }
-
-            console.log(apiUrl);
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    this.filteredApartments = data;
-                    this.$emit('apartments-updated', this.filteredApartments);
-                    this.updateCounter();
-                    
-                })
-                .catch(error => {
-                    console.log('There was a problem with the fetch operation:', error.message);
-                });
-
+            this.$emit('apartments-updated', this.filteredApartments);
+            this.updateCounter();
+            
             this.$emit('update-filters', {
                 rooms: this.selectedRooms,
                 bathrooms: this.selectedBathrooms,
