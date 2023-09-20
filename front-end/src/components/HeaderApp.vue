@@ -178,47 +178,46 @@ export default {
 <template>
     <header>
         <div class="container">
-            <div class="flex align-items-center">
+            <div id="bar" class="flex align-items-center">
 
                 <!-- Logo immagine -->
                 <div class="logo">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
                 </div>
 
                 <!-- Logo mobile -->
                 <div class="logo-mobile">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
 
-                <!-- Searchbar -->
-                <div class="search">
-                    <div>
-                        <!-- Distanza -->
-                        <div class="range-bar">
-                            <span class="testo-range">In un raggio di {{ distanceRange }} km</span>
-                            <input type="range" class="form-range custom-range" v-model="distanceRange"
-                                @change="handleSliderChange" />
+                <div id="find">
+                    <!-- Distanza -->
+                    <div class="range-bar">
+                        <div class="testo-range">In un raggio di <span>{{ distanceRange }} km</span></div>
+                        <input type="range" class="form-range custom-range" v-model="distanceRange"
+                            @change="handleSliderChange" />
+                    </div>
 
+                    <!-- Searchbar -->
+                    <div class="search">
+                        <div class="d-flex">
+                            <input type="text" placeholder="Cerca" :value="search" @input="updateSearch"
+                                @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
+                            <!-- Suggerimenti -->
+                            <ul v-if="suggestions.length">
+                                <li v-for="suggestion in suggestions" :key="suggestion"
+                                    @click="selectSuggestion(suggestion)">
+                                    {{ suggestion }}
+                                </li>
+                            </ul>
+                            <button class="me-3" @click="onSearch">
+                                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                            </button>
+                            <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <input type="text" placeholder="Cerca" :value="search" @input="updateSearch" @keyup.enter="onSearch"
-                            @focus="handleSearchClick" @blur="hideSuggestions">
-                        <!-- Suggerimenti -->
-                        <ul v-if="suggestions.length">
-                            <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
-                                {{ suggestion }}
-                            </li>
-                        </ul>
-                        <button class="me-3" @click="onSearch">
-                            <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                        </button>
-                        <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
-                    </div>
-
-
-
                 </div>
+
 
 
                 <!-- Nav -->
@@ -248,177 +247,7 @@ export default {
 
 
 <style lang="scss" scoped>
+@use '../styles/general.scss';
+@use '../styles/partials/_header.scss';
 @use "../styles/partials/variables" as *;
-
-header {
-    position: fixed;
-    width: 100%;
-    height: 120px;
-    background-color: white;
-    z-index: 999;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-    display: flex;
-    align-items: center;
-
-    .container {
-        max-width: 95%;
-        margin: 0 auto;
-
-        .flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-
-            .logo {
-                width: 180px;
-
-                img {
-                    max-width: 100%;
-                    max-height: 100%;
-                    border-radius: 18px;
-                }
-            }
-
-            @media screen and (min-width: 1200px) {
-                .logo-mobile {
-                    display: none;
-                }
-            }
-
-            .search {
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border-radius: 18px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px 30px;
-                box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-                cursor: pointer;
-                position: relative;
-
-                &:hover {
-                    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-                }
-
-                ul {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    background-color: white;
-                    border: 1px solid #ccc;
-                    width: 100%;
-                    list-style-type: none;
-                    padding: 0;
-                    z-index: 10;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-                    li {
-                        padding: 10px;
-                        cursor: pointer;
-                        border-bottom: 1px solid #eee;
-
-                        &:last-child {
-                            border-bottom: none;
-                        }
-
-                        &:hover {
-                            background-color: #f5f5f5;
-                        }
-                    }
-                }
-            }
-
-            .range-bar {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-right: 24px;
-            }
-
-            .custom-range {
-                width: 70%;
-
-            }
-
-            input {
-                border: none;
-                padding: 4px;
-                border-radius: 20px;
-                outline: none;
-
-            }
-
-            button {
-                background-color: $color-blue-hover;
-                color: #fff;
-                border: none;
-                width: 30px;
-                height: 30px;
-                border-radius: 30px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            button:hover {
-                background-color: $color-dark-purple;
-            }
-
-            .menu {
-                display: flex;
-                align-items: center;
-                width: 40%;
-
-
-                li {
-                    margin: 0 12px;
-
-                    .button-52 {
-                        padding: 8px 22px;
-                        text-decoration: none;
-                        background-color: #6474fc;
-                        color: #fff;
-                        border-radius: 18px;
-                        transition: transform 0.4s, box-shadow 0.2s;
-                    }
-
-                    .button-52:hover {
-                        transform: scale(1.05);
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-                    }
-                }
-
-
-            }
-        }
-    }
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
-@media screen and (max-width:1200px) {
-    .logo {
-        display: none;
-    }
-
-    .logo-mobile {
-        width: 60px;
-        display: block;
-
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 80px;
-        }
-    }
-}
 </style>
