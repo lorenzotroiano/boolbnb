@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 // Importo il model
@@ -64,19 +65,9 @@ class GuestController extends Controller
         $view->date = now();
         $view->save();
 
-        // Ottieni tutti i nomi delle immagini dalla cartella 'images'
-        $allImages = Storage::disk('public')->files('images');
-
-        // Mescola le immagini in modo casuale
-        shuffle($allImages);
-
-        // Prendi solo le prime 3 immagini
-        $randomImages = array_slice($allImages, 0, 3);
-
         return response()->json([
             'apartment' => $apartment,
             'apartmentsponsors' => $apartmentsponsors,
-            'randomImages' => $randomImages
         ]);
     }
 

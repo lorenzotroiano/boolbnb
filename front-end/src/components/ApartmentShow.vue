@@ -23,11 +23,7 @@ export default {
     },
 
     methods: {
-        getCoverUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
-        },
-
-        getImagesUrl(imageName) {
+        getImageUrl(imageName) {
             return `http://127.0.0.1:8001/storage/${imageName}`;
         },
         initializeTomTomMap() {
@@ -51,7 +47,7 @@ export default {
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -64,12 +60,9 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
-                this.apartment.images = response.data.randomImages;
-                console.log(this.apartment.images);
-                console.log(this.getImagesUrl);
                 this.center = [this.apartment.longitude, this.apartment.latitude];
                 this.initializeTomTomMap(); // Move this inside the then() block after setting this.center
             })
@@ -103,11 +96,17 @@ export default {
                 
                 <!-- Colonna dell'immagine per schermi grandi -->
                 <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
-                    <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image" class="img-fluid main-image mb-2 rounded-top">
+                    <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image" class="img-fluid main-image mb-2 rounded-top">
                     <div class="d-flex secondary-images-container rounded-bottom">
                         <!-- Qui puoi inserire le 3 immagini piccole alla destra della principale -->
-                        <div v-if="apartment.images">
-                            <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)" :alt="apartment.name" class="secondary-image">  <!-- removed the wrapping div and added a class to the image -->
+                        <div class="d-flex" v-if="apartment && apartment.images">
+                            <img 
+                                class="secondary-image"
+                                v-for="image in apartment.images" 
+                                :key="image.id"
+                                :src="getImageUrl(image.image)"
+                                alt="Image"
+                            >
                         </div>
                     </div>
                 </div>
@@ -138,7 +137,7 @@ export default {
                         </div>
                         <!-- Mappa -->
                         <div class="mt-3">
-                            <div ref="mapContainer" id="map" class="rounded map-lg align-items-end"></div>
+                            <div ref="mapContainer" id="map" class="map-lg align-items-end" style="border-radius: 10px;"></div>
                         </div>
                     </div>
                 </div>
@@ -200,6 +199,8 @@ main {
     .secondary-images-container {
         display: flex;
         height: 34%;
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
     }
 
     .secondary-image {

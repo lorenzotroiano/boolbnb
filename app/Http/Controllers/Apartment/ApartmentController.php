@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apartment;
 
 use App\Models\ApartmentSponsor;
+use App\Models\Image;
 use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -111,15 +112,14 @@ class ApartmentController extends Controller
         // Crea un nuovo appartamento utilizzando i dati validati e associati
         $apartment = Apartment::create($data);
 
-        // Immagini oltre quella di copertina
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = Storage::put('apartment_images', $image);
-    
-                $apartment->images()->create([
-                    'path' => $path
-                ]);
-            }
+        // Carica le immagini extra
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('images', 'public');
+            
+            // Creazione di un nuovo record Image e associarlo all'appartamento corrente
+            $newImage = new Image();
+            $newImage->image = $path;
+            $apartment->images()->save($newImage);
         }
 
         // Associa i servizi selezionati all'appartamento
@@ -274,13 +274,9 @@ class ApartmentController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = Storage::put('apartment_images', $image);
-        
-                $apartment->images()->create([
-                    'path' => $path
-                ]);
+                $apartment->images()->create(['path' => $path]);
             }
         }
-
         // Aggiorna l'appartamento con i dati validati
         $apartment->update($data);
 
@@ -360,7 +356,8 @@ class ApartmentController extends Controller
             "visible" => "required|boolean",
             "cover" => "image",
             "services" => "required|array|exists:services,id",
-            "images.*" => "image|max:4096",
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:10000',
+            'images' => 'array|max:3',
         ];
     }
 
