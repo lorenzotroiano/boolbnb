@@ -24,13 +24,11 @@ export default {
 
     methods: {
         getCoverUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`;
-            return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8001/storage/${imageName}`;
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`;
-            return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8001/storage/${imageName}`; 
         },
         initializeTomTomMap() {
             try {
@@ -110,17 +108,15 @@ export default {
                 <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
                     <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
                         class="img-fluid main-image mb-2 rounded-top">
-                    <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
-                        class="img-fluid main-image mb-2 rounded-top">
                     <div class="d-flex secondary-images-container rounded-bottom">
-                        <!-- Qui puoi inserire le 3 immagini piccole alla destra della principale -->
-                        <div v-if="apartment.images">
-                            <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)"
-                                :alt="apartment.name" class="secondary-image">
-                            <!-- removed the wrapping div and added a class to the image -->
-                            <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)"
-                                :alt="apartment.name" class="secondary-image">
-                            <!-- removed the wrapping div and added a class to the image -->
+                        <div v-if="apartment && apartment.images" style="display: flex;justify-content: space-between;">
+                            <img 
+                                class="secondary-image"
+                                v-for="image in apartment.images" 
+                                :key="image.id"
+                                :src="getImagesUrl(image.image)"
+                                alt="Image"
+                            >
                         </div>
                     </div>
                 </div>
@@ -240,10 +236,12 @@ main {
     .secondary-images-container {
         display: flex;
         height: 34%;
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
     }
 
     .secondary-image {
-        width: 33.33%;
+        width: calc((100% / 3) - 1%);
         height: 100%;
         object-fit: cover;
     }
