@@ -86,7 +86,8 @@
                                 <label for="cover" class="form-label col-12"><strong>Immagine principale
                                         dell'appartamento </strong></label>
                                 <div class="col-6">
-                                    <input type="file" name="cover" id="cover" value="{{ $apartment->cover }}">
+                                    <input type="file" class="form-control" name="cover" id="cover"
+                                        value="{{ $apartment->cover }}">
                                     @error('cover')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -103,31 +104,36 @@
                         </div>
 
                         <div class="mb-3 col-12">
-                            <label class="form-label" for="service"><strong>Servizi</strong></label>
-                            <div id="checkbox-feedback" class="invalid-feedback"></div>
-                            <div class="row ps-2">
-                                @foreach ($services as $service)
-                                    <div class="form-check col-12 col-md-6 ps-0">
-                                        <div class="d-flex">
-                                            <input class="form-check-input" type="checkbox" value="{{ $service->id }}"
-                                                name="services[]" id="service-{{ $service->id }}"
-                                                {{ $apartment->services->contains($service->id) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="service-{{ $service->id }}">
-                                                {{ $service->name }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            <label for="url" class="form-label"> <strong>Inserire l'album immagini</strong></label>
+                            <input type="file" class="form-control" id="images" name="images[]" multiple>
                         </div>
-
-                        <!-- Bottone di submit per inviare il form -->
-                        <button id="submit" class="btn btn-success my-3 w-25 col-12 m-auto"
-                            type="submit">Salva</button>
                     </div>
-                </form>
+
+                    <div class="mb-3 col-12">
+                        <label class="form-label" for="service"><strong>Servizi</strong></label>
+                        <div id="checkbox-feedback" class="invalid-feedback"></div>
+                        <div class="row ps-2">
+                            @foreach ($services as $service)
+                                <div class="form-check col-12 col-md-6 ps-0">
+                                    <div class="d-flex">
+                                        <input class="form-check-input" type="checkbox" value="{{ $service->id }}"
+                                            name="services[]" id="service-{{ $service->id }}"
+                                            {{ $apartment->services->contains($service->id) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="service-{{ $service->id }}">
+                                            {{ $service->name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Bottone di submit per inviare il form -->
+                    <button id="submit" class="btn btn-success my-3 w-25 col-12 m-auto" type="submit">Salva</button>
             </div>
+            </form>
         </div>
+    </div>
     </div>
 
     <style>
@@ -142,7 +148,7 @@
         }
 
         #submit {
-            background-color: #7c8bc6;
+            background-color: #2249e6;
             color: white;
             border: 3px solid transparent;
         }

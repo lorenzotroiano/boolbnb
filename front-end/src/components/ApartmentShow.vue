@@ -25,15 +25,21 @@ export default {
     methods: {
         getCoverUrl(imageName) {
             return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
 
         getImagesUrl(imageName) {
+            return `http://127.0.0.1:8000/storage/${imageName}`;
             return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
 
                 this._nonReactiveMap = tt.map({
+                    container: 'map',
+                    key: this.apiKey,
+                    center: this.center,
+                    zoom: 11,
                     container: 'map',
                     key: this.apiKey,
                     center: this.center,
@@ -99,8 +105,11 @@ export default {
                         apartment.address }}</span>
                 </div>
 
+
                 <!-- Colonna dell'immagine per schermi grandi -->
                 <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
+                    <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
+                        class="img-fluid main-image mb-2 rounded-top">
                     <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
                         class="img-fluid main-image mb-2 rounded-top">
                     <div class="d-flex secondary-images-container rounded-bottom">
@@ -109,9 +118,13 @@ export default {
                             <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)"
                                 :alt="apartment.name" class="secondary-image">
                             <!-- removed the wrapping div and added a class to the image -->
+                            <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)"
+                                :alt="apartment.name" class="secondary-image">
+                            <!-- removed the wrapping div and added a class to the image -->
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Colonna delle informazioni -->
                 <div class="col-lg-6 col-md-12">
@@ -149,6 +162,7 @@ export default {
                 </div>
 
                 <!-- Mappa per schermi grandi (posizionata qui per fluire sotto la descrizione) -->
+
 
 
             </div>
@@ -326,12 +340,16 @@ main {
 @media (max-width: 992px) {
 
     /* Fino a schermi medium (col-md) */
-    .apartment-info .d-flex {
-        max-height: 40px;
-    }
-}
 
-.margin-top-140 {
-    padding-top: 140px;
-}
+    @media (max-width: 992px) {
+
+        /* Fino a schermi medium (col-md) */
+        .apartment-info .d-flex {
+            max-height: 40px;
+        }
+    }
+
+    .margin-top-140 {
+        padding-top: 140px;
+    }
 </style>
