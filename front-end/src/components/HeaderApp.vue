@@ -204,7 +204,7 @@ export default {
                         <button class="me-3" @click="onSearch">
                             <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                         </button>
-                        <button class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                        <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
                     </div>
 
                     <div class="d-flex w-50 align-items-center">
@@ -414,4 +414,43 @@ header {
 }
 
 // Login e registrati
+.button-52 {
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    padding: 13px 20px 13px;
+    outline: 0;
+    border: 1px solid rgba(122, 122, 122, 0.404);
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    color: white;
+    text-decoration: none;
+}
+
+.button-52:after {
+    content: "";
+    background-color: $color-dark-purple;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    top: 7px;
+    left: 7px;
+    transition: 0.2s;
+}
+
+.button-52:hover:after {
+    top: 0px;
+    left: 0px;
+}
+
+@media (min-width: 768px) {
+    .button-52 {
+        padding: 13px 50px 13px;
+    }
+}
 </style>
