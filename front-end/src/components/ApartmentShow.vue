@@ -130,7 +130,7 @@ export default {
                     <!-- Info Appartamento -->
                     <div class="apartment-info mb-3 mb-lg-0">
                         <p>{{ apartment.description }}</p>
-                        <div class="d-flex flex-wrap justify-content-start">
+                        <div id="icon-wrapper" class="d-flex flex-wrap justify-content-start">
                             <!-- Icona della casa -->
                             <div
                                 class="d-flex align-items-center justify-content-center mb-2 text-white info-color rounded p-1 me-2">
@@ -171,9 +171,9 @@ export default {
             <div class="flex-section">
 
                 <div class="services mt-4">
-                    <h3 class="text-start">Servizi:</h3>
-                    <ul class="text-start">
-                        <li class="list-service text-start" v-for="service in  apartment.services " :key="service.id">
+                    <h3>Servizi</h3>
+                    <ul>
+                        <li class="list-service" v-for="service in  apartment.services " :key="service.id">
                             <i :class="service.icon"></i>
                             <span>{{ service.name }}</span>
                         </li>
@@ -182,7 +182,7 @@ export default {
 
 
                 <div class="message-form mt-4">
-                    <h3 class="text-center">Invia un messaggio</h3>
+                    <h3 class="text-center">Contattaci</h3>
                     <form @submit.prevent="sendMessage">
                         <div class="mb-3">
                             <label for="name" class="form-label">Nome</label>
@@ -199,7 +199,7 @@ export default {
                             <textarea class="form-control" id="body" rows="3" v-model="formData.body" required
                                 placeholder="Inserisci testo.."></textarea>
                         </div>
-                        <div class="text-center"> <button type="submit" class="btn btn-primary">Invia</button></div>
+                        <div id=" " class="text-center d-flex justify-content-center"> <button type="submit" class="btn btn-primary">Invia</button></div>
                     </form>
                 </div>
             </div>
@@ -283,7 +283,7 @@ main {
                     color: $color-blue-hover;
                     ;
 
-                    margin: 0 50px 15px -26px;
+                     
 
                     i {
                         margin-right: 10px;
@@ -330,27 +330,75 @@ main {
 
 
 
-@media (max-width: 2048px) {
+@media (max-width: 2048px) and (min-width: 993px) {
 
     /* Fino a schermi medium (col-md) */
     .apartment-info .d-flex {
         max-height: 40px;
         flex-grow: 1;
     }
+    main .flex-section .services ul {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        gap: 15px;
+    }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 992px) { 
+    // Questo si applica a schermi piccoli fino a medium (col-md)
 
-    /* Fino a schermi medium (col-md) */
+    #icon-wrapper {
+        display: flex;
+        width: 100%;
+    }
+    .col-lg-6, .col-md-12 {
+        width: 100%;
+        margin-bottom: 20px;  // margine aggiunto per separare le sezioni
+    }
 
-    @media (max-width: 992px) {
+    main, .flex-section, .message-form, .services {
+        text-align: center;
+        width: 100%;
+    }
 
-        /* Fino a schermi medium (col-md) */
-        .apartment-info .d-flex {
-            max-height: 40px;
+    main .flex-section .services {
+        width: 100%;
+    }
+
+    h3 .text-start {
+        text-align: center;
+    }
+
+    // Ridimensiona la larghezza dei servizi e del modulo messaggi 
+    // in modo che non occupino troppo spazio
+    .flex-section {
+        flex-direction: column;
+
+        .services, .message-form {
+            width: 100%;
+            text-align: center;
         }
     }
 
-    
+    // Centra gli elementi interni
+    .apartment-info .d-flex {  /* Dato che ci sono 3 buttons, ognuno dovrebbe prendere circa 1/3 dello spazio */
+        box-sizing: border-box;
+    } 
+    .message-form form .text-center, 
+    .services ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+        justify-content: center;
+    }
+    .services {
+        text-align: center;
+    }
+
+    main .message-form .btn {
+        width: 70px;
+        text-align: center;
+    }
 }
 </style>
