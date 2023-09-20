@@ -2,8 +2,13 @@
 import axios from 'axios';
 // import tt from '@tomtom-international/web-sdk-maps';
 import * as tt from '@tomtom-international/web-sdk-maps';
+import HeaderApp from './HeaderApp.vue';
 
 export default {
+    name: 'ApartmentShow',
+    components: {
+        HeaderApp
+    },
     data() {
         return {
             apartment: [],
@@ -18,7 +23,11 @@ export default {
     },
 
     methods: {
-        getImageUrl(imageName) {
+        getCoverUrl(imageName) {
+            return `http://127.0.0.1:8001/storage/${imageName}`;
+        },
+
+        getImagesUrl(imageName) {
             return `http://127.0.0.1:8001/storage/${imageName}`;
         },
         initializeTomTomMap() {
@@ -28,7 +37,7 @@ export default {
                         container: 'map',
                         key: this.apiKey,
                         center: this.center,
-                        zoom: 12.5,
+                        zoom: 11,
                 });
 
                 this._nonReactiveMap.on('load', () => {
@@ -58,6 +67,9 @@ export default {
         axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
+                this.apartment.images = response.data.randomImages;
+                console.log(this.apartment.images);
+                console.log(this.getImagesUrl);
                 this.center = [this.apartment.longitude, this.apartment.latitude];
                 this.initializeTomTomMap(); // Move this inside the then() block after setting this.center
             })
@@ -74,90 +86,90 @@ export default {
 </script>
 
 <template>
+    <HeaderApp></HeaderApp>
     <link rel='stylesheet' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.14.0/maps/maps.css'>
     <main>
         <div class="container">
-            <h1>{{ apartment.name }}</h1>
-            <span class="address"> <i class="fa-solid fa-map"></i>- {{ apartment.address }}</span>
-            <div class="flex-info">
-                <div class="img">
-                    <img v-if="apartment.cover" :src="getImageUrl(apartment.cover)" alt="Apartment Image">
+            
+            
+            
+            
+                
+            <div class="row margin-top-140">
+                <div>
+                    <span>{{ apartment.name }}</span>
+                    <span class="address d-block text-secondary mb-3"> <i class="fa-solid fa-map"></i> - {{ apartment.address }}</span>
                 </div>
-
-                <div class="apartment-description">
-                    <h3>Info Appartamento</h3>
-                    <div class="description-flex">
-                        <span class="">Stanze: {{ apartment.room }}</span>
-                        <span class="">Bagni: {{ apartment.bathroom }}</span>
-                        <span class="">Mq: {{ apartment.mq }}</span>
+                
+                <!-- Colonna dell'immagine per schermi grandi -->
+                <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
+                    <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image" class="img-fluid main-image mb-2 rounded-top">
+                    <div class="d-flex secondary-images-container rounded-bottom">
+                        <!-- Qui puoi inserire le 3 immagini piccole alla destra della principale -->
+                        <div v-if="apartment.images">
+                            <img v-for="image in apartment.images" :key="image" :src="getImagesUrl(image)" :alt="apartment.name" class="secondary-image">  <!-- removed the wrapping div and added a class to the image -->
+                        </div>
                     </div>
-                    <div class="only-description">
+                </div>
+                
+                <!-- Colonna delle informazioni -->
+                <div class="col-lg-6 col-md-12">
+                    <!-- Info Appartamento -->
+                    <div class="apartment-info mb-3 mb-lg-0">
                         <p>{{ apartment.description }}</p>
-                    </div>
-
-
-
-                    <!-- Servizi -->
-                    <span v-if="apartment && apartment.services && apartment.services.length > 0">Servizi
-                        disponibili:</span>
-                    <span v-else>Nessun servizio disponibile</span>
-
-                    <div class="services" v-if="apartment && apartment.services && apartment.services.length > 0">
-                        <!-- Centra gli elementi orizzontalmente -->
-                        <div class="" v-for="service in apartment.services" :key="service.id">
-                            <!-- Riduci la larghezza delle colonne per fare spazio -->
-                            <div class="">
-                                <div class="label-services">
-                                    <i :class="service.icon" class="service-icon"></i>
-                                    <!-- Riduci la dimensione dell'icona -->
-                                    <span class="">{{ service.name }}</span>
-                                </div>
+                        <div class="d-flex flex-wrap justify-content-start">
+                            <!-- Icona della casa -->
+                            <div class="d-flex align-items-center justify-content-center mb-2 text-white bg-primary rounded p-1 me-2">
+                                <i class="fas fa-home me-2"></i>
+                                <span>Stanze: {{ apartment.room }}</span>
                             </div>
+
+                            <!-- Icona del gabinetto -->
+                            <div class="d-flex align-items-center justify-content-center mb-2 text-white bg-primary rounded p-1 me-2 flex-grow-1">
+                                <i class="fas fa-toilet me-2"></i>
+                                <span>Bagni: {{ apartment.bathroom }}</span>
+                            </div>
+
+                            <!-- Icona dei metri quadrati -->
+                            <div class="d-flex align-items-center justify-content-center mb-2 text-white bg-primary rounded p-1 flex-grow-1">
+                                <i class="fas fa-ruler-combined me-2"></i>
+                                <span>Mq: {{ apartment.mq }}</span>
+                            </div>
+                        </div>
+                        <!-- Mappa -->
+                        <div class="mt-3">
+                            <div ref="mapContainer" id="map" class="rounded map-lg align-items-end"></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Mappa per schermi grandi (posizionata qui per fluire sotto la descrizione) -->
+                
 
             </div>
 
-
-
-
-
-            <!-- Mappa -->
-
-            <h3>Mappa</h3>
-            <div ref="mapContainer" id="map" style="width: 75%; margin: 30px auto; height: 400px;"></div>
-
-
             <!-- Messaggi -->
-            <div class="message-form">
-                <h3>Invia un messaggio</h3>
+            <div class="message-form mt-4">
+                <h3 class="text-center">Invia un messaggio</h3>
                 <form @submit.prevent="sendMessage">
-                    <div class="mb-3 form-group">
+                    <div class="mb-3">
                         <label for="name" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="name" v-model="formData.name" required
-                            placeholder="Inserisci il tuo nome..">
+                        <input type="text" class="form-control" id="name" v-model="formData.name" required placeholder="Inserisci il tuo nome..">
                     </div>
-                    <div class="mb-3 form-group">
+                    <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" v-model="formData.email" required
-                            placeholder="Insirisci la tua email..">
+                        <input type="email" class="form-control" id="email" v-model="formData.email" required placeholder="Insirisci la tua email..">
                     </div>
-                    <div class="mb-3 form-group">
+                    <div class="mb-3">
                         <label for="body" class="form-label">Testo</label>
-                        <textarea class="form-control" id="body" rows="3" v-model="formData.body" required
-                            placeholder="Inserisci testo.."></textarea>
+                        <textarea class="form-control" id="body" rows="3" v-model="formData.body" required placeholder="Inserisci testo.."></textarea>
                     </div>
-                    <div class="text-center"> <button type="submit" class="btn">Invia</button></div>
+                    <div class="text-center"> <button type="submit" class="btn btn-primary">Invia</button></div>
                 </form>
             </div>
         </div>
     </main>
 </template>
-
-
-
 
 <style scoped lang="scss">
 @use "../styles/partials/variables" as *;
@@ -165,155 +177,77 @@ export default {
 main {
     background-color: rgb(255, 255, 255);
 
-    h2,
-    h3 {
-        text-align: center;
-    }
-
-    .container {
-
-        margin: 0 auto;
-        padding-top: 140px;
-        padding-top: 140px;
-        padding-bottom: 30px;
-
-        p {
-            color: grey;
-        }
-
-        span {
-            color: rgb(255, 255, 255);
-        }
+    .address {
+        font-size: 20px;
+        color: grey;
 
         i {
-            color: rgb(255, 255, 255);
-        }
-
-        .address {
-            font-size: 20px;
             color: grey;
-
-            i {
-                color: grey;
-            }
-        }
-
-        .flex-info {
-
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            margin-top: 90px;
-            padding: 10px 50px;
-            height: 550px;
-
-            .img {
-
-                border-radius: 20px;
-                width: 40%;
-                height: 100%;
-                padding: 50px;
-
-                img {
-                    border: 1px black solid;
-                    max-height: 100%;
-                    max-width: 150%;
-                    object-fit: cover;
-                }
-            }
-
-            .apartment-description {
-                width: 45%;
-
-                padding: 20px;
-
-                span {
-                    color: gray;
-                }
-
-                .only-description {
-                    width: 100%;
-                }
-
-
-                .description-flex {
-                    text-align: center;
-                    padding: 10px;
-
-
-                    span {
-                        color: $color-blue-hover;
-                        margin: 0 30px;
-                    }
-
-
-
-
-                }
-            }
-        }
-
-
-
-
-
-
-        .message-form {
-            border-top: 0.1px solid gray;
-
-            padding: 40px;
-
-            form {
-                width: 40%;
-                margin: 0 auto;
-                margin-top: 60px;
-
-                .btn {
-                    background-color: $color-blue-hover;
-                    color: white;
-                }
-            }
         }
     }
 
-
-
-    .services {
-
+    .image-container {
         display: flex;
-        flex-wrap: wrap;
-        width: calc(100% / 1);
-        justify-content: space-around;
-        padding: 15px;
+        flex-direction: column;
+    }
 
+    .main-image {
+        height: 66%;
+        width: 100%;
+        object-fit: cover;
+    }
 
-        .label-services {
-            border: 1px solid blue;
+    .secondary-images-container {
+        display: flex;
+        height: 34%;
+    }
 
-            display: flex;
-            width: 150px;
-            align-items: center;
+    .secondary-image {
+        width: 33.33%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-            padding: 8px;
+    .apartment-info p {
+        color: grey;
+    }
 
+    .message-form {
+        border-top: 0.1px solid gray;
+        padding: 40px;
 
+        .btn {
+            background-color: $color-blue-hover;
+            color: white;
         }
-
-        i {
-            color: $color-blue-hover;
-            font-size: 16px;
-            margin-right: 10px;
-
-        }
-
-        // span {
-        //     font-size: 15px;
-        // }
-
-
-
-
-
     }
 }
+
+.map-lg,
+.map-md {
+    width: 100%;
+    height: 400px;
+}
+
+.map-sm {
+    width: 100%;
+    height: 300px;
+}
+
+@media (max-width: 2048px) {  /* Fino a schermi medium (col-md) */
+    .apartment-info .d-flex {
+        max-height: 40px;
+        flex-grow: 1;
+    }
+}
+@media (max-width: 992px) {  /* Fino a schermi medium (col-md) */
+    .apartment-info .d-flex {
+        max-height: 40px;
+    }
+}
+
+.margin-top-140 {
+    padding-top: 140px;
+}
+
 </style>

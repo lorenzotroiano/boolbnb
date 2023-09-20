@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 // Importo il model
 use App\Models\Apartment;
@@ -10,12 +11,13 @@ use App\Models\Service;
 use App\Models\View;
 use App\Models\ApartmentSponsor;
 use App\Models\Message;
+use App\Models\Image;
 
 class GuestController extends Controller
 {
     public function index(Request $request)
     {
-        $apartments = Apartment::with('services')
+        $apartments = Apartment::with('services', 'images')
             ->when($request->get('name'), function ($query, $name) {
                 return $query->where('name', 'LIKE', '%' . $name . '%');
             })
@@ -52,7 +54,7 @@ class GuestController extends Controller
 
     public function show($id)
     {
-        $apartment = Apartment::with('services')->findOrFail($id);
+        $apartment = Apartment::with('services', 'images')->findOrFail($id);
         $apartmentsponsors = ApartmentSponsor::all();
 
         // NUOVA VISUALIZZAZIONE
@@ -62,9 +64,19 @@ class GuestController extends Controller
         $view->date = now();
         $view->save();
 
+        // Ottieni tutti i nomi delle immagini dalla cartella 'images'
+        $allImages = Storage::disk('public')->files('images');
+
+        // Mescola le immagini in modo casuale
+        shuffle($allImages);
+
+        // Prendi solo le prime 3 immagini
+        $randomImages = array_slice($allImages, 0, 3);
+
         return response()->json([
             'apartment' => $apartment,
-            'apartmentsponsors' => $apartmentsponsors
+            'apartmentsponsors' => $apartmentsponsors,
+            'randomImages' => $randomImages
         ]);
     }
 

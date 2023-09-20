@@ -29,6 +29,7 @@ class ApartmentTableSeeder extends Seeder
 
             // Seleziona un'immagine ciclando attraverso l'array delle immagini
             $selectedImage = $imageFiles[$index % $totalImages];
+            
 
             // Imposta il percorso dell'immagine come URL dell'appartamento
             $apartment->cover = 'apartments/' . $selectedImage->getFilename();

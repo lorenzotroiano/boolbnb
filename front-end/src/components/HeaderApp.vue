@@ -178,7 +178,7 @@ export default {
 <template>
     <header>
         <div class="container">
-            <div class="flex">
+            <div class="flex align-items-center">
 
                 <!-- Logo immagine -->
                 <div class="logo">
@@ -192,36 +192,42 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch" @keyup.enter="onSearch" @focus="handleSearchClick"
-        @blur="hideSuggestions">
-                    <!-- Suggerimenti -->
+                    <div class="d-flex w-50">
+                        <input type="text" placeholder="Cerca" :value="search" @input="updateSearch" @keyup.enter="onSearch" @focus="handleSearchClick"
+                        @blur="hideSuggestions">
+                        <!-- Suggerimenti -->
                         <ul v-if="suggestions.length">
                             <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
                                 {{ suggestion }}
                             </li>
                         </ul>
-                    <button @click="onSearch">
-                        <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                    </button>
-                    <button @click="$emit('toggle-sidebar')">Filtri</button>
+                        <button class="me-3" @click="onSearch">
+                            <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                        </button>
+                    <button class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                    </div>
+                    
+                    <div class="d-flex w-50 align-items-center">
+                        <!-- Distanza -->
+                        <div class=" d-flex align-items-center w-100">
+                            <span class="d-block me-3">{{ distanceRange }} km</span>
+                            <input 
+                                type="range" 
+                                class="form-range custom-range" 
+                                v-model="distanceRange" 
+                                @change="handleSliderChange" />
+                            
+                        </div>
+                    </div>
+                    
                 </div>
 
-                <!-- Distanza -->
-                <div class="mb-3">
-                        <label for="distanceRange" class="form-label">Distanza (km)</label>
-                        <input 
-                            type="range" 
-                            class="form-range custom-range" 
-                            v-model="distanceRange" 
-                            @change="handleSliderChange" />
-                        <div>{{ distanceRange }} km</div>
-                    </div>
-
+                
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8001/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8001/register">Registrati</a></li>
+                        <li><a class="button-52" href="http://127.0.0.1:8001/login">Login</a> </li>
+                        <li><a class="button-52" href="http://127.0.0.1:8001/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
@@ -265,7 +271,7 @@ header {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 
     .container {
-        max-width: 80%;
+        max-width: 95%;
         margin: 0 auto;
 
         .flex {
@@ -298,11 +304,15 @@ header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 38%;
+                width: 50%;
                 margin: 20px auto;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+                box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
                 cursor: pointer;
                 position: relative;
+
+                &:hover {
+                    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+                }
 
                 ul {
                     position: absolute;
@@ -332,9 +342,7 @@ header {
                 }
              }
 
-            .search:hover {
-                transition: transform 0.2s ease-in-out;
-            }
+            
 
 
             input {
@@ -370,10 +378,6 @@ header {
                 li {
                     margin: 0 12px;
 
-                    a {
-                        text-decoration: none;
-                        color: $color-blue-hover;
-                    }
                 }
             }
         }
@@ -407,16 +411,44 @@ header {
     }
 }
 
-.menu a {
-    text-decoration: none;
-    display: inline-block;
-    transition: transform 0.3s;
-    transform-origin: bottom;
+// Login e registrati
+.button-52 {
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 13px 20px 13px;
+  outline: 0;
+  border: 1px solid rgba(122, 122, 122, 0.404);
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  color: white;
+  text-decoration: none;
 }
 
-/* Stile al passaggio del mouse */
-.menu a:hover {
-    border-bottom: 2px solid #007bff;
-    transform: scale(1.1);
+.button-52:after {
+  content: "";
+  background-color: $color-dark-purple;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+.button-52:hover:after {
+  top: 0px;
+  left: 0px;
+}
+
+@media (min-width: 768px) {
+  .button-52 {
+    padding: 13px 50px 13px;
+  }
 }
 </style>

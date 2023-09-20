@@ -187,21 +187,4 @@ export default {
 @use '../styles/general.scss';
 @use '../styles/partials/_home.scss';
 @use '../styles/partials/_variables.scss' as *;
-
-.single {
-    .single-img {
-        width: 100%;
-    }
-}
-
-.button-color {
-    background-color: #879ae8;
-    border: none;
-    color: white; // Puoi scegliere il colore del testo che preferisci
-    // Aggiungi altre proprietà come necessario
-}
-
-.apartment-name {
-    color: #879ae8;
-}
 </style>

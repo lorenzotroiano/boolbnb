@@ -94,6 +94,8 @@
                                     dell'appartamento</strong></label>
                             <input type="file" class="form-control" id="cover" name="cover" required
                                 aria-label="file example" required>
+                                <input type="file" name="images[]" id="images" multiple>
+                                <div id="image-previews"></div>
                             @error('cover')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -209,4 +211,27 @@
             border-radius: 15px;
         }
     </style>
+
+<script>
+    document.getElementById('images').addEventListener('change', function() {
+        const previewsContainer = document.getElementById('image-previews');
+        // Pulisci il contenitore di anteprime esistente prima di aggiungere nuove anteprime
+        previewsContainer.innerHTML = '';
+
+        // Per ciascun file selezionato, crea un'anteprima
+        for (let i = 0; i < this.files.length; i++) {
+            const file = this.files[i];
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.onload = function() {
+                URL.revokeObjectURL(this.src);
+            }
+
+            img.height = 100;  // puoi modificare l'altezza come preferisci
+
+            previewsContainer.appendChild(img);
+        }
+    });
+</script>
 @endsection

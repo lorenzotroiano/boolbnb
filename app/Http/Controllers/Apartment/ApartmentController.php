@@ -87,6 +87,8 @@ class ApartmentController extends Controller
 
         $response = Http::get($endpoint);
 
+        
+
         // Verifica se la chiamata API è stata eseguita con successo
         if ($response->successful()) {
             $apiData = $response->json();
@@ -108,6 +110,17 @@ class ApartmentController extends Controller
 
         // Crea un nuovo appartamento utilizzando i dati validati e associati
         $apartment = Apartment::create($data);
+
+        // Immagini oltre quella di copertina
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = Storage::put('apartment_images', $image);
+    
+                $apartment->images()->create([
+                    'path' => $path
+                ]);
+            }
+        }
 
         // Associa i servizi selezionati all'appartamento
         $apartment->services()->attach($data['services']);
@@ -257,6 +270,17 @@ class ApartmentController extends Controller
             $data['cover'] = Storage::put('apartments', $data['cover']);
         }
 
+        // Gestione delle nuove immagini
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = Storage::put('apartment_images', $image);
+        
+                $apartment->images()->create([
+                    'path' => $path
+                ]);
+            }
+        }
+
         // Aggiorna l'appartamento con i dati validati
         $apartment->update($data);
 
@@ -285,6 +309,11 @@ class ApartmentController extends Controller
         $apartment->images()->delete();
         $apartment->messages()->delete();
         $apartment->views()->delete();
+
+        foreach ($apartment->images as $image) {
+            Storage::delete($image->path);
+            $image->delete();
+        }
 
         // Elimina l'appartamento dal database
         $apartment->delete();
@@ -330,7 +359,8 @@ class ApartmentController extends Controller
             "address" => "required|string",
             "visible" => "required|boolean",
             "cover" => "image",
-            "services" => "required|array|exists:services,id"
+            "services" => "required|array|exists:services,id",
+            "images.*" => "image|max:4096",
         ];
     }
 
