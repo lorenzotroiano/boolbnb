@@ -71,7 +71,7 @@
                                                 </button>
                                             </form>
                                             <a href="{{ route('show', $apartment->id) }}"
-                                                class="text-decoration-none">Visualizza messaggi</a>
+                                                class="text-decoration-none">Dettagli e messaggi</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -135,11 +135,11 @@
                                                     class="text-danger border-0 border bg-transparent elimina"
                                                     title="Elimina Appartamento"
                                                     onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
-                                                    Elimina appartamento
+                                                    Elimina
                                                 </button>
                                             </form>
                                             <a href="{{ route('show', $apartment->id) }}"
-                                                class="text-decoration-none">Visualizza messaggi</a>
+                                                class="text-decoration-none">Dettagli e messaggi</a>
                                         </div>
                                     </td>
                                 </tr>

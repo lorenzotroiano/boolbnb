@@ -64,7 +64,6 @@
                                 <div class="alert alert-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div id="dropdown" class="mb-3 col-12 col-md-3"></div>
 
                         <div class="mb-3 col-12">
                             <label class="d-block" for="visibility">
@@ -94,12 +93,18 @@
                                     dell'appartamento</strong></label>
                             <input type="file" class="form-control" id="cover" name="cover" required
                                 aria-label="file example" required>
-                                <input type="file" name="images[]" id="images" multiple>
-                                <div id="image-previews"></div>
+
                             @error('cover')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div id="image-previews-cover"></div>
+
+                        <div class="mb-3 col-12">
+                            <label for="url" class="form-label"> <strong>Inserire l'album immagini</strong></label>
+                            <input type="file" class="form-control" id="images" name="images[]" multiple>
+                        </div>
+                        <div id="image-previews"></div>
 
                         <div class="mb-3 col-12">
                             <label class="form-label">Services</label>
@@ -189,8 +194,14 @@
 
         }
 
+        #image-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         #submit {
-            background-color: #7c8bc6;
+            background-color: #2c4ed3;
             color: white;
             border: 3px solid transparent;
         }
@@ -212,26 +223,47 @@
         }
     </style>
 
-<script>
-    document.getElementById('images').addEventListener('change', function() {
-        const previewsContainer = document.getElementById('image-previews');
-        // Pulisci il contenitore di anteprime esistente prima di aggiungere nuove anteprime
-        previewsContainer.innerHTML = '';
+    <script>
+        document.getElementById('images').addEventListener('change', function() {
+            const previewsContainer = document.getElementById('image-previews');
+            // Pulisci il contenitore di anteprime esistente prima di aggiungere nuove anteprime
+            previewsContainer.innerHTML = '';
 
-        // Per ciascun file selezionato, crea un'anteprima
-        for (let i = 0; i < this.files.length; i++) {
-            const file = this.files[i];
+            // Per ciascun file selezionato, crea un'anteprima
+            for (let i = 0; i < this.files.length; i++) {
+                const file = this.files[i];
 
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.onload = function() {
-                URL.revokeObjectURL(this.src);
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = function() {
+                    URL.revokeObjectURL(this.src);
+                }
+
+                img.height = 100; // puoi modificare l'altezza come preferisci
+
+                previewsContainer.appendChild(img);
             }
+        });
 
-            img.height = 100;  // puoi modificare l'altezza come preferisci
+        document.getElementById('cover').addEventListener('change', function() {
+            const previewsContainer = document.getElementById('image-previews-cover');
+            // Pulisci il contenitore di anteprime esistente prima di aggiungere nuove anteprime
+            previewsContainer.innerHTML = '';
 
-            previewsContainer.appendChild(img);
-        }
-    });
-</script>
+            // Per ciascun file selezionato, crea un'anteprima
+            for (let i = 0; i < this.files.length; i++) {
+                const file = this.files[i];
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = function() {
+                    URL.revokeObjectURL(this.src);
+                }
+
+                img.height = 100; // puoi modificare l'altezza come preferisci
+
+                previewsContainer.appendChild(img);
+            }
+        });
+    </script>
 @endsection

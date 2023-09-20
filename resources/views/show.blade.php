@@ -24,8 +24,6 @@
                 <li class="list-group-item">Bathroom: {{ $apartment->bathroom }}</li>
                 <li class="list-group-item">mq: {{ $apartment->mq }}</li>
                 <li class="list-group-item">Address: {{ $apartment->address }}</li>
-                <li class="list-group-item">Latitude: {{ $apartment->latitude }}</li>
-                <li class="list-group-item">Longitude: {{ $apartment->longitude }}</li>
             </ul>
 
             {{-- Servizi --}}

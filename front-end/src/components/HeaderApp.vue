@@ -192,7 +192,16 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <div class="d-flex w-50">
+                    <div>
+                        <!-- Distanza -->
+                        <div class="range-bar">
+                            <span class="testo-range">In un raggio di {{ distanceRange }} km</span>
+                            <input type="range" class="form-range custom-range" v-model="distanceRange"
+                                @change="handleSliderChange" />
+
+                        </div>
+                    </div>
+                    <div class="d-flex">
                         <input type="text" placeholder="Cerca" :value="search" @input="updateSearch" @keyup.enter="onSearch"
                             @focus="handleSearchClick" @blur="hideSuggestions">
                         <!-- Suggerimenti -->
@@ -207,15 +216,7 @@ export default {
                         <button class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
                     </div>
 
-                    <div class="d-flex w-50 align-items-center">
-                        <!-- Distanza -->
-                        <div class=" d-flex align-items-center w-100">
-                            <span class="d-block me-3">{{ distanceRange }} km</span>
-                            <input type="range" class="form-range custom-range" v-model="distanceRange"
-                                @change="handleSliderChange" />
 
-                        </div>
-                    </div>
 
                 </div>
 
@@ -252,10 +253,12 @@ export default {
 header {
     position: fixed;
     width: 100%;
-    height: 100px;
+    height: 120px;
     background-color: white;
     z-index: 999;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    display: flex;
+    align-items: center;
 
     .container {
         max-width: 95%;
@@ -287,12 +290,10 @@ header {
                 background-color: #fff;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 border-radius: 18px;
-                padding: 8px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 50%;
-                margin: 20px auto;
+                padding: 8px 30px;
                 box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
                 cursor: pointer;
                 position: relative;
@@ -329,14 +330,22 @@ header {
                 }
             }
 
+            .range-bar {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 24px;
+            }
 
+            .custom-range {
+                width: 70%;
 
+            }
 
             input {
                 border: none;
                 padding: 4px;
                 border-radius: 20px;
-                width: 80%;
                 outline: none;
 
             }
@@ -368,7 +377,7 @@ header {
                     .button-52 {
                         padding: 8px 22px;
                         text-decoration: none;
-                        background-color: #3498db;
+                        background-color: #6474fc;
                         color: #fff;
                         border-radius: 18px;
                         transition: transform 0.4s, box-shadow 0.2s;
