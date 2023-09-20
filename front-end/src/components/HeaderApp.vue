@@ -76,18 +76,39 @@ export default {
 
                 <!-- Searchbar -->
                 <div class="search">
-                    <input type="text" placeholder="Vai ovunque" :value="search" @input="updateSearch">
-                    <button @click="onSearch">
-                        <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                    </button>
-                    <button class="button-filter" @click="$emit('toggle-sidebar')">Filtri</button>
+                    <div class="d-flex w-50">
+                        <input type="text" placeholder="Cerca" :value="search" @input="updateSearch" @keyup.enter="onSearch"
+                            @focus="handleSearchClick" @blur="hideSuggestions">
+                        <!-- Suggerimenti -->
+                        <ul v-if="suggestions.length">
+                            <li v-for="suggestion in suggestions" :key="suggestion" @click="selectSuggestion(suggestion)">
+                                {{ suggestion }}
+                            </li>
+                        </ul>
+                        <button class="me-3" @click="onSearch">
+                            <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                        </button>
+                        <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                    </div>
+
+                    <div class="d-flex w-50 align-items-center">
+                        <!-- Distanza -->
+                        <div class=" d-flex align-items-center w-100">
+                            <span class="d-block me-3">{{ distanceRange }} km</span>
+                            <input type="range" class="form-range custom-range" v-model="distanceRange"
+                                @change="handleSliderChange" />
+
+                        </div>
+                    </div>
+
                 </div>
+
 
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
-                        <li><a href="http://127.0.0.1:8000/login">Login</a> </li>
-                        <li><a href="http://127.0.0.1:8000/register">Registrati</a></li>
+                        <li><a class="button-52" href="http://127.0.0.1:8000/login">Login</a> </li>
+                        <li><a class="button-52" href="http://127.0.0.1:8000/register">Registrati</a></li>
                     </ul>
                 </nav>
             </div>
@@ -159,17 +180,42 @@ header {
                 margin: 20px auto;
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
                 cursor: pointer;
+                position: relative;
 
+                &:hover {
+                    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+                }
 
-                .button-filter {
-                    width: 75px;
-                    margin-left: 7px;
+                ul {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    background-color: white;
+                    border: 1px solid #ccc;
+                    width: 100%;
+                    list-style-type: none;
+                    padding: 0;
+                    z-index: 10;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                    li {
+                        padding: 10px;
+                        cursor: pointer;
+                        border-bottom: 1px solid #eee;
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+
+                        &:hover {
+                            background-color: #f5f5f5;
+                        }
+                    }
                 }
             }
 
-            .search:hover {
-                transition: transform 0.2s ease-in-out;
-            }
+
+
 
             input {
                 border: none;
@@ -241,16 +287,44 @@ header {
     }
 }
 
-.menu a {
+// Login e registrati
+.button-52 {
+    font-size: 16px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    padding: 13px 20px 13px;
+    outline: 0;
+    border: 1px solid rgba(122, 122, 122, 0.404);
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    color: white;
     text-decoration: none;
-    display: inline-block;
-    transition: transform 0.3s;
-    transform-origin: bottom;
 }
 
-/* Stile al passaggio del mouse */
-.menu a:hover {
-    border-bottom: 2px solid #007bff;
-    transform: scale(1.1);
+.button-52:after {
+    content: "";
+    background-color: $color-dark-purple;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    top: 7px;
+    left: 7px;
+    transition: 0.2s;
+}
+
+.button-52:hover:after {
+    top: 0px;
+    left: 0px;
+}
+
+@media (min-width: 768px) {
+    .button-52 {
+        padding: 13px 50px 13px;
+    }
 }
 </style>
