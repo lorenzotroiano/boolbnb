@@ -24,11 +24,11 @@ export default {
 
     methods: {
         getCoverUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`; 
+            return `http://127.0.0.1:8000/storage/${imageName}`; 
         },
         initializeTomTomMap() {
             try {
@@ -55,7 +55,7 @@ export default {
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -68,7 +68,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -97,6 +97,9 @@ export default {
 
 
             <div class="row margin-top-140">
+
+
+
                 <div>
                     <h1>{{ apartment.name }}</h1>
                     <span class="address d-block text-secondary mb-3"> <i class="fa-solid fa-map"></i> - {{
@@ -227,7 +230,6 @@ main {
     }
 
     .main-image {
-        margin-top: 50px;
         height: 66%;
         width: 100%;
         object-fit: cover;
@@ -247,7 +249,6 @@ main {
     }
 
     .apartment-info p {
-        margin-top: 50px;
         color: grey;
     }
 
@@ -308,6 +309,9 @@ main {
     }
 }
 
+.margin-top-140 {
+        padding-top: 140px;
+    }
 .map-lg,
 .map-md {
     width: 100%;
@@ -347,8 +351,6 @@ main {
         }
     }
 
-    .margin-top-140 {
-        padding-top: 140px;
-    }
+    
 }
 </style>
