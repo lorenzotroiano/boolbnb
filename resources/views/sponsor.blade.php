@@ -7,10 +7,10 @@
         <form class="p-1" action="{{ route('apply-sponsorship', $apartment->id) }}" method="POST">
             @csrf
             <div class="form-group d-flex justify-content-center grid gap-3 mb-4">
-                <div class="card" style="width: 18rem;">
+                <div class="card text-center" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title border-bottom p-2 text-center">{{ $sponsors[0]->name }}</h5>
-                        <p class="card-text text-center">€{{ $sponsors[0]->price }} for {{ $sponsors[0]->duration }} ore</p>
+                        <h5 class="card-title border-bottom p-2">{{ $sponsors[0]->name }}</h5>
+                        <p class="card-text">€{{ $sponsors[0]->price }} for {{ $sponsors[0]->duration }} ore</p>
                         <input type="radio" id="sponsor1" name="sponsor_id" value="{{ $sponsors[0]->id }}">
                         <label for="sponsor1">Seleziona</label>
 
@@ -18,10 +18,10 @@
                 </div>
 
                 <!-- Card 2 - Livello 2 -->
-                <div class="card" style="width: 18rem;">
+                <div class="card text-center" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title border-bottom p-2 text-center">{{ $sponsors[1]->name }}</h5>
-                        <p class="card-text text-center">€{{ $sponsors[1]->price }} for {{ $sponsors[1]->duration }} ore</p>
+                        <h5 class="card-title border-bottom p-2">{{ $sponsors[1]->name }}</h5>
+                        <p class="card-text">€{{ $sponsors[1]->price }} for {{ $sponsors[1]->duration }} ore</p>
                         <input type="radio" id="sponsor2" name="sponsor_id" value="{{ $sponsors[1]->id }}">
                         <label for="sponsor2">Seleziona</label>
 
@@ -29,10 +29,10 @@
                 </div>
 
                 <!-- Card 3 - Livello 3 -->
-                <div class="card" style="width: 18rem;">
+                <div class="card text-center" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title border-bottom p-2 text-center">{{ $sponsors[2]->name }}</h5>
-                        <p class="card-text text-center">€{{ $sponsors[2]->price }} for {{ $sponsors[2]->duration }} ore
+                        <h5 class="card-title border-bottom p-2">{{ $sponsors[2]->name }}</h5>
+                        <p class="card-text">€{{ $sponsors[2]->price }} for {{ $sponsors[2]->duration }} ore
                         </p>
                         <input type="radio" id="sponsor3" name="sponsor_id" value="{{ $sponsors[2]->id }}">
                         <label for="sponsor3">Seleziona</label>
@@ -41,7 +41,9 @@
                 </div>
             </div>
             <div id="dropin-container"></div>
-            <button id="submit-button" class="button button--small button--green">Acquista</button>
+            <div class="button-center">
+                <button id="submit-button" class="button button--small button--green">Acquista</button>
+            </div>
 
 
             <script src="https://js.braintreegateway.com/web/dropin/1.40.2/js/dropin.js"></script>
