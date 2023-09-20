@@ -77,7 +77,7 @@
             <!-- socials -->
             <div class="col-12 col-xl-2 d-flex justify-content-center p-0">
                 <div class="d-flex justify-content-center align-items-center flex-column socials mt-4">
-                    <h2 class="m-0">Socials:</h2>
+                    <h2 class="m-0">Socials</h2>
                     <ul class="d-flex gap-4 pe-4">
                         <li>
                             <a href="#">

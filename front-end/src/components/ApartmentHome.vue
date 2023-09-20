@@ -27,7 +27,6 @@ export default {
             userLocation: null,
             userCountry: null,
 
-
             // Variabili temp per il filtering
             tempRooms: null,
             tempBathrooms: null,
@@ -40,7 +39,6 @@ export default {
             selectedSize: null,
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
-            
             applyFilters: null,
 
 
@@ -49,9 +47,9 @@ export default {
     methods: {
 
         getImageUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
-        
+
         updateApartments(filtered) {
             console.log("Updating apartments list with:", filtered);
             this.apartments = filtered;
@@ -90,16 +88,16 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.originalApartments = data;  // Store all data in originalApartments
-                this.apartments = data;  
+                this.apartments = data;
             })
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -115,29 +113,15 @@ export default {
 
 <!-- TEMPLATE -->
 <template>
-    <HeaderApp 
-    :services="services" 
-    :selectedServices="selectedServices" 
-    :isSidebarVisible="isSidebarVisible"
-    :isSearchClicked="isSearchClicked" 
-    :tempSize="tempSize" 
-    :referencePoint="referencePoint"
-    :distanceRange="distanceRange" 
-    :search="search"
-
-    
-    :apartments="originalApartments"
-    @update-apartments="handleUpdatedApartments"
-
-    @update:search="updateSearchValue"
-    @request-coordinates="getCoordinatesFromAddress"
-    @search-clicked="handleSearchClick"
-    @request-filter-by-distance="handleDistanceFilter"
-    @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
-    @close-sidebar="isSidebarVisible = false"
-    @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
-    @apply-filters="applyFilters" 
-    @apartments-updated="updateApartments">
+    <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
+        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
+        :distanceRange="distanceRange" :search="search" :apartments="originalApartments"
+        @update-apartments="handleUpdatedApartments" @update:search="updateSearchValue"
+        @request-coordinates="getCoordinatesFromAddress" @search-clicked="handleSearchClick"
+        @request-filter-by-distance="handleDistanceFilter"
+        @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
+        @close-sidebar="isSidebarVisible = false" @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
+        @apply-filters="applyFilters" @apartments-updated="updateApartments">
     </HeaderApp>
     <!-- @filter-by-distance="handleDistanceFilter" -->
     <div class="container-fluid">
@@ -174,12 +158,9 @@ export default {
                             </button>
                         </router-link>
                     </div>
-
                 </div>
-
             </div>
         </div>
-
     </div>
 </template>
 

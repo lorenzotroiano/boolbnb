@@ -32,7 +32,7 @@ export default {
         },
         initializeTomTomMap() {
             try {
-                
+
                 this._nonReactiveMap = tt.map({
                         container: 'map',
                         key: this.apiKey,
@@ -44,14 +44,14 @@ export default {
                     let marker = new tt.Marker().setLngLat(this.center);
                     marker.addTo(this._nonReactiveMap);
                 });
-                
+
 
             } catch (error) {
                 console.error("Errore durante l'inizializzazione della mappa TomTom:", error);
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -64,7 +64,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.apartment.images = response.data.randomImages;

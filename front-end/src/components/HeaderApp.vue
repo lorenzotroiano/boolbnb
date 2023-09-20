@@ -49,7 +49,7 @@ export default {
             console.log("onSearch called with value:", this.search);
             this.getCoordinatesFromAddress(this.search);
         },
-       
+
         updateSearch(event) {
             this.search = event.target.value;
             if (this.search.length >= 1) {  // Suggerisci solo se ci sono almeno 3 caratteri
@@ -74,9 +74,9 @@ export default {
 
             this.$emit('apartments-updated', this.apartmentsInRange);
         },
-        
+
         // SUGGESTIONS METHODS**************************
-    
+
         async fetchSuggestions(query) {
             const requestUrl = `https://api.tomtom.com/search/2/search/${query}.json?typeahead=true&limit=200&sortBy=relevance&categorySet=7315&countrySet=IT&language=it-IT&minFuzzyLevel=2&maxFuzzyLevel=3&key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
             try {
@@ -133,7 +133,7 @@ export default {
         // FETCH COORDINATES FROM THE ADDRESS THE USER INPUTS IN
         async getCoordinatesFromAddress(address) {
             console.log("Received request to get coordinates for address:", address);
-            
+
             const requestUrl = `https://api.tomtom.com/search/2/geocode/${address}.json?key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
 
             console.log("Sending Request:", requestUrl);
@@ -160,7 +160,7 @@ export default {
         // Controlla se clicco la searchbar
         handleSearchClick() {
             this.isSearchClicked = true;
-        }, 
+        },
         hideSuggestions() {
             this.blurTimeout = setTimeout(() => {
                 this.suggestions = [];
@@ -235,21 +235,11 @@ export default {
 
         <div class="spacer" ref="spacer">
             <transition name="slide">
-                <FilterSidebar 
-                    v-show="isSidebarVisible" 
-                    :services="services" 
-                    :selectedServices="selectedServices"
-                    :isSidebarVisible="isSidebarVisible" 
-                    :isSearchClicked="isSearchClicked" 
-                    :tempSize="tempSize"
-                    
-                    :apartments="referencePoint ? apartmentsInRange : apartments"
-                    
-    
-                    @close-sidebar="$emit('close-sidebar')"
-                    @apply-filters="$emit('apply-filters')"
-                    @apartments-updated="$emit('apartments-updated', $event)"
-                ></FilterSidebar>
+                <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
+                    :apartments="referencePoint ? apartmentsInRange : apartments" @close-sidebar="$emit('close-sidebar')"
+                    @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
+                </FilterSidebar>
             </transition>
         </div>
 
@@ -340,7 +330,7 @@ header {
                         }
                     }
                 }
-             }
+            }
 
             
 
