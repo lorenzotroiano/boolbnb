@@ -7,9 +7,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Project Management</title>
+    <title>BoolBNB</title>
 
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/8752/8752436.png">
+    <link rel="icon" href="">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

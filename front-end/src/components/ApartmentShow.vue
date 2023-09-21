@@ -137,10 +137,11 @@ export default {
                                 <i class="fas fa-ruler-combined me-2"></i>
                                 <span>Mq: {{ apartment.mq }}</span>
                             </div>
-                        </div>
-                        <!-- Mappa -->
-                        <div class="mt-3">
-                            <div ref="mapContainer" id="map" class="map-lg align-items-end" style="border-radius: 10px;">
+                            <!-- Mappa -->
+                            <div class="mt-3">
+                                <div ref="mapContainer" id="map" class="map-lg align-items-end"
+                                    style="border-radius: 10px;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -190,7 +191,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@use '../styles/general.scss';
+// @use '../styles/general.scss';
 @use '../styles/partials/_show.scss';
 @use "../styles/partials/_variables" as *;
 </style>
