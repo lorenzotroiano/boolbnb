@@ -115,11 +115,16 @@ export default {
                 <div class="col-lg-6 col-md-12">
                     <!-- Info Appartamento -->
                     <div class="apartment-info mb-3 mb-lg-0">
+                        <!-- Mappa -->
+                        <div class="mt-3 mb-3">
+                            <div ref="mapContainer" id="map" class="map-lg align-items-end" style="border-radius: 10px;">
+                            </div>
+                        </div>
                         <p>{{ apartment.description }}</p>
                         <div id="icon-wrapper" class="d-flex flex-wrap justify-content-start">
                             <!-- Icona della casa -->
                             <div
-                                class="d-flex align-items-center justify-content-center mb-2 text-white info-color rounded p-1 me-2">
+                                class="d-flex align-items-center justify-content-center mb-2 text-white info-color rounded p-1 me-2 flex-grow-1">
                                 <i class="fas fa-home me-2"></i>
                                 <span>Stanze: {{ apartment.room }}</span>
                             </div>
@@ -137,13 +142,8 @@ export default {
                                 <i class="fas fa-ruler-combined me-2"></i>
                                 <span>Mq: {{ apartment.mq }}</span>
                             </div>
-                            <!-- Mappa -->
-                            <div class="mt-3">
-                                <div ref="mapContainer" id="map" class="map-lg align-items-end"
-                                    style="border-radius: 10px;">
-                                </div>
-                            </div>
                         </div>
+
                     </div>
                 </div>
                 <!-- Mappa per schermi grandi (posizionata qui per fluire sotto la descrizione) -->

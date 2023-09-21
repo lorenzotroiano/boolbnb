@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>BoolBNB</title>
 
-    <link rel="icon" href="">
+    <link rel="icon" href="{{ asset('storage/defaultImage/logoboolbnb.jpeg') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
