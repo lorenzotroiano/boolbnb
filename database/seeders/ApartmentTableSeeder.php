@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Apartment;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use App\Models\ApartmentSponsor;
 use Illuminate\Support\Facades\File;
 
@@ -17,23 +18,24 @@ class ApartmentTableSeeder extends Seeder
      */
     public function run()
     {
-        $apartments = Apartment::factory()->count(30)->make();
+        // Crei 30 appartamenti con Apartment::factory() e li salvi nel database
+        $apartments = Apartment::factory()->count(20)->create();
 
-        // Ottieni la lista di tutti i file nella cartella "apartments"
-        $imageFiles = File::allFiles(storage_path('app/public/apartments'));
-        $totalImages = count($imageFiles);
+        foreach ($apartments as $apartment) {
+            // Ottieni il primo utente in ordine casuale
+            $user = User::inRandomOrder()->first();
+            $apartment->user_id = $user->id;
 
-        foreach ($apartments as $index => $apartment) {
-            $users = User::inRandomOrder()->first();
-            $apartment->user_id = $users->id;
+            // Costruisci il nome del file immagine basato sull'id dell'appartamento
+            $imageName = "images/foto" . $apartment->id;
 
-            // Seleziona un'immagine ciclando attraverso l'array delle immagini
-            $selectedImage = $imageFiles[$index % $totalImages];
-            
+            // Controlla se l'immagine esiste
+            if (Storage::disk('public')->exists($imageName)) {
+                // Imposta il percorso dell'immagine come URL dell'appartamento
+                $apartment->cover = $imageName;
+            }
 
-            // Imposta il percorso dell'immagine come URL dell'appartamento
-            $apartment->cover = 'apartments/' . $selectedImage->getFilename();
-
+            // Salva le modifiche fatte all'appartamento
             $apartment->save();
         }
     }

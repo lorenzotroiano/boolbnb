@@ -20,13 +20,13 @@ class ImageTableSeeder extends Seeder
         // Recupera tutti gli appartamenti
         $apartments = Apartment::all();
 
-        // Suppongo che tu abbia le immagini ordinate in qualche modo 
-        // (ad es., "images/app1/1.jpg", "images/app1/2.jpg", ecc.).
-        // Se non è così, dovresti adattare il codice di seguito.
-        
         foreach ($apartments as $apartment) {
-            for ($i = 1; $i <= 3; $i++) {
-                $imagePath = "images/app" . $apartment->id . "/" . $i . ".jpg";
+            // La lista delle possibili estensioni dell'immagine, come 'a', 'b', 'c', etc.
+            $imageExtensions = ['a', 'b', 'c'];
+            
+            foreach ($imageExtensions as $extension) {
+                $imagePath = "images/foto" . $apartment->id . $extension;
+                
                 if (Storage::disk('public')->exists($imagePath)) {
                     Image::create([
                         'apartment_id' => $apartment->id,

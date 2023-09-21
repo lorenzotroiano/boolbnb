@@ -53,6 +53,23 @@
                 });
             </script>
         </form>
+
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Successo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Pagamento avvenuto con successo
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
     <script>
@@ -100,25 +117,10 @@
             }
         }
 
-        document.addEventListener('input', function() {
-            let errorElements = document.querySelectorAll('.braintree-form__field-error, .braintree-form__field-error-icon', 'braintree-dropin-wrapper', '.braintree-form', '.braintree-form__error',
-        '.braintree-dropin-wrapper', '.field.is-invalid', '.braintree-form__error');
-            errorElements.forEach(el => el.style.display = 'none');
-        });
 
-        button.addEventListener('click', function() {
-            instance.requestPaymentMethod(function(err, payload) {
-                // Submit payload.nonce to your server
-
-                // Mostra la notifica
-                const notification = document.getElementById('success-notification');
-                notification.style.display = 'block';
-
-                // Nascondi la notifica dopo 3 secondi
-                setTimeout(function() {
-                    notification.style.display = 'none';
-                }, 3000);
-            })
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
         });
     </script>
 
