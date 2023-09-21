@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="container-fluid" id="forms">
-        <h2 class="text-center">Crea qui il tuo appartamento
+        <h2 class="text-center">Crea il tuo appartamento
         </h2>
         <div class="row justify-content-center container" id="content-form">
             <div class="col-12 col-lg-9 col-xl-7">
@@ -89,7 +89,7 @@
                         </div>
 
                         <div class="mb-3 col-12">
-                            <label for="cover" class="form-label"> <strong>Immagine principale
+                            <label for="cover" class="form-label"> <strong>Inserire l'immagine principale
                                     dell'appartamento</strong></label>
                             <input type="file" class="form-control" id="cover" name="cover" required
                                 aria-label="file example" required>
@@ -107,11 +107,11 @@
                         <div id="image-previews"></div>
 
                         <div class="mb-3 col-12">
-                            <label class="form-label">Services</label>
+                            <label class="form-label"><strong>Services</strong></label>
                             <div class="row ps-2">
                                 @foreach ($services as $service)
                                     <div class="form-check col-12 col-md-6 ps-0">
-                                        <div class="d-flex">
+                                        <div class="d-flex gap-2">
                                             <input class="form-check-input ps-0 ms-0" type="checkbox"
                                                 value="{{ $service->id }}" name="services[]"
                                                 id="service-{{ $service->id }}">

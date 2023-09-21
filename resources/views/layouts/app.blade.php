@@ -22,7 +22,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Usando Vite -->
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
-    @vite('resources/css/pages/show.scss')
+    @vite('resources/scss/pages/show.scss')
+    @vite('resources/scss/pages/footer.scss')
 
 </head>
 
@@ -106,6 +107,8 @@
     </div>
 </body>
 <style>
+
+   
     .logo {
         max-width: 180px;
     }

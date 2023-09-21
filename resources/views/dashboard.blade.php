@@ -6,7 +6,7 @@
         <div id="nav-intro" class="container px-0">
 
             <div class="row pb-3">
-                <h4 class="col-12 fw-bold">
+                <h4 style="text-transform: capitalize" class="col-12 fw-bold">
                     Benvenuto {{ Auth::user()->name }} !
                 </h4>
                 <p class="col-12 fs-6">
@@ -65,7 +65,7 @@
                                                 @method('delete')
 
                                                 <button type="submit"
-                                                    class="text-danger border-0 border bg-transparent elimina"
+                                                    class="text-danger border-0 bg-transparent elimina"
                                                     title="Elimina Appartamento"
                                                     onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
                                                     Elimina
@@ -133,7 +133,7 @@
                                                 @method('delete')
 
                                                 <button type="submit"
-                                                    class="text-danger border-0 border bg-transparent elimina"
+                                                    class="text-danger border-0  bg-transparent elimina"
                                                     title="Elimina Appartamento"
                                                     onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
                                                     Elimina

@@ -1,0 +1,179 @@
+footer {
+    width: 100%;
+    background-color: #323232;
+
+    .container {
+        color: #8e8e8e;
+
+        .row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+
+            h2{
+                padding-bottom:1.3rem ;
+            }
+
+            strong{
+                font-size: 1.1rem;
+            }
+
+            .socials {
+                ul {
+                    li {
+                        a {
+                            font-size: 2rem;
+                            
+                            i{
+                                transition: 0.4s all ease-in-out;
+
+                                &:hover{
+                                    transform: scale(1.5);
+                                    color: lighten(#879ae8, 10%);
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+            }
+            li {
+                list-style-type: none;
+                margin-top: 10px;
+                font-size: 15px;
+                color: #bcabe8;
+                padding: 3px;
+
+                a {
+                    text-decoration: none;
+                    color: #879ae8;
+                    
+
+                    &:hover{
+                        color: lighten(#879ae8, 10%);
+                    }
+                }
+            }
+
+        }
+    }
+
+    .p-3 img {
+        width: 90px;
+    }
+}
+
+
+@media (max-width: 1200px) {
+
+    footer {
+        .container {
+            .row {
+                flex: center;
+                .col-12 {
+                    justify-content: center;
+                    h2 {
+                        text-align: center;
+                        font-size: 1.6rem;
+                        padding-bottom:1rem ;
+                    }
+
+                    ul{
+                        text-align: center;
+                    }
+
+                    .socials {
+                        h2 {
+                            font-size: 1.6rem;
+                        }
+
+                        ul {
+                            padding-left: 0;
+                            padding-right: 0;
+
+                            li {
+                                a {
+                                    font-size: 1.8rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 766px) {
+
+    footer {
+        .container {
+            .row {
+                text-align: center;
+                gap: 50px;
+
+                .col-12 {
+                    h2 {
+                        padding: 0;
+                        font-size: 1.8rem;
+                        padding-bottom:1rem ;
+                    }
+
+                    strong{
+                        font-size: 1.1rem;
+                    }
+                    .socials {
+                        h2 {
+                            font-size: 1.6rem;
+                        }
+
+                        ul {
+                            padding-left: 0;
+                            padding-right: 0;
+
+                            li {
+                                a {
+                                    font-size: 1.9rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 425px) {
+
+    footer {
+        .container {
+            .row {
+                .col-12 {
+                    .socials {
+                        h2 {
+                            font-size: 1.6rem;
+                            padding: 0;
+                            margin: 0;
+                        }
+
+                        ul {
+                            padding-left: 0;
+                            padding-right: 0;
+
+                            li {
+                                a {
+                                    font-size: 1.4rem;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                span {
+                    font-size: 0.9rem;
+                }
+            }
+        }
+    }
+}
