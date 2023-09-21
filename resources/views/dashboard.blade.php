@@ -153,7 +153,7 @@
 
         {{-- CREATE --}}
         <div class="text-center py-3">
-            <a href="{{ route('create') }}" class="text-decoration-none create-apartament">Crea un nuovo appartamento</a>
+            <a href="{{ route('create') }}" class="text-decoration-none create-apartament">Aggiungi un nuovo appartamento</a>
         </div>
     </div>
     <style>
