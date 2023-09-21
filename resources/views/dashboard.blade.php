@@ -53,6 +53,7 @@
                                                     @endif
                                             </div>
                                         </div>
+                                    </td>
                                     <td class="my-1 azioni">
                                         <div class="d-flex gap-3">
                                             <a href="{{ route('edit', $apartment->id) }}"
@@ -67,7 +68,7 @@
                                                     class="text-danger border-0 border bg-transparent elimina"
                                                     title="Elimina Appartamento"
                                                     onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
-                                                    Elimina appartamento</i>
+                                                    Elimina
                                                 </button>
                                             </form>
                                             <a href="{{ route('show', $apartment->id) }}"

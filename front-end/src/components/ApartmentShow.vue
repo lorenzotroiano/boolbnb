@@ -28,7 +28,7 @@ export default {
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`; 
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -92,34 +92,20 @@ export default {
     <main>
         <div class="container">
 
-
-
-
-
             <div class="row margin-top-140">
-
-
-
                 <div>
                     <h1>{{ apartment.name }}</h1>
                     <span class="address d-block text-secondary mb-3"> <i class="fa-solid fa-map"></i> - {{
                         apartment.address }}</span>
                 </div>
-
-
                 <!-- Colonna dell'immagine per schermi grandi -->
                 <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
                     <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
                         class="img-fluid main-image mb-2 rounded-top">
                     <div class="d-flex secondary-images-container rounded-bottom">
                         <div v-if="apartment && apartment.images" style="display: flex;justify-content: space-between;">
-                            <img 
-                                class="secondary-image"
-                                v-for="image in apartment.images" 
-                                :key="image.id"
-                                :src="getImagesUrl(image.image)"
-                                alt="Image"
-                            >
+                            <img class="secondary-image" v-for="image in apartment.images" :key="image.id"
+                                :src="getImagesUrl(image.image)" alt="Image">
                         </div>
                     </div>
                 </div>
@@ -159,14 +145,8 @@ export default {
                         </div>
                     </div>
                 </div>
-
                 <!-- Mappa per schermi grandi (posizionata qui per fluire sotto la descrizione) -->
-
-
-
             </div>
-
-            <!-- Messaggi -->
 
             <div class="flex-section">
 
@@ -179,7 +159,7 @@ export default {
                         </li>
                     </ul>
                 </div>
-
+                <!-- Messaggi -->
 
                 <div class="message-form mt-4">
                     <h3 class="text-center">Contattaci</h3>
@@ -199,7 +179,8 @@ export default {
                             <textarea class="form-control" id="body" rows="3" v-model="formData.body" required
                                 placeholder="Inserisci testo.."></textarea>
                         </div>
-                        <div id=" " class="text-center d-flex justify-content-center"> <button type="submit" class="btn btn-primary">Invia</button></div>
+                        <div id=" " class="text-center d-flex justify-content-center"> <button type="submit"
+                                class="btn btn-primary">Invia</button></div>
                     </form>
                 </div>
             </div>
@@ -283,7 +264,7 @@ main {
                     color: $color-blue-hover;
                     ;
 
-                     
+
 
                     i {
                         margin-right: 10px;
@@ -310,8 +291,9 @@ main {
 }
 
 .margin-top-140 {
-        padding-top: 140px;
-    }
+    padding-top: 140px;
+}
+
 .map-lg,
 .map-md {
     width: 100%;
@@ -337,6 +319,7 @@ main {
         max-height: 40px;
         flex-grow: 1;
     }
+
     main .flex-section .services ul {
         display: flex;
         flex-wrap: wrap;
@@ -345,19 +328,24 @@ main {
     }
 }
 
-@media (max-width: 992px) { 
+@media (max-width: 992px) {
     // Questo si applica a schermi piccoli fino a medium (col-md)
 
     #icon-wrapper {
         display: flex;
         width: 100%;
     }
-    .col-lg-6, .col-md-12 {
+
+    .col-lg-6,
+    .col-md-12 {
         width: 100%;
-        margin-bottom: 20px;  // margine aggiunto per separare le sezioni
+        margin-bottom: 20px; // margine aggiunto per separare le sezioni
     }
 
-    main, .flex-section, .message-form, .services {
+    main,
+    .flex-section,
+    .message-form,
+    .services {
         text-align: center;
         width: 100%;
     }
@@ -370,28 +358,32 @@ main {
         text-align: center;
     }
 
-    // Ridimensiona la larghezza dei servizi e del modulo messaggi 
+    // Ridimensiona la larghezza dei servizi e del modulo messaggi
     // in modo che non occupino troppo spazio
     .flex-section {
         flex-direction: column;
 
-        .services, .message-form {
+        .services,
+        .message-form {
             width: 100%;
             text-align: center;
         }
     }
 
     // Centra gli elementi interni
-    .apartment-info .d-flex {  /* Dato che ci sono 3 buttons, ognuno dovrebbe prendere circa 1/3 dello spazio */
+    .apartment-info .d-flex {
+        /* Dato che ci sono 3 buttons, ognuno dovrebbe prendere circa 1/3 dello spazio */
         box-sizing: border-box;
-    } 
-    .message-form form .text-center, 
+    }
+
+    .message-form form .text-center,
     .services ul {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 15px;
         justify-content: center;
     }
+
     .services {
         text-align: center;
     }
@@ -400,5 +392,4 @@ main {
         width: 70px;
         text-align: center;
     }
-}
-</style>
+}</style>
