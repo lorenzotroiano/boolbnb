@@ -249,5 +249,5 @@ export default {
 <style lang="scss" scoped>
 @use '../styles/general.scss';
 @use '../styles/partials/_header.scss';
-@use "../styles/partials/variables" as *;
+@use "../styles/partials/_variables" as *;
 </style>
