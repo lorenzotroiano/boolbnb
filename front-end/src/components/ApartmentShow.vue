@@ -28,7 +28,7 @@ export default {
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`; 
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -92,34 +92,20 @@ export default {
     <main>
         <div class="container">
 
-
-
-
-
             <div class="row margin-top-140">
-
-
-
                 <div>
                     <h1>{{ apartment.name }}</h1>
                     <span class="address d-block text-secondary mb-3"> <i class="fa-solid fa-map"></i> - {{
                         apartment.address }}</span>
                 </div>
-
-
                 <!-- Colonna dell'immagine per schermi grandi -->
                 <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
                     <img v-if="apartment.cover" :src="getCoverUrl(apartment.cover)" alt="Apartment Image"
                         class="img-fluid main-image mb-2 rounded-top">
                     <div class="d-flex secondary-images-container rounded-bottom">
                         <div v-if="apartment && apartment.images" style="display: flex;justify-content: space-between;">
-                            <img 
-                                class="secondary-image"
-                                v-for="image in apartment.images" 
-                                :key="image.id"
-                                :src="getImagesUrl(image.image)"
-                                alt="Image"
-                            >
+                            <img class="secondary-image" v-for="image in apartment.images" :key="image.id"
+                                :src="getImagesUrl(image.image)" alt="Image">
                         </div>
                     </div>
                 </div>
@@ -159,14 +145,8 @@ export default {
                         </div>
                     </div>
                 </div>
-
                 <!-- Mappa per schermi grandi (posizionata qui per fluire sotto la descrizione) -->
-
-
-
             </div>
-
-            <!-- Messaggi -->
 
             <div class="flex-section">
 
@@ -179,7 +159,7 @@ export default {
                         </li>
                     </ul>
                 </div>
-
+                <!-- Messaggi -->
 
                 <div class="message-form mt-4">
                     <h3 class="text-center">Invia un messaggio</h3>
@@ -310,8 +290,9 @@ main {
 }
 
 .margin-top-140 {
-        padding-top: 140px;
-    }
+    padding-top: 140px;
+}
+
 .map-lg,
 .map-md {
     width: 100%;
@@ -351,6 +332,6 @@ main {
         }
     }
 
-    
+
 }
 </style>

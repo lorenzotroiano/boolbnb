@@ -1,0 +1,188 @@
+main {
+    background-color: rgb(255, 255, 255);
+
+    .address {
+        font-size: 20px;
+        color: grey;
+        margin-top: 10px;
+
+        i {
+            color: grey;
+        }
+    }
+
+    .image-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-image {
+        height: 66%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .secondary-images-container {
+        display: flex;
+        height: 34%;
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
+    }
+
+    .secondary-image {
+        width: calc((100% / 3) - 1%);
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .apartment-info p {
+        color: grey;
+    }
+
+    .flex-section {
+
+        margin: 90px auto;
+        display: flex;
+        // align-items: self-start;
+        justify-content: space-around;
+        padding: 30px;
+        border-top: 0.1px solid gray;
+
+        .services {
+            h3 {
+                margin-bottom: 40px;
+            }
+
+            width: calc(100% / 3);
+            padding: 20px;
+
+            ul {
+                display: flex;
+                flex-wrap: wrap;
+                // gap: 45px;
+
+
+                li {
+
+
+                    width: 140px;
+                    text-align: start;
+                    color: #6474fc;
+                    ;
+
+                    margin: 0 50px 15px -26px;
+
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .message-form {
+
+        padding: 20px;
+        width: 60%;
+
+        h3 {
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            background-color: #6474fc;
+            color: white;
+        }
+    }
+}
+
+.margin-top-140 {
+    padding-top: 140px;
+}
+
+.map-lg,
+.map-md {
+    width: 100%;
+    height: 400px;
+}
+
+.map-sm {
+    width: 100%;
+    height: 300px;
+}
+
+.info-color {
+    background: #6474fc;
+    ;
+}
+
+.message-box {
+    width: 400px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Stile per l'intestazione */
+.message-header {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Stile per il nome */
+.message-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Stile per l'email */
+.message-email {
+    font-size: 16px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+/* Stile per il messaggio */
+.message-text {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/* Stile per il divisorio tra i messaggi */
+.message-divider {
+    border-top: 1px solid #e0e0e0;
+    margin: 15px 0;
+}
+
+
+
+@media (max-width: 2048px) {
+
+    /* Fino a schermi medium (col-md) */
+    .apartment-info .d-flex {
+        max-height: 40px;
+        flex-grow: 1;
+    }
+}
+
+@media (max-width: 992px) {
+
+    /* Fino a schermi medium (col-md) */
+
+    @media (max-width: 992px) {
+
+        /* Fino a schermi medium (col-md) */
+        .apartment-info .d-flex {
+            max-height: 40px;
+        }
+    }
+
+
+}
