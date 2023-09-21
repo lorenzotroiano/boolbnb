@@ -153,7 +153,7 @@ export default {
                     <div class="show">
                         <router-link :to="{ name: 'apartment-show', params: { id: apartment.id } }">
                             <button class="visit-button button-color">
-                                Explore
+                                Esplora
                                 <i class="fa-solid fa-house"></i>
                             </button>
                         </router-link>

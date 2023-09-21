@@ -216,6 +216,11 @@ header {
             border-radius: 80px;
         }
     }
+
+    .menu{
+        flex-direction: column;
+        gap: 20px;
+    }
 }
 
 
@@ -242,6 +247,7 @@ header {
         nav{
             .menu{
                 padding: 20px 0;
+                flex-direction: row;
             }
         }
     }
