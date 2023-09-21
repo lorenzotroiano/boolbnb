@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container mt-5">
+    <div class="container main">
 
         <div class="row">
             <div>
@@ -11,31 +11,23 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden text-center">
+            <div class="col-lg-6 col-md-12 image-container rounded overflow-hidden">
                 @if ($apartment->cover)
                     <img src="{{ asset('storage/' . $apartment->cover) }}" class="img-fluid rounded mb-4"
                         alt="Apartment Image">
                 @else
                     <div class="alert alert-warning">Immagine non disponibile</div>
                 @endif
-                <div class="d-flex secondary-images-container rounded-bottom">
-                    @foreach ($apartment->images as $image)
-                        <img class="secondary-image mx-2" src="{{ asset('storage/' . $image->image) }}" alt="Image">
-                    @endforeach
-                </div>
-                {{-- Numero di visualizzazioni --}}
-                @if (Auth::check() && $apartment->user_id === Auth::id())
-                    <div class="mt-4">
-                        <span>Il tuo appartamento è stato visualizzato da <strong>{{ $apartment->views->count() }}</strong>
-                            utenti nelle
-                            ultime
-                            24h</span>
+                @if (isset($apartment) && isset($apartment->images))
+                    <div class="d-flex secondary-images-container rounded-bottom">
+                        @foreach ($apartment->images as $image)
+                            <img class="secondary-image mx-2" src="{{ asset('storage/' . $image->image) }}" alt="Image">
+                        @endforeach
                     </div>
                 @endif
-
                 {{-- Tempo mancante sponsorizzazioni --}}
                 @if (Auth::check() && $apartment->sponsor === 1)
-                    <div class="alert alert-info mt-4">
+                    <div class="sponsor-time">
                         @foreach ($apartmentsponsors as $apartmentsponsor)
                             @if ($apartmentsponsor->apartment_id === $apartment->id)
                                 @php
@@ -44,11 +36,20 @@
                                     $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
                                     $hoursDifference = $endDate->diffInHours($startDate);
                                 @endphp
-                                <div class="alert alert-info mt-4">
-                                    <b>Tempo rimasto di sponsorizzazione</b> {{ $hoursDifference }} hours
+                                <div>
+                                    <strong>Tempo rimasto di sponsorizzazione</strong> {{ $hoursDifference }} hours
                                 </div>
                             @endif
                         @endforeach
+                    </div>
+                @endif
+                {{-- Numero di visualizzazioni --}}
+                @if (Auth::check() && $apartment->user_id === Auth::id())
+                    <div class="views-apartment">
+                        <span>Il tuo appartamento è stato visualizzato da <strong>{{ $apartment->views->count() }}</strong>
+                            utenti nelle
+                            ultime
+                            24h</span>
                     </div>
                 @endif
             </div>
@@ -111,26 +112,5 @@
         </div>
     </div>
 
-    {{-- Delete e Modify --}}
-    @if (Auth::id() === $apartment->user_id)
-        {{-- MODIFY --}}
-        <a href="{{ route('edit', $apartment->id) }}" class="btn btn-warning mb-2">MODIFY APARTMENT</a>
-
-        {{-- DELETE --}}
-        <form class="d-inline" method="POST" action="{{ route('delete', $apartment->id) }}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger mb-2">DELETE</button>
-        </form>
-
-        {{-- DELETE PICTURE --}}
-        <form class="d-inline" method="POST" action="{{ route('apartment.picture.delete', $apartment->id) }}">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger mb-2">DELETE PICTURE</button>
-        </form>
-    @endif
-
-    </div>
 
 @endsection
