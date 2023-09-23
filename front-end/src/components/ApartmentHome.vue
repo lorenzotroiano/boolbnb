@@ -46,6 +46,7 @@ export default {
     },
     methods: {
 
+        // Prendi l'url dell'immagine
         getImageUrl(imageName) {
             console.log(imageName);
             return `http://127.0.0.1:8000/storage/${imageName}`;
