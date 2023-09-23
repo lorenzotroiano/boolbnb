@@ -15,7 +15,6 @@ export default {
 </script>
 
 <template>
-    <HeaderApp />
     <router-view></router-view>
     <FooterApp />
 </template>
