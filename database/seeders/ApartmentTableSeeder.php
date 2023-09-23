@@ -19,25 +19,37 @@ class ApartmentTableSeeder extends Seeder
     public function run()
     {
         // Crei 30 appartamenti con Apartment::factory() e li salvi nel database
-        $apartments = Apartment::factory()->count(20)->create();
+        $apartments = Apartment::factory()->count(20)->make();
+
+        $possibleExtensions = ['png', 'jpg', 'jpeg', 'webp'];
 
         foreach ($apartments as $apartment) {
-            // Ottieni il primo utente in ordine casuale
             $user = User::inRandomOrder()->first();
             $apartment->user_id = $user->id;
+            $apartment->save(); // Salva l'appartamento per ottenere un ID
 
-            // Costruisci il nome del file immagine basato sull'id dell'appartamento
-            $imageName = "images/foto" . $apartment->id;
-
-            // Controlla se l'immagine esiste
-            if (Storage::disk('public')->exists($imageName)) {
-                // Imposta il percorso dell'immagine come URL dell'appartamento
-                $apartment->cover = $imageName;
+            $imageName = null;
+            
+            // Cicla su ogni possibile estensione
+            foreach($possibleExtensions as $extension) {
+                $potentialImageName = "images/foto" . $apartment->id . "." . $extension;
+                
+                if (Storage::disk('public')->exists($potentialImageName)) {
+                    $imageName = $potentialImageName;
+                    break; // Esce dal ciclo quando trova un'immagine
+                }
             }
-
-            // Salva le modifiche fatte all'appartamento
+            
+            if ($imageName) {
+                $apartment->cover = $imageName;
+            } else {
+                $apartment->cover = 'percorso/a/un/immagine/default.png';
+            }
+            
+            // Salva di nuovo l'appartamento con l'immagine associata
             $apartment->save();
         }
+
     }
 
 }

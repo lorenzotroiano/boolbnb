@@ -28,7 +28,7 @@ export default {
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/images/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {

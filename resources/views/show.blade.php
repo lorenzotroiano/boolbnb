@@ -27,21 +27,34 @@
                 @endif
                 {{-- Tempo mancante sponsorizzazioni --}}
                 @if (Auth::check() && $apartment->sponsor === 1)
-                    <div class="sponsor-time">
-                        @foreach ($apartmentsponsors as $apartmentsponsor)
-                            @if ($apartmentsponsor->apartment_id === $apartment->id)
-                                @php
-                                    // Converto in formato data
-                                    $startDate = \Carbon\Carbon::parse($apartmentsponsor->start_date);
-                                    $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
-                                    $hoursDifference = $endDate->diffInHours($startDate);
-                                @endphp
-                                <div>
-                                    <strong>Tempo rimasto di sponsorizzazione</strong> {{ $hoursDifference }} hours
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
+                <div class="sponsor-time">
+                    @foreach ($apartmentsponsors as $apartmentsponsor)
+                        @if ($apartmentsponsor->apartment_id === $apartment->id)
+                            @php
+                                $startDate = \Carbon\Carbon::parse($apartmentsponsor->start_date);
+                                $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
+                                $minutesDifference = $endDate->diffInMinutes($startDate);
+                            @endphp
+                            <div>
+                                <strong>Tempo rimasto di sponsorizzazione</strong> 
+                                <span id="minutesRemaining">{{ $minutesDifference }}</span> minutes
+                            </div>
+                        @endif
+                    @endforeach
+                    {{-- Script for time update --}}
+                    <script>
+                        function updateMinutesRemaining() {
+                            var minutesElement = document.getElementById('minutesRemaining');
+                            var minutesRemaining = parseInt(minutesElement.textContent, 10);
+                            if (isNaN(minutesRemaining) || minutesRemaining <= 0) return;
+                            
+                            minutesRemaining -= 1;
+                            minutesElement.textContent = minutesRemaining.toString();
+                        }
+                        
+                        setInterval(updateMinutesRemaining, 60000); // aggiorna i minuti ogni 60 secondi (60000 millisecondi)
+                    </script>
+                </div>
                 @endif
                 {{-- Numero di visualizzazioni --}}
                 @if (Auth::check() && $apartment->user_id === Auth::id())
