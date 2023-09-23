@@ -1,21 +1,26 @@
 <script>
 
 export default {
-    props: {
+    props: 
+    {
         selectedServices: {
             type: Array,
             default: () => []
         },
         services: Array,
         referencePoint: Object,
-        distanceRange: Number,
+        distanceRange: {
+        type: Number,
+        default: 50, // O un altro valore di default che preferisci.
+    },
         isSidebarVisible: Boolean,
         apartments: {
             type: Array,
             default: () => []
         },
-        isSearchClicked: Boolean,
-        tempSize: Number
+        // isSearchClicked: Boolean,
+        tempSize: Number,
+        selectedCity: String
     },
     data() {
         return {
@@ -24,6 +29,7 @@ export default {
 
             filteredApartments: [],
 
+            tempDistanceRange: this.distanceRange,
             // Copia di apartments perché le props sono readonly
             // localApartments: this.apartments,
 
@@ -101,6 +107,12 @@ export default {
                 apartment.services.some(service => service.id === serviceId)
             );
         },
+        // SLIDER PER LA DISTANZA
+        handleSliderChange() {
+            console.log('Slider value before emit:', this.numericDistanceRange);
+            this.$emit('update:distanceRange', Number(this.numericDistanceRange));
+            this.updateCounter();
+        },
 
         updateSelectedServices(serviceId) {
             if (this.selectedServicesCopy.includes(serviceId)) {
@@ -110,11 +122,6 @@ export default {
                 console.log("selectedServicesCopy:", this.selectedServicesCopy);
             }
             console.log('selectedServicesCopy:', this.selectedServicesCopy);
-            this.updateCounter();
-        },
-
-        handleSliderChange() {
-            this.$emit('update:distanceRange', this.tempDistanceRange);
             this.updateCounter();
         },
 
@@ -196,6 +203,19 @@ export default {
         filteredApartmentsCount() {
             return this.counterFilter !== null ? this.counterFilter : (this.localApartments ? this.localApartments.length : 0);
         },
+        // Converte in number TempDistanceRange che risulta essere una stringa e non va bene
+        numericDistanceRange: {
+            get() {
+                return Number(this.tempDistanceRange); // Converte in Number quando leggi il valore
+            },
+            set(value) {
+                this.tempDistanceRange = value.toString(); // Converte in String quando cambi il valore
+            }
+        },
+        // Check for reference point
+        hasReferencePoint() {
+            return !!this.referencePoint;
+        },
     },
     mounted() {
 
@@ -217,6 +237,14 @@ export default {
         <!-- Sezione scrollabile dei filtri -->
         <div class="scrollable-section">
 
+            <!-- Distanza -->
+            <div v-if="hasReferencePoint">
+                <div class="range-bar">
+                    <div class="testo-range">In un raggio di <span>{{ tempDistanceRange }} km rispetto a {{ selectedCity  }}</span></div>
+                    <input type="range" class="form-range custom-range" v-model="numericDistanceRange" @input="handleSliderChange" />
+                </div>
+            </div>
+            
             <!-- Stanze -->
             <div class="mb-3">
                 <label class="form-label d-flex justify-content-center">Stanze:</label>
