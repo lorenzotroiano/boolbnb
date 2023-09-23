@@ -68,8 +68,6 @@ export default {
     computed: {
         filteredApartments() {
             return this.apartments.filter(apartment => {
-                const distanceCondition = !this.isSearchClicked || this.filterByDistanceRange(apartment);
-
                 // Aggiungi filtro per servizi
                 const servicesCondition = this.selectedServices.every(service => apartment.services.includes(service));
 
@@ -82,7 +80,9 @@ export default {
                 // Condizione per filtrare per metri quadrati
                 const sizeCondition = !this.tempSize || apartment.size >= this.tempSize;
 
-                return distanceCondition && servicesCondition && bathroomCondition && sizeCondition && roomCondition;
+                return servicesCondition && bathroomCondition && sizeCondition && roomCondition;
+                
+                // Il filtro per distanza è completamente gestito in HeaderApp
             });
         },
     },
@@ -116,11 +116,8 @@ export default {
 <!-- TEMPLATE -->
 <template>
     <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
-        :isSearchClicked="isSearchClicked" :tempSize="tempSize" :referencePoint="referencePoint"
-        :distanceRange="distanceRange" :search="search" :apartments="originalApartments"
-        @update-apartments="handleUpdatedApartments" @update:search="updateSearchValue"
-        @request-coordinates="getCoordinatesFromAddress" @search-clicked="handleSearchClick"
-        @request-filter-by-distance="handleDistanceFilter"
+         :tempSize="tempSize" :referencePoint="referencePoint" :apartments="originalApartments"
+        @update-apartments="handleUpdatedApartments"
         @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
         @close-sidebar="isSidebarVisible = false" @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
         @apply-filters="applyFilters" @apartments-updated="updateApartments">

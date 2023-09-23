@@ -34,6 +34,7 @@ export default {
 
             // Suggerimenti
             suggestions: [],
+            selectedCity: null,
             // Timeout per il blur
             blurTimeout: null
         };
@@ -60,8 +61,10 @@ export default {
         },
 
         // FILTERING BY DISTANCE METHODS**********************************************
-        handleSliderChange() {
-            this.filterByDistanceRange();
+        handleDistanceChange(newDistance) {
+            console.log('Received new distance:', newDistance);
+            this.distanceRange = newDistance;
+            this.filterByDistanceRange(); // Se vuoi filtrare subito dopo aver aggiornato la distanza.
         },
 
         filterByDistanceRange() {
@@ -69,6 +72,7 @@ export default {
 
             this.apartmentsInRange = this.apartments.filter(apartment => {
                 const distance = haversineDistance(this.referencePoint, new tt.LngLat(apartment.longitude, apartment.latitude));
+                console.log('Distance for apartment', apartment.id, ':', distance);
                 return distance <= this.distanceRange;
             });
 
@@ -78,7 +82,7 @@ export default {
         // SUGGESTIONS METHODS**************************
 
         async fetchSuggestions(query) {
-            const requestUrl = `https://api.tomtom.com/search/2/search/${query}.json?typeahead=true&limit=200&sortBy=relevance&categorySet=7315&countrySet=IT&language=it-IT&minFuzzyLevel=2&maxFuzzyLevel=3&key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
+            const requestUrl = `https://api.tomtom.com/search/2/search/${query}.json?typeahead=true&limit=15&sortBy=relevance&categorySet=7315&countrySet=IT&language=it-IT&minFuzzyLevel=2&maxFuzzyLevel=3&key=2hSUhlhHixpowSvWwlyl6oARrDT01OsD`;
             try {
                 const response = await axios.get(requestUrl);
                 if (response.data && response.data.results) {
@@ -125,6 +129,7 @@ export default {
         selectSuggestion(suggestion) {
             clearTimeout(this.blurTimeout);
             this.search = suggestion;
+            this.selectedCity = suggestion; // Impostiamo il valore di selectedCity qui
             this.suggestions = [];
             this.onSearch();
         },
@@ -170,7 +175,7 @@ export default {
     watch: {
         search(newSearch) {
             this.search = newSearch;  // Aggiorniamo search quando search cambia
-        }
+        },
     }
 }
 </script>
@@ -191,13 +196,6 @@ export default {
                 </div>
 
                 <div id="find">
-                    <!-- Distanza -->
-                    <div class="range-bar">
-                        <div class="testo-range">In un raggio di <span>{{ distanceRange }} km</span></div>
-                        <input type="range" class="form-range custom-range" v-model="distanceRange"
-                            @change="handleSliderChange" />
-                    </div>
-
                     <!-- Searchbar -->
                     <div class="search">
                         <div class="d-flex">
@@ -233,6 +231,8 @@ export default {
         <div class="spacer" ref="spacer">
             <transition name="slide">
                 <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
+                    :distanceRange="50"  @update:distanceRange="handleDistanceChange" :referencePoint="referencePoint"
+                    :selectedCity="selectedCity"
                     :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
                     :apartments="referencePoint ? apartmentsInRange : apartments" @close-sidebar="$emit('close-sidebar')"
                     @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
