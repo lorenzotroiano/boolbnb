@@ -41,6 +41,8 @@ export default {
             isSidebarVisible: false,
             applyFilters: null,
 
+            // Posizione slide
+            activeItem: 0
 
         }
     },
@@ -60,6 +62,32 @@ export default {
         // Appartmenti filtrati
         handleUpdatedApartments(filteredApartments) {
             this.apartments = filteredApartments;
+        },
+
+        // Appartmenti filtrati per sponsor
+        sponsorFilteredApartments() {
+            return this.apartments.filter(apartment => apartment.sponsor === 1);
+        },
+
+        // Comandi per carosello
+        changeImage(index) {
+            this.activeItem = index;
+        },
+
+        nextSlide() {
+            if (this.activeItem < this.sponsorFilteredApartments().length - 1) {
+                this.activeItem++;
+            } else {
+                this.activeItem = 0; // torna al primo slide
+            }
+        },
+
+        prevSlide() {
+            if (this.activeItem > 0) {
+                this.activeItem--;
+            } else {
+                this.activeItem = this.sponsorFilteredApartments().length - 1; // torna all'ultimo slide
+            }
         }
 
     },
@@ -98,17 +126,18 @@ export default {
             })
             .catch(error => {
                 console.log(error);
-            }),
-            axios.get('http://127.0.0.1:8000/api/v1/service')
-                .then(response => {
-                    const data = response.data;
-                    this.services = data;
+            });
 
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+        axios.get('http://127.0.0.1:8000/api/v1/service')
+            .then(response => {
+                const data = response.data;
+                this.services = data;
+            })
+            .catch(error => {
+                console.log(error);
+            });
     },
+
 };
 </script>
 
@@ -127,6 +156,22 @@ export default {
     </HeaderApp>
     <!-- @filter-by-distance="handleDistanceFilter" -->
     <div class="container-fluid">
+
+        <!-- Carosello -->
+        <div class="carousel">
+            <div class="image-container">
+                <img v-for="(apartment, index) in sponsorFilteredApartments()" :src="getImageUrl(apartment.cover)"
+                    alt="Immagine app sponsor" :class="{ active: activeItem === index }" @click="changeImage(index)">
+                <!-- Inserisco il bottone per il metodo "indietro"-->
+                <button id="prev" @click="prevSlide" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+
+                <!-- Inserisco il bottone per il metodo "avanti"  -->
+                <button id="next" @click="nextSlide" type="button"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+        </div>
+
+
 
         <!-- LISTA APPARTAMENTI -->
         <div id="apartmentList">
