@@ -4,7 +4,7 @@
 
 
 .container-fluid {
-    background-color: $color-white;
+    background-color: $color-white-pearl;
     text-align: center;
     padding-top: 50px;
 
@@ -14,65 +14,62 @@
         margin: 20px 0; // Spazio attorno al carosello
 
         .image-container {
-            position: relative;
             height: 400px;
             width: 800px;
+            position: relative;
 
-            img {
+            .carousel-item {
                 display: none;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Leggera ombra intorno all'immagine
-                border-radius: 20px;
+                height: 100%;
+                width: 100%;
 
                 &.active {
                     display: block;
                 }
-            }
 
-            .description {
-                position: absolute;
-                bottom: 10%;
-                left: 50%;
-                transform: translateY(-50%); // Centra verticalmente
-                transform: translateX(-50%); // Centra verticalmente
-                width: 40%;
+                img {
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Leggera ombra intorno all'immagine
+                    border-radius: 5px;
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
 
-                h3 {
-                    font-style: italic;
-                    font-weight: 400;
-                    display: none;
-                    padding: 10px; // Aggiungi il padding desiderato
-                    background-color: rgba(0, 0, 0, 0.7); // Sfondo opaco
-                    color: white; // Colore del testo
+                }
 
+                .description {
+                    position: absolute;
+                    bottom: 10%;
+                    left: 50%;
+                    transform: translate(-50%, -50%); // Centra verticalmente e orizzontalmente
+                    width: 40%;
+                    padding: 5px 10px; // Riduci il padding verticalmente
+                    background-color: rgba(0, 0, 0, 0.7);
+                    color: white;
+                    text-align: center; // Allinea il testo al centro
+                    border-radius: 5px; // Aggiunge angoli arrotondati
 
-                    &.active {
-                        display: block;
+                    h3 {
+                        font-size: 1.2rem;
+                        font-style: italic;
+                        font-weight: 700;
+                        color: white;
+                        border-radius: 3px; // Angoli arrotondati più piccoli
+
+                    }
+
+                    p {
+                        font-style: oblique;
+                        font-size: 0.7rem;
+                        padding-top: 5px;
+                        font-weight: 200;
+
                     }
                 }
             }
 
-            .description {
-                position: absolute;
-                bottom: 10%;
-                left: 50%;
-                transform: translateY(-50%); // Centra verticalmente
-                transform: translateX(-50%); // Centra verticalmente
-                width: 40%;
-
-                h3 {
-                    font-style: italic;
-                    font-weight: 400;
-                    display: none;
-                    padding: 10px; // Aggiungi il padding desiderato
-                    background-color: rgba(0, 0, 0, 0.7); // Sfondo opaco
-                    color: white; // Colore del testo
 
 
-                    &.active {
-                        display: block;
-                    }
-                }
-            }
+
 
             button {
                 background-color: rgba(255, 255, 255, 0.7); // Leggermente trasparente

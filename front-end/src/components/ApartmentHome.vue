@@ -37,6 +37,7 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
+
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             applyFilters: null,
@@ -70,7 +71,7 @@ export default {
         },
 
         // Comandi per carosello
-        changeImage(index) {
+        changeActive(index) {
             this.activeItem = index;
         },
 
@@ -156,23 +157,24 @@ export default {
 
         <!-- Carosello -->
         <div class="carousel">
-            <div class="image-container">
-                <img v-for="(apartment, index) in sponsorFilteredApartments()" :src="getImageUrl(apartment.cover)"
-                    alt="Immagine app sponsor" :class="{ active: activeItem === index }" @click="changeImage(index)">
-
-                <div class="description">
-                    <h3 v-for="(apartment, index) in sponsorFilteredApartments()" :class="{ active: activeItem === index }"
-                        @click="changeImage(index)">{{ apartment.name }} </h3>
+            <div class="image-container"
+                :style="{ display: this.originalApartments === this.apartments ? 'flex' : 'none' }">
+                <div v-for="(apartment, index) in sponsorFilteredApartments()" :key="index" class="carousel-item"
+                    :class="{ active: activeItem === index }" @click="changeActive(index)">
+                    <img :src="getImageUrl(apartment.cover)" alt="Immagine app sponsor">
+                    <div class="description">
+                        <h3>{{ apartment.name }}</h3>
+                        <p>{{ apartment.address }}</p>
+                    </div>
                 </div>
-
                 <!-- Inserisco il bottone per il metodo "indietro"-->
                 <button id="prev" @click="prevSlide" type="button"><i class="fa-solid fa-arrow-left"></i></button>
 
                 <!-- Inserisco il bottone per il metodo "avanti"  -->
                 <button id="next" @click="nextSlide" type="button"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
-
         </div>
+
 
 
 
