@@ -1,8 +1,38 @@
 @use './_variables.scss' as *;
 @import './_mixins.scss';
 
+main::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.826);
+
+}
+
 main {
-    background-color: rgb(255, 255, 255);
+    background-image: url(../assets/img/Firefly-background.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    z-index: 999;
+    padding-bottom: 80px;
+
+    .card {
+        background-color: white;
+        box-shadow: 30px rgba(0, 0, 0, 0.891);
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 80px;
+        transition: transform 0.4s ease;
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+    }
 
     .address {
         font-size: 20px;
@@ -30,6 +60,7 @@ main {
         height: 34%;
         border-radius: 0 0 10px 10px;
         overflow: hidden;
+
     }
 
     .secondary-image {
@@ -43,13 +74,10 @@ main {
     }
 
     .flex-section {
-
-        margin: 90px auto;
         display: flex;
         // align-items: self-start;
         justify-content: space-around;
         padding: 30px;
-        border-top: 0.1px solid gray;
 
         .services {
             h3 {
@@ -64,19 +92,16 @@ main {
                 flex-wrap: wrap;
                 // gap: 45px;
 
-
                 li {
-
-
+                    z-index: 999;
                     width: 140px;
                     text-align: start;
                     color: $color-blue-hover;
-                    ;
-
 
 
                     i {
                         margin-right: 10px;
+                        z-index: 999;
                     }
                 }
             }
@@ -84,7 +109,7 @@ main {
     }
 
     .message-form {
-
+        z-index: 999;
         padding: 20px;
         width: 60%;
 
@@ -114,9 +139,13 @@ main {
     height: 300px;
 }
 
+
+.z-index {
+    z-index: 999;
+}
+
 .info-color {
     background: $color-blue-hover;
-    ;
 }
 
 
