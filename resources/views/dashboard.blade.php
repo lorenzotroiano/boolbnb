@@ -7,7 +7,7 @@
 
             <div class="row pb-3">
                 <h4 style="text-transform: capitalize" class="col-12 fw-bold">
-                    Benvenuto {{ Auth::user()->name }} !
+                    Benvenuto {{ Auth::user()->name }}
                 </h4>
                 <p class="col-12 fs-6">
                     Benvenuto nella tua area personale! Qui potrai gestire facilmente i tuoi appartamenti con pieno
@@ -56,23 +56,22 @@
                                     </td>
                                     <td class="my-1 azioni">
                                         <div class="d-flex gap-3">
-                                            <a href="{{ route('edit', $apartment->id) }}"
-                                                class="text-decoration-none">Modifica</a>
-                                            <a href="{{ route('sponsor-form', $apartment->id) }}"
-                                                class="text-decoration-none">Sponsorizza</a>
-                                            <form action="{{ route('delete', $apartment->id) }}" method="POST">
+                                            <a href="{{ route('edit', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-edit"></i> Modifica
+                                            </a>
+                                            <a href="{{ route('sponsor-form', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-star"></i> Sponsorizza
+                                            </a>
+                                            <a href="{{ route('show', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-info-circle"></i> Dettagli
+                                            </a>
+                                            <form action="{{ route('delete', $apartment->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('delete')
-
-                                                <button type="submit"
-                                                    class="text-danger border-0 bg-transparent elimina"
-                                                    title="Elimina Appartamento"
-                                                    onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
-                                                    Elimina
+                                                <button type="submit" class="btn delete-btn" title="Elimina Appartamento">
+                                                    <i class="fas fa-trash-alt"></i> Elimina
                                                 </button>
                                             </form>
-                                            <a href="{{ route('show', $apartment->id) }}"
-                                                class="text-decoration-none">Dettagli e messaggi</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -124,23 +123,22 @@
                                     </td>
                                     <td class="my-1 azioni">
                                         <div class="d-flex gap-3">
-                                            <a href="{{ route('edit', $apartment->id) }}"
-                                                class="text-decoration-none">Modifica</a>
-                                            <a href="{{ route('sponsor-form', $apartment->id) }}"
-                                                class="text-decoration-none">Sponsorizza</a>
-                                            <form action="{{ route('delete', $apartment->id) }}" method="POST">
+                                            <a href="{{ route('edit', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-edit"></i> Modifica
+                                            </a>
+                                            <a href="{{ route('sponsor-form', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-star"></i> Sponsorizza
+                                            </a>
+                                            <a href="{{ route('show', $apartment->id) }}" class="btn custom-btn">
+                                                <i class="fas fa-info-circle"></i> Dettagli
+                                            </a>
+                                            <form action="{{ route('delete', $apartment->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('delete')
-
-                                                <button type="submit"
-                                                    class="text-danger border-0  bg-transparent elimina"
-                                                    title="Elimina Appartamento"
-                                                    onclick="return confirm('Sicuro di volere eliminare questo elemento?')">
-                                                    Elimina
+                                                <button type="submit" class="btn delete-btn" title="Elimina Appartamento">
+                                                    <i class="fas fa-trash-alt"></i> Elimina
                                                 </button>
                                             </form>
-                                            <a href="{{ route('show', $apartment->id) }}"
-                                                class="text-decoration-none">Dettagli e messaggi</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -197,26 +195,6 @@
 
         }
 
-        .d-flex a {
-            font-size: 1rem;
-            transition: transform 0.5s ease-in-out;
-            color: #3b70ed;
-        }
-
-        .d-flex a:hover {
-            transform: scale(1.14);
-            color: #0442d2;
-        }
-
-        .create-apartament {
-            font-size: 1.3rem;
-            color: #3b70ed;
-        }
-
-        .create-apartament:hover {
-            color: #0442d2;
-        }
-
         .elimina {
             font-size: 1rem !important;
             transition: transform 0.5s ease-in-out !important;
@@ -228,5 +206,106 @@
             transform: scale(1.14) !important;
             color: rgb(187, 0, 0) !important;
         }
+
+        .btn {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .custom-btn {
+            background-color: #35393fb0;
+            color: #ffffff;
+        }
+
+        .custom-btn:hover {
+            background-color: #222831;
+            color: #ffffff;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+            color: #f0f0f0;
+        }
+
+        .custom-btn, .delete-btn {
+            width: 130px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px; 
+            font-size: 0.8rem; 
+        }
+
+        #confirmation-div {
+            display: none;
+            z-index: 1050; /* Porta sopra gli altri elementi */
+            width: 300px; /* o quanto preferisci */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040; /* Porta sopra il contenuto ma sotto il div di conferma */
+        }
+
+        .navbar li:hover {
+            border-bottom: 2px solid yellow;
+            color: initial !important; /* Per mantenere il colore iniziale durante l'hover */
+        }
+
+        .navbar li a {
+            color: whitesmoke; /* Per fare in modo che il colore del testo sia ereditato dall'elemento li */
+            text-decoration: none; /* Per rimuovere l'effetto sottolineato */
+        }
+
+        .navbar li a:hover {
+            color: whitesmoke; /* Per mantenere il colore iniziale durante l'hover */
+        }
     </style>
 @endsection
+
+<div id="confirmation-div" class="position-fixed top-50 start-50 translate-middle bg-danger text-white p-4 rounded">
+    <p>Sei sicuro di voler eliminare questo elemento?</p>
+    <button id="confirmDeleteBtn" class="btn btn-outline-light me-2">Conferma</button>
+    <button id="cancelBtn" class="btn btn-light">Annulla</button>
+</div>
+  
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmationDiv = document.getElementById('confirmation-div');
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+    
+        let formToDelete; // Variabile per salvare il form da eliminare
+    
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                formToDelete = e.target.closest('form'); // Salva il form associato al pulsante 'Elimina' premuto
+                document.body.appendChild(overlay);
+                confirmationDiv.style.display = 'block';
+            });
+        });
+    
+        document.getElementById('cancelBtn').addEventListener('click', function () {
+            confirmationDiv.style.display = 'none';
+            document.body.removeChild(overlay);
+        });
+    
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            if(formToDelete) formToDelete.submit(); // Sottometti il form se esiste
+            confirmationDiv.style.display = 'none';
+            document.body.removeChild(overlay);
+        });
+    });
+</script>

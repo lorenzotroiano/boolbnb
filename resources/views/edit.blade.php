@@ -136,7 +136,7 @@
     </div>
     </div>
 
-    <style>
+    <style scoped>
         #forms {
             background: #648be9;
             background: linear-gradient(140deg, rgb(124, 136, 198) 0%, rgb(142, 155, 206) 2%, rgb(176, 181, 221) 10%, rgb(207, 213, 235) 31%, rgba(255, 255, 255, 1) 100%);

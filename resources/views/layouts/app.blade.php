@@ -29,7 +29,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm bg-dark-gray">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="http://localhost:5174/">
                     <div class="logo">
@@ -47,14 +47,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        {{-- Home
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/') }}">{{ __('Home') }}</a>
-                        </li> --}}
                         {{-- Dashboard --}}
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/dashboard') }}">{{ __('Dashboard') }}</a>
+                                <a class="nav-link white-pearl" href="{{ url('/dashboard') }}"><span>{{ __('Dashboard') }}</span></a>
                             </li>
                         @endauth
                     </ul>
@@ -63,17 +59,17 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
+                            <li class="nav-item white-pearl">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
-                                <li class="nav-item">
+                                <li class="nav-item white-pearl">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }} </a>
                                 </li>
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle white-pearl" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
@@ -106,8 +102,10 @@
         </footer>
     </div>
 </body>
-<style>
 
+<style lang="scss" scoped>
+
+    
    
     .logo {
         max-width: 180px;
@@ -118,6 +116,42 @@
         max-height: 100%;
         border-radius: 18px;
     }
+
+    /* Background Colors */
+    .bg-white-pearl {
+        background-color: #EEEEEE
+    }
+
+    .bg-yellow {
+        background-color: #FFD369;
+    }
+
+    .bg-dark-gray {
+        background-color: #393E46;
+    }
+
+    .bg-black {
+        background-color: #222831;
+    }
+
+    /* Colors */
+    .white-pearl {
+        color: #EEEEEE
+    }
+
+    .yellow {
+        color: #FFD369;
+    }
+
+    .dark-gray {
+        color: #393E46;
+    }
+
+    .black {
+        color: #222831;
+    }
+
+
 </style>
 
 </html>
