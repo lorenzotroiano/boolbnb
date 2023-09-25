@@ -49,7 +49,7 @@ export default {
         // Prendi l'url dell'immagine
         getImageUrl(imageName) {
             console.log(imageName);
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
 
         updateApartments(filtered) {
@@ -81,7 +81,7 @@ export default {
                 const sizeCondition = !this.tempSize || apartment.size >= this.tempSize;
 
                 return servicesCondition && bathroomCondition && sizeCondition && roomCondition;
-                
+
                 // Il filtro per distanza è completamente gestito in HeaderApp
             });
         },
@@ -90,7 +90,7 @@ export default {
 
     // CHIAMATE AXIOS PER SERVIZI E APPARTAMENTI
     mounted() {
-        axios.get('http://127.0.0.1:8001/api/v1/')
+        axios.get('http://127.0.0.1:8000/api/v1/')
             .then(response => {
                 const data = response.data;
                 this.originalApartments = data;  // Store all data in originalApartments
@@ -99,7 +99,7 @@ export default {
             .catch(error => {
                 console.log(error);
             }),
-            axios.get('http://127.0.0.1:8001/api/v1/service')
+            axios.get('http://127.0.0.1:8000/api/v1/service')
                 .then(response => {
                     const data = response.data;
                     this.services = data;
@@ -116,7 +116,7 @@ export default {
 <!-- TEMPLATE -->
 <template>
     <HeaderApp :services="services" :selectedServices="selectedServices" :isSidebarVisible="isSidebarVisible"
-         :tempSize="tempSize" :referencePoint="referencePoint" :apartments="originalApartments"
+        :tempSize="tempSize" :referencePoint="referencePoint" :apartments="originalApartments"
         @update-apartments="handleUpdatedApartments"
         @update:distanceRange="tempDistanceRange => distanceRange = tempDistanceRange"
         @close-sidebar="isSidebarVisible = false" @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
