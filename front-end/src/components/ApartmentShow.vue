@@ -2,12 +2,12 @@
 import axios from 'axios';
 // import tt from '@tomtom-international/web-sdk-maps';
 import * as tt from '@tomtom-international/web-sdk-maps';
-import HeaderApp from './HeaderApp.vue';
+import HeaderShowVue from './Header-show.vue';
 
 export default {
     name: 'ApartmentShow',
     components: {
-        HeaderApp
+        HeaderShowVue
     },
     data() {
         return {
@@ -24,11 +24,11 @@ export default {
 
     methods: {
         getCoverUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8001/storage/${imageName}`;
+            return `http://127.0.0.1:8000/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -55,7 +55,7 @@ export default {
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -68,7 +68,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
@@ -87,12 +87,12 @@ export default {
 </script>
 
 <template>
-    <HeaderApp></HeaderApp>
     <link rel='stylesheet' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.14.0/maps/maps.css'>
     <main>
-        <div class="container">
+        <HeaderShowVue></HeaderShowVue>
+        <div class="container card">
 
-            <div class="row margin-top-140">
+            <div class="row ">
                 <div>
                     <h1>{{ apartment.name }}</h1>
                     <span class="address d-block text-secondary mb-3"> <i class="fa-solid fa-map"></i> - {{
@@ -171,7 +171,7 @@ export default {
                                 placeholder="Inserisci il tuo nome..">
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label ">Email</label>
                             <input type="email" class="form-control" id="email" v-model="formData.email" required
                                 placeholder="Insirisci la tua email..">
                         </div>
