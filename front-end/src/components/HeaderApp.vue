@@ -26,7 +26,7 @@ export default {
             distanceRange: 50,
             referencePoint: null,
             search: '',
-
+            isSearchBarFixed: false,
             isSearchClicked: Boolean,
             // Dati da mandare a FilterSidebar per filtrare sugli appartamenti
             // che escono dalla ricerca per distanza
@@ -40,7 +40,14 @@ export default {
         };
     },
     methods: {
-
+        handleScroll() {
+            // Controlla la posizione dello scroll
+            if (window.pageYOffset > 90) { // Puoi regolare il valore 100 in base a quando vuoi che la barra diventi fissa
+                this.isSearchBarFixed = true;
+            } else {
+                this.isSearchBarFixed = false;
+            }
+        },
         // SEARCH METHODS************************************************************
         onSearch() {
             if (!this.search.trim()) {
@@ -176,7 +183,16 @@ export default {
         search(newSearch) {
             this.search = newSearch;  // Aggiorniamo search quando search cambia
         },
-    }
+    },
+    mounted() {
+        // Aggiungi un listener per l'evento di scorrimento della pagina
+        window.addEventListener('scroll', this.handleScroll);
+    },
+
+    beforeDestroy() {
+        // Rimuovi il listener quando il componente viene distrutto per evitare memory leak
+        window.removeEventListener('scroll', this.handleScroll);
+    },
 }
 </script>
 
@@ -187,7 +203,7 @@ export default {
 
                 <!-- Logo immagine -->
                 <div class="logo">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb.png" alt=" Logo"></a>
+                    <a href="http://localhost:5174"><img src="../assets/img/Boolbnb.png" alt=" Logo"></a>
                 </div>
 
                 <!-- Logo mobile -->
@@ -195,28 +211,29 @@ export default {
                     <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
                 </div>
 
-                <div id="find">
+                <div id="find" :class="{ 'search-bar-fixed': isSearchBarFixed }">
                     <!-- Searchbar -->
-                    <div class="search">
-                        <div class="d-flex">
-                            <input type="text" placeholder="Cerca" :value="search" @input="updateSearch"
-                                @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
-                            <!-- Suggerimenti -->
-                            <ul v-if="suggestions.length">
-                                <li v-for="suggestion in suggestions" :key="suggestion"
-                                    @click="selectSuggestion(suggestion)">
-                                    {{ suggestion }}
-                                </li>
-                            </ul>
-                            <button class="me-3" @click="onSearch">
-                                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                            </button>
-                            <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                    <div class="search-content">
+
+                        <div class="search">
+                            <div class="d-flex">
+                                <input type="text" placeholder="Cerca" :value="search" @input="updateSearch"
+                                    @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
+                                <!-- Suggerimenti -->
+                                <ul v-if="suggestions.length">
+                                    <li v-for="suggestion in suggestions" :key="suggestion"
+                                        @click="selectSuggestion(suggestion)">
+                                        {{ suggestion }}
+                                    </li>
+                                </ul>
+                                <button class="me-3" @click="onSearch">
+                                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                                </button>
+                                <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
 
                 <!-- Nav -->
                 <nav>
@@ -231,11 +248,11 @@ export default {
         <div class="spacer" ref="spacer">
             <transition name="slide">
                 <FilterSidebar v-show="isSidebarVisible" :services="services" :selectedServices="selectedServices"
-                    :distanceRange="50"  @update:distanceRange="handleDistanceChange" :referencePoint="referencePoint"
-                    :selectedCity="selectedCity"
-                    :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked" :tempSize="tempSize"
-                    :apartments="referencePoint ? apartmentsInRange : apartments" @close-sidebar="$emit('close-sidebar')"
-                    @apply-filters="$emit('apply-filters')" @apartments-updated="$emit('apartments-updated', $event)">
+                    :distanceRange="50" @update:distanceRange="handleDistanceChange" :referencePoint="referencePoint"
+                    :selectedCity="selectedCity" :isSidebarVisible="isSidebarVisible" :isSearchClicked="isSearchClicked"
+                    :tempSize="tempSize" :apartments="referencePoint ? apartmentsInRange : apartments"
+                    @close-sidebar="$emit('close-sidebar')" @apply-filters="$emit('apply-filters')"
+                    @apartments-updated="$emit('apartments-updated', $event)">
                 </FilterSidebar>
             </transition>
         </div>
