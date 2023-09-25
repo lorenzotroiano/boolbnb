@@ -31,6 +31,29 @@
                 }
             }
 
+            .description{
+                position: absolute;
+                bottom: 10%;
+                left: 50%;
+                transform: translateY(-50%); // Centra verticalmente
+                transform: translateX(-50%); // Centra verticalmente
+                width:40%;
+
+                h3{
+                    font-style: italic ;
+                    font-weight: 400;
+                    display: none;
+                    padding: 10px; // Aggiungi il padding desiderato
+                    background-color: rgba(0, 0, 0, 0.7); // Sfondo opaco
+                    color: white; // Colore del testo
+                    
+
+                    &.active{
+                        display: block;
+                    }
+                }
+            }
+
             
             button {
                 background-color: rgba(255, 255, 255, 0.7); // Leggermente trasparente
