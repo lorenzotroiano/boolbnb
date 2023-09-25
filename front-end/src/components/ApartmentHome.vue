@@ -159,6 +159,12 @@ export default {
             <div class="image-container">
                 <img v-for="(apartment, index) in sponsorFilteredApartments()" :src="getImageUrl(apartment.cover)"
                     alt="Immagine app sponsor" :class="{ active: activeItem === index }" @click="changeImage(index)">
+
+                <div class="description">
+                    <h3 v-for="(apartment, index) in sponsorFilteredApartments()" :class="{ active: activeItem === index }"
+                        @click="changeImage(index)">{{ apartment.name }} </h3>
+                </div>
+
                 <!-- Inserisco il bottone per il metodo "indietro"-->
                 <button id="prev" @click="prevSlide" type="button"><i class="fa-solid fa-arrow-left"></i></button>
 
