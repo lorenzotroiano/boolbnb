@@ -6,108 +6,122 @@
 .container-fluid {
     background-color: $color-white-pearl;
     text-align: center;
-    padding-top: 50px;
 
-    .carousel {
-        @include flex;
-        justify-content: center;
-        margin: 20px 0; // Spazio attorno al carosello
+    .jumbotron {
+        background: url(../../../public/jumbo.svg);
+        padding-top: 50px;
+        padding-bottom: 100px;
+        text-align: center; // Allinea il testo al centro verticalmente
 
-        .image-container {
-            height: 400px;
-            width: 800px;
-            position: relative;
+        h1 {
+            text-transform: uppercase;
+            color: white;
+            font-size: 2.5rem; // Dimensione del font
+            font-weight: bold; // Grassetto
+            margin-bottom: 20px; // Spazio tra il titolo e il testo sottostante
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); // Ombra testo
+        }
 
-            .carousel-item {
-                display: none;
-                height: 100%;
-                width: 100%;
+        .carousel {
+            @include flex;
+            justify-content: center;
+            margin: 20px 0; // Spazio attorno al carosello
+            padding-top: 50px;
 
-                &.active {
-                    display: block;
-                }
+            .image-container {
+                height: 400px;
+                width: 800px;
+                position: relative;
 
-                img {
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Leggera ombra intorno all'immagine
-                    border-radius: 5px;
+                .carousel-item {
+                    display: none;
                     height: 100%;
                     width: 100%;
-                    object-fit: cover;
 
-                }
+                    &.active {
+                        display: block;
+                    }
 
-                .description {
-                    position: absolute;
-                    bottom: 10%;
-                    left: 50%;
-                    transform: translate(-50%, -50%); // Centra verticalmente e orizzontalmente
-                    width: 40%;
-                    padding: 5px 10px; // Riduci il padding verticalmente
-                    background-color: rgba(0, 0, 0, 0.7);
-                    color: white;
-                    text-align: center; // Allinea il testo al centro
-                    border-radius: 5px; // Aggiunge angoli arrotondati
+                    img {
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Leggera ombra intorno all'immagine
+                        border-radius: 5px;
+                        height: 100%;
+                        width: 100%;
+                        object-fit: cover;
 
-                    h3 {
-                        font-size: 1.2rem;
-                        font-style: italic;
-                        font-weight: 700;
+                    }
+
+                    .description {
+                        position: absolute;
+                        bottom: 10%;
+                        left: 50%;
+                        transform: translate(-50%, -50%); // Centra verticalmente e orizzontalmente
+                        width: 40%;
+                        padding: 5px 10px; // Riduci il padding verticalmente
+                        background-color: rgba(0, 0, 0, 0.7);
                         color: white;
-                        border-radius: 3px; // Angoli arrotondati più piccoli
+                        text-align: center; // Allinea il testo al centro
+                        border-radius: 5px; // Aggiunge angoli arrotondati
 
-                    }
+                        h3 {
+                            font-size: 1.2rem;
+                            font-style: italic;
+                            font-weight: 700;
+                            color: white;
+                            border-radius: 3px; // Angoli arrotondati più piccoli
 
-                    p {
-                        font-style: oblique;
-                        font-size: 0.7rem;
-                        padding-top: 5px;
-                        font-weight: 200;
+                        }
 
+                        p {
+                            font-style: oblique;
+                            font-size: 0.7rem;
+                            padding-top: 5px;
+                            font-weight: 200;
+
+                        }
                     }
                 }
-            }
 
-
-
-
-
-            button {
-                background-color: rgba(255, 255, 255, 0.7); // Leggermente trasparente
-                border: none;
-                padding: 15px;
-                border-radius: 50%; // Pulsanti rotondi
-                cursor: pointer;
-                transition: all 0.3s; // Transizione morbida
-
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.9); // Meno trasparente al passaggio del mouse
-                }
-
-                i {
-                    font-size: 1.2em;
-                    transition: all 0.7s;
+                button {
+                    background-color: rgba(255, 255, 255, 0.7); // Leggermente trasparente
+                    border: none;
+                    padding: 10px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    transition: all 0.3s;
 
                     &:hover {
-                        transform: scale(1.4);
+                        background-color: rgba(255, 255, 255, 0.9); // Meno trasparente al passaggio del mouse
+                    }
+
+                    i {
+                        font-size: 1.2em;
+                        transition: all 0.7s;
+
+                        &:hover {
+                            transform: scale(1.4);
+                        }
                     }
                 }
-            }
 
-            #next {
-                position: absolute;
-                top: 50%;
-                right: 0;
-                transform: translateY(-50%); // Centra verticalmente
-            }
+                #next {
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    transform: translateY(-50%); // Centra verticalmente
+                }
 
-            #prev {
-                position: absolute;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%); // Centra verticalmente
+                #prev {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-50%); // Centra verticalmente
+                }
             }
         }
     }
+
+
 
 
     #apartmentList {
@@ -172,7 +186,7 @@
 
                         .visit-button {
                             @include flex;
-                            background-color: $color-blue-hover;
+                            background-color: $color-red;
                             color: $color-white;
                             padding: 8px 16px;
                             font-size: 1rem;

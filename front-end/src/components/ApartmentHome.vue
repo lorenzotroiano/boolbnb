@@ -152,33 +152,39 @@ export default {
         @close-sidebar="isSidebarVisible = false" @toggle-sidebar="isSidebarVisible = !isSidebarVisible"
         @apply-filters="applyFilters" @apartments-updated="updateApartments">
     </HeaderApp>
-    <!-- @filter-by-distance="handleDistanceFilter" -->
     <div class="container-fluid">
 
-        <!-- Carosello -->
-        <div class="carousel">
-            <div class="image-container"
-                :style="{ display: this.originalApartments === this.apartments ? 'flex' : 'none' }">
-                <div v-for="(apartment, index) in sponsorFilteredApartments()" :key="index" class="carousel-item"
-                    :class="{ active: activeItem === index }" @click="changeActive(index)">
-                    <img :src="getImageUrl(apartment.cover)" alt="Immagine app sponsor">
-                    <div class="description">
-                        <h3>{{ apartment.name }}</h3>
-                        <p>{{ apartment.address }}</p>
-                    </div>
-                </div>
-                <!-- Inserisco il bottone per il metodo "indietro"-->
-                <button id="prev" @click="prevSlide" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+        <!-- JUMBOTRON -->
+        <div class="jumbotron">
+            <h1>Le nostre proposte</h1>
 
-                <!-- Inserisco il bottone per il metodo "avanti"  -->
-                <button id="next" @click="nextSlide" type="button"><i class="fa-solid fa-arrow-right"></i></button>
+            <!-- CAROUSEL -->
+            <div class="carousel">
+                <div class="image-container"
+                    :style="{ display: this.originalApartments === this.apartments ? 'flex' : 'none' }">
+                    <div v-for="(apartment, index) in sponsorFilteredApartments()" :key="index" class="carousel-item"
+                        :class="{ active: activeItem === index }" @click="changeActive(index)">
+                        <img :src="getImageUrl(apartment.cover)" alt="Immagine app sponsor">
+                        <div class="description">
+                            <h3>{{ apartment.name }}</h3>
+                            <p>{{ apartment.address }}</p>
+                        </div>
+                    </div>
+                    <!-- Inserisco il bottone per il metodo "indietro"-->
+                    <button id="prev" @click="prevSlide" type="button"><i class="fa-solid fa-arrow-left"></i></button>
+
+                    <!-- Inserisco il bottone per il metodo "avanti"  -->
+                    <button id="next" @click="nextSlide" type="button"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
+
         </div>
 
 
 
 
         <!-- LISTA APPARTAMENTI -->
+        <h1></h1>
         <div id="apartmentList">
 
             <!-- Singola card -->

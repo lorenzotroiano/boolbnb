@@ -93,20 +93,20 @@ header {
 
                 span {
                     font-weight: 800;
-                    color: $color-blue-hover
+                    color: $color-red
                 }
             }
 
             /* Stile per il pallino (thumb) */
             .form-range {
                 &::-webkit-slider-thumb {
-                    background-color: $color-blue-hover;
+                    background-color: $color-red;
                     cursor: pointer;
                     border: none;
                     transition: background-color 0.3s; // Transizione fluida al cambio colore
 
                     &:hover {
-                        background-color: darken($color-blue-hover, 10%); // Rende il colore del thumb un po' più scuro
+                        background-color: $color-red; // Rende il colore del thumb un po' più scuro
                     }
                 }
 
@@ -138,7 +138,7 @@ header {
         }
 
         button {
-            background-color: $color-blue-hover;
+            background-color: $color-red;
             color: #fff;
             border: none;
             width: 30px;
@@ -180,7 +180,7 @@ header {
                     .button-52 {
                         padding: 8px 22px;
                         text-decoration: none;
-                        background-color: #6474fc;
+                        background-color: $color-red;
                         color: #fff;
                         border-radius: 18px;
                         transition: transform 0.4s, box-shadow 0.2s;
