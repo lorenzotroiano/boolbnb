@@ -31,9 +31,9 @@
                     @foreach ($apartmentsponsors as $apartmentsponsor)
                         @if ($apartmentsponsor->apartment_id === $apartment->id)
                             @php
-                                $startDate = \Carbon\Carbon::parse($apartmentsponsor->start_date);
-                                $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
-                                $minutesDifference = $endDate->diffInMinutes($startDate);
+                            $startDate = \Carbon\Carbon::now();
+                            $endDate = \Carbon\Carbon::parse($apartmentsponsor->end_date);
+                            $minutesDifference = max(0, $endDate->diffInMinutes($startDate));
                             @endphp
                             <div>
                                 <strong>Tempo rimasto di sponsorizzazione</strong> 
@@ -46,13 +46,17 @@
                         function updateMinutesRemaining() {
                             var minutesElement = document.getElementById('minutesRemaining');
                             var minutesRemaining = parseInt(minutesElement.textContent, 10);
-                            if (isNaN(minutesRemaining) || minutesRemaining <= 0) return;
+                    
+                            if (isNaN(minutesRemaining) || minutesRemaining <= 0) {
+                                clearInterval(intervalId); // Ferma l'intervallo quando il counter raggiunge zero
+                                return;
+                            }
                             
                             minutesRemaining -= 1;
                             minutesElement.textContent = minutesRemaining.toString();
                         }
                         
-                        setInterval(updateMinutesRemaining, 60000); // aggiorna i minuti ogni 60 secondi (60000 millisecondi)
+                        var intervalId = setInterval(updateMinutesRemaining, 60000);
                     </script>
                 </div>
                 @endif

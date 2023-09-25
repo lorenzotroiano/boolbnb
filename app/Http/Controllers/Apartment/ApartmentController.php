@@ -203,15 +203,27 @@ class ApartmentController extends Controller
         $apartment = Apartment::with(['services', 'messages'])->findOrFail($id);
         $apartmentsponsors = ApartmentSponsor::all();
 
-        // NUOVA VISUALIZZAZIONE
-        $view = new View();
-        $view->apartment_id = $id;
-        $view->IP_address = request()->ip();
-        $view->date = now();
-        $view->save();
+        // Ottieni l'IP dell'utente
+        $ip = request()->ip();
+
+        // Verifica se è passato abbastanza tempo dalla precedente visualizzazione
+        $lastView = View::where('apartment_id', $id)
+            ->where('IP_address', $ip)
+            ->where('created_at', '>', Carbon::now()->subHours(3))
+            ->first();
+
+        // Se non è stata trovata una visualizzazione recente, allora crea una nuova visualizzazione
+        if(!$lastView) {
+            $view = new View();
+            $view->apartment_id = $id;
+            $view->IP_address = $ip;
+            $view->date = now();
+            $view->save();
+        }
 
         return view("show", compact("apartment", "apartmentsponsors"));
     }
+
 
     // EDIT
     public function edit($id)
