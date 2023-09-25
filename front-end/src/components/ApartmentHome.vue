@@ -37,6 +37,7 @@ export default {
             selectedRooms: null,
             selectedBathrooms: null,
             selectedSize: null,
+
             // Toggle per la parte di filtri avanzati
             isSidebarVisible: false,
             applyFilters: null,
@@ -156,7 +157,8 @@ export default {
 
         <!-- Carosello -->
         <div class="carousel">
-            <div class="image-container">
+            <div class="image-container"
+                :style="{ display: this.originalApartments === this.apartments ? 'flex' : 'none' }">
                 <div v-for="(apartment, index) in sponsorFilteredApartments()" :key="index" class="carousel-item"
                     :class="{ active: activeItem === index }" @click="changeActive(index)">
                     <img :src="getImageUrl(apartment.cover)" alt="Immagine app sponsor">
