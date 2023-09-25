@@ -42,7 +42,7 @@ export default {
     methods: {
         handleScroll() {
             // Controlla la posizione dello scroll
-            if (window.pageYOffset > 90) { // Puoi regolare il valore 100 in base a quando vuoi che la barra diventi fissa
+            if (window.pageYOffset > 212) { // Puoi regolare il valore 100 in base a quando vuoi che la barra diventi fissa
                 this.isSearchBarFixed = true;
             } else {
                 this.isSearchBarFixed = false;
@@ -206,35 +206,6 @@ export default {
                     <a href="http://localhost:5174"><img src="../assets/img/Boolbnb.png" alt=" Logo"></a>
                 </div>
 
-                <!-- Logo mobile -->
-                <div class="logo-mobile">
-                    <a href="http://localhost:5173"><img src="../assets/img/logoBoolbnb-mobile.png" alt="Logo"></a>
-                </div>
-
-                <div id="find" :class="{ 'search-bar-fixed': isSearchBarFixed }">
-                    <!-- Searchbar -->
-                    <div class="search-content">
-
-                        <div class="search">
-                            <div class="d-flex">
-                                <input type="text" placeholder="Cerca" :value="search" @input="updateSearch"
-                                    @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
-                                <!-- Suggerimenti -->
-                                <ul v-if="suggestions.length">
-                                    <li v-for="suggestion in suggestions" :key="suggestion"
-                                        @click="selectSuggestion(suggestion)">
-                                        {{ suggestion }}
-                                    </li>
-                                </ul>
-                                <button class="me-3" @click="onSearch">
-                                    <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                                </button>
-                                <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Nav -->
                 <nav>
                     <ul class="menu">
@@ -243,6 +214,30 @@ export default {
                     </ul>
                 </nav>
             </div>
+
+            <div id="find" :class="{ 'search-bar-fixed': isSearchBarFixed }">
+                <!-- Searchbar -->
+                <div class="search-content">
+                    <div class="search">
+                        <div class="d-flex">
+                            <input type="text" placeholder="Cerca" :value="search" @input="updateSearch"
+                                @keyup.enter="onSearch" @focus="handleSearchClick" @blur="hideSuggestions">
+                            <!-- Suggerimenti -->
+                            <ul v-if="suggestions.length">
+                                <li v-for="suggestion in suggestions" :key="suggestion"
+                                    @click="selectSuggestion(suggestion)">
+                                    {{ suggestion }}
+                                </li>
+                            </ul>
+                            <button class="me-3" @click="onSearch">
+                                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                            </button>
+                            <button style="width: 70px;" class="me-3" @click="$emit('toggle-sidebar')">Filtri</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="spacer" ref="spacer">
