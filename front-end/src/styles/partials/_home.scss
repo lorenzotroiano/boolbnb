@@ -6,7 +6,63 @@
 .container-fluid {
     background-color:$color-white;
     text-align: center;
-    padding-top: 100px;
+    padding-top: 150px;
+
+    .carousel {
+        @include flex;
+        justify-content: center;
+        margin: 20px 0; // Spazio attorno al carosello
+    
+        .image-container {
+            position: relative;
+
+            img {
+                display: none;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Leggera ombra intorno all'immagine
+                border-radius: 20px;
+    
+                &.active {
+                    display: block;
+                }
+            }
+    
+            button {
+                background-color: rgba(255, 255, 255, 0.7); // Leggermente trasparente
+                border: none;
+                padding: 15px;
+                border-radius: 50%; // Pulsanti rotondi
+                cursor: pointer; 
+                transition: all 0.3s; // Transizione morbida
+    
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.9); // Meno trasparente al passaggio del mouse
+                }
+    
+                i {
+                    font-size: 1.2em;
+                    transition: all 0.7s; 
+
+                    &:hover {
+                        transform: scale(1.4);
+                    }
+                }
+            }
+    
+            #next {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translateY(-50%); // Centra verticalmente
+            }
+            #prev {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%); // Centra verticalmente
+            }
+        }
+    }
+    
 
     #apartmentList{
         @include flex;
