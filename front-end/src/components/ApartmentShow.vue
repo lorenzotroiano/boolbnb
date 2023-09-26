@@ -24,11 +24,11 @@ export default {
 
     methods: {
         getCoverUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8001/storage/${imageName}`;
         },
 
         getImagesUrl(imageName) {
-            return `http://127.0.0.1:8000/storage/${imageName}`;
+            return `http://127.0.0.1:8001/storage/${imageName}`;
         },
         initializeTomTomMap() {
             try {
@@ -55,7 +55,7 @@ export default {
             }
         },
         sendMessage() {
-            axios.post(`http://127.0.0.1:8000/api/v1/show/${this.id}/messages`, this.formData)
+            axios.post(`http://127.0.0.1:8001/api/v1/show/${this.id}/messages`, this.formData)
                 .then(response => {
                     console.log(response.data);
                     this.formData = { name: '', email: '', body: '' };
@@ -68,7 +68,7 @@ export default {
     },
     props: ['id'],
     mounted() {
-        axios.get(`http://127.0.0.1:8000/api/v1/show/${this.id}`)
+        axios.get(`http://127.0.0.1:8001/api/v1/show/${this.id}`)
             .then(response => {
                 this.apartment = response.data.apartment;
                 this.center = [this.apartment.longitude, this.apartment.latitude];
